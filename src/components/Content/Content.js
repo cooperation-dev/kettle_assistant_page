@@ -4,11 +4,9 @@ import {Switch, Route} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {toggleCollapsed} from '../../redux/actions/app';
 
-import Home from 'bundle-loader?lazy&name=home!pages/Home/Home';
-import Page from 'bundle-loader?lazy&name=[name]!pages/Page/Page';
 import JobManager from 'bundle-loader?lazy&name=[name]!pages/JobManager/JobManager';
 import JobMonitor from 'bundle-loader?lazy&name=[name]!pages/JobMonitor/JobMonitor';
-import UserInfo from 'bundle-loader?lazy&name=[name]!pages/UserInfo/UserInfo';
+import SumDic from 'bundle-loader?lazy&name=[name]!pages/SumDic/SumDic';
 import Bundle from '../../router/Bundle';
 import {Layout, Icon, Breadcrumb} from 'antd';
 
@@ -46,6 +44,7 @@ class Content extends Component{
                 <Switch>
                     <Route exact path="/job_manager" component={createComponent(JobManager)}></Route>
                     <Route exact path="/job_monitor" component={createComponent(JobMonitor)}></Route>
+                    <Route exact path="/sum_dic" component={createComponent(SumDic)}></Route>
                 </Switch>
             </Layout>
         )

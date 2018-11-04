@@ -2,7 +2,7 @@ import {TOGGLE_MENU, CHANGE_MENU} from '../actions/app';
 
 const initState = {
     collapsed: false,
-    selectKeys: ['job_monitor'],
+    selectKeys: ['job_manager'],
     openKeys: ['job_manager'],
 }
 

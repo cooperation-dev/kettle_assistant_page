@@ -28,7 +28,8 @@ class LeftMenu extends Component{
                     mode="inline"
                     theme="dark"
                     inlineCollapsed={this.props.app.collapsed}
-                    onClick={() => this.props.selectMenu()}
+                    onClick={(e) => this.props.selectMenu(e)}
+                    // selectedKeys={this.props.app.openKeys}
                 >
                     <SubMenu 
                         key="job_manager" 
@@ -45,7 +46,8 @@ class LeftMenu extends Component{
                         key="dic_manager" 
                         title={<span><Icon type="tablet"/><span>字典管理</span></span>}
                     >
-                        <Menu.Item key="sum_dic">统一字典</Menu.Item>
+                        <Menu.Item key="sum_dic">
+                            <Link to="/sum_dic">统一字典</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu 
                         key="config_manager" 

@@ -72,7 +72,7 @@ class LeftMenu extends Component{
                     </SubMenu>
                     <SubMenu 
                         key="assistant_manager" 
-                        title={<span><Icon type="tag-o"/><span>辅助工具</span></span>}
+                        title={<span><Icon type="tag-o"/><span>辅助工具</span></span>} 
                     >
                         <Menu.Item key="database_pool">druid</Menu.Item>
                         <Menu.Item key="interval">cron</Menu.Item>

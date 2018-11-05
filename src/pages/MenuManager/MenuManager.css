@@ -1,0 +1,18 @@
+.ant-advanced-search-form {
+    padding: 24px !important;
+    background: #fbfbfb !important;
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 6px !important;
+  }
+    
+  .ant-advanced-search-form .ant-form-item {
+    display: flex !important;
+  }
+    
+  .ant-advanced-search-form .ant-form-item-control-wrapper {
+    flex: 1 !important;
+  }
+
+  .btn{
+    margin: 7px !important;
+  }

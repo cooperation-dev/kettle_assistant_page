@@ -263,7 +263,7 @@ for(let i=1; i<=11; i++){
         obj_sort: i+"",
         create_time: '2018-10-17 00:00:00',
         create_name: 'Dawn',
-        whether_to_disable: Mock.Random.integer(0,1)==0?'是':'否',
+        whether_to_disable: Mock.Random.integer(0,1)==0?true:false,
         agency_name: 'Dawn',
         agency_code: 'dawn_leewp@163.com',
         db_type: '',
@@ -273,7 +273,69 @@ for(let i=1; i<=11; i++){
     }))
 }
 
+/**
+ * 菜单管理
+ */
+const menu_manager = []
+    menu_manager.push(Mock.mock({
+        key: 1,
+        name: "1菜单",
+        type: "类型1",
+        coding: "1编码",
+        num: 1,
+        parent_node: '',
+        filter_condition: '',
+        custom_func: '',
+        whether_to_hide: Mock.Random.integer(0,1)==0?true:false,
+        children:[
+            {
+                key: 11,
+                name: "11菜单",
+                type: "类型11",
+                coding: "11编码",
+                num: 11,
+                parent_node: '11菜单',
+                filter_condition: '',
+                custom_func: '',
+                whether_to_hide: Mock.Random.integer(0,1)==0?true:false,
+            },{
+                key: 12,
+                name: "12菜单",
+                type: "类型12",
+                coding: "2编码",
+                num: 12,
+                parent_node: '12菜单',
+                filter_condition: '',
+                custom_func: '',
+                whether_to_hide: Mock.Random.integer(0,1)==0?true:false,
+                children:[
+                    {
+                        key: 121,
+                        name: "121菜单",
+                        type: "类型121",
+                        coding: "121编码",
+                        num: 121,
+                        parent_node: '121菜单',
+                        filter_condition: '',
+                        custom_func: '',
+                        whether_to_hide: Mock.Random.integer(0,1)==0?true:false,
+                    },{
+                        key: 122,
+                        name: "122菜单",
+                        type: "类型122",
+                        coding: "122编码",
+                        num: 122,
+                        parent_node: '122菜单',
+                        filter_condition: '',
+                        custom_func: '',
+                        whether_to_hide: Mock.Random.integer(0,1)==0?true:false,
+                    },
+                ]
+            },
+        ]
+    }))
+
 export {Jobs, job_monitor_analysis, 
     input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
     input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year,
-    database_manager}
+    database_manager, menu_manager}

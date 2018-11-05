@@ -41,8 +41,11 @@ class DatabaseManager extends Component{
             },
             {
                 title: '是否禁用',
-                dataIndex: 'whether_to_disable',
-                key: 'whether_to_disable'
+                // dataIndex: 'whether_to_disable',
+                key: 'whether_to_disable',
+                render: (text, record) => (
+                    record.whether_to_disable?<Checkbox defaultChecked></Checkbox>:<Checkbox></Checkbox>
+                )
             },
             {
                 title: '机构名称',

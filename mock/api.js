@@ -4,7 +4,7 @@ import MockAdapter from 'axios-mock-adapter';
 import {Jobs, job_monitor_analysis, 
             input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
             input_range_date, input_range_week, input_range_month, input_range_year,
-            output_range_date, output_range_week, output_range_month, output_range_year,database_manager} from './data';
+            output_range_date, output_range_week, output_range_month, output_range_year,database_manager,menu_manager} from './data';
 
 const mock = new MockAdapter(axios);
 
@@ -106,8 +106,15 @@ mock.onPost('jobMonitor/showRange', {type: 'output', datet: 'year'})
     .reply('200', {
         rangeData: output_range_year
     })
+
 mock.onPost('databaseManager/findList').reply(
     '200', {
         list: database_manager
+    }
+)
+
+mock.onPost('menuManager/findList').reply(
+    '200', {
+        list: menu_manager
     }
 )

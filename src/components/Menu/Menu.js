@@ -53,12 +53,17 @@ class LeftMenu extends Component{
                         key="config_manager" 
                         title={<span><Icon type="database"/><span>配置管理</span></span>}
                     >
-                        <Menu.Item key="database_manager">数据库管理</Menu.Item>
+                        <Menu.Item key="database_manager">
+                            <Link to="/database_manager">数据库管理</Link>
+                        </Menu.Item>
                     </SubMenu>
                     <SubMenu 
                         key="system_manager" 
                         title={<span><Icon type="tool"/><span>系统管理</span></span>}
                     >
+                        <Menu.Item key="menu_manager">
+                            <Link to="/menu_manager">菜单管理</Link>
+                        </Menu.Item>
                         <Menu.Item key="user_manager">用户管理</Menu.Item>
                         <Menu.Item key="role_manager">角色管理</Menu.Item>
                     </SubMenu>

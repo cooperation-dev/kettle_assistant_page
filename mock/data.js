@@ -251,6 +251,29 @@ const output_range_year = {
     list: output_range_year_data
 }
 
+/**
+ * 数据库管理
+ */
+const database_manager = []
+for(let i=1; i<=11; i++){
+    database_manager.push(Mock.mock({
+        key: i+"",
+        obj_id: i+"",
+        obj_name: "测试名称" + i,
+        obj_sort: i+"",
+        create_time: '2018-10-17 00:00:00',
+        create_name: 'Dawn',
+        whether_to_disable: Mock.Random.integer(0,1)==0?'是':'否',
+        agency_name: 'Dawn',
+        agency_code: 'dawn_leewp@163.com',
+        db_type: '',
+        interview_method: 'Native',
+        jndi_name: '',
+        connection_string: ''
+    }))
+}
+
 export {Jobs, job_monitor_analysis, 
     input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
-    input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year}
+    input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year,
+    database_manager}

@@ -430,8 +430,25 @@ const menu_manager = []
         ]
     }))
 
+/***
+ * 日志管理
+ */
+const data_system_log = []
+for(let i=0; i<=10; i++){
+    data_system_log.push(Mock.mock({
+        key: i+1,
+        id: i+1,
+        "operator|1": ['adan', "zhangsan", "lisi", "wangwu"],
+        "log_type|1": ['普通日志', '登陆日志', '系统日志'],
+        "operate_ip|1": ['122.334.43.123', '124.56.46.35', '23.142.34.14', '32.142.134.1'],
+        "details": Mock.Random.string(20),
+        create_time: '2018-11-05 00:00:00'
+    }))
+}
+
 export {Jobs, job_monitor_analysis, 
     input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
     input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year,
     sum_dic_list, sum_dic_list_change, change_sum_dic_mysql,
-    database_manager, menu_manager}
+    database_manager, menu_manager,
+    data_system_log}

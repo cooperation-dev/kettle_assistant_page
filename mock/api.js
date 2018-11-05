@@ -5,7 +5,8 @@ import {Jobs, job_monitor_analysis,
             input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
             input_range_date, input_range_week, input_range_month, input_range_year,
             output_range_date, output_range_week, output_range_month, output_range_year,
-            sum_dic_list, change_sum_dic_mysql, database_manager,menu_manager} from './data';
+            sum_dic_list, change_sum_dic_mysql, database_manager,menu_manager,
+            data_system_log} from './data';
 
 const mock = new MockAdapter(axios);
 
@@ -132,3 +133,13 @@ mock.onPost('menuManager/findList').reply(
         list: menu_manager
     }
 )
+
+mock.onPost('systemLog/findLogs', {
+    operator: '',
+    log_type: '',
+    operate_ip: '',
+    details: '',
+    create_time: ''
+}).reply('200', {
+    list: data_system_log
+})

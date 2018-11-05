@@ -251,6 +251,102 @@ const output_range_year = {
     list: output_range_year_data
 }
 
+/***
+ * 统一字典
+ */
+const sum_dic_list = []
+const org_sum_dic_oracle = Mock.mock({
+    index: 1,
+    key: 'oracle',
+    dic_code: 'oracle',
+    dic_name: 'oracle',
+    sort: 10,
+    create_time: "2018-09-09 12:34:44",
+    modify_time: '2018-09-18 01:23:46',
+    creator: 'adan',
+    is_disabled: false,
+    dic_type: '数据库类型',
+    belongs: ''
+})
+const org_sum_dic_mysql = Mock.mock({
+    index: 2,
+    key: 'mysql',
+    dic_code: 'mysql',
+    dic_name: 'mysql',
+    sort: 11,
+    create_time: "2018-09-09 12:34:44",
+    modify_time: '2018-09-18 01:23:46',
+    creator: 'adan',
+    is_disabled: true,
+    dic_type: '数据库类型',
+    belongs: ''
+})
+const org_sum_dic_sqlserver = Mock.mock({
+    index: 3,
+    key: 'sqlserver',
+    dic_code: 'sqlserver',
+    dic_name: 'sqlserver',
+    sort: 12,
+    create_time: "2018-09-09 12:34:44",
+    modify_time: '2018-09-18 01:23:46',
+    creator: 'adan',
+    is_disabled: true,
+    dic_type: '数据库类型',
+    belongs: ''
+})
+const org_sum_dic_success_failed = Mock.mock({
+    index: 4,
+    key: 'SUCCESS_FAILED',
+    dic_code: 'SUCCESS_FAILED',
+    dic_name: '成功失败',
+    sort: 20,
+    create_time: "2018-09-09 12:34:44",
+    modify_time: '2018-09-18 01:23:46',
+    creator: 'adan',
+    is_disabled: false,
+    dic_type: '字典类型',
+    belongs: ''
+})
+const org_sum_dic_encoding = Mock.mock({
+    index: 5,
+    key: 'ENCODING',
+    dic_code: 'ENCODING',
+    dic_name: '编码',
+    sort: 21,
+    create_time: "2018-09-09 12:34:44",
+    modify_time: '2018-09-18 01:23:46',
+    creator: 'adan',
+    is_disabled: false,
+    dic_type: '字典类型',
+    belongs: ''
+})
+const change_sum_dic_mysql = Mock.mock({
+    index: 2,
+    key: 'mysql',
+    dic_code: 'mysql',
+    dic_name: 'mysql',
+    sort: 11,
+    create_time: "2018-09-09 12:34:44",
+    modify_time: '2018-09-18 01:23:46',
+    creator: 'adan',
+    is_disabled: false,
+    dic_type: '数据库类型',
+    belongs: ''
+})
+sum_dic_list.push(org_sum_dic_oracle)
+sum_dic_list.push(org_sum_dic_mysql)
+sum_dic_list.push(org_sum_dic_sqlserver)
+sum_dic_list.push(org_sum_dic_success_failed)
+sum_dic_list.push(org_sum_dic_encoding)
+
+const sum_dic_list_change = []
+sum_dic_list_change.push(org_sum_dic_oracle)
+sum_dic_list_change.push(change_sum_dic_mysql)
+sum_dic_list_change.push(org_sum_dic_sqlserver)
+sum_dic_list_change.push(org_sum_dic_success_failed)
+sum_dic_list_change.push(org_sum_dic_encoding)
+
 export {Jobs, job_monitor_analysis, 
     input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
-    input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year}
+    input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year,
+    sum_dic_list, sum_dic_list_change, change_sum_dic_mysql}

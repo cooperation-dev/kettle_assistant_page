@@ -132,7 +132,7 @@ mock.onPost('databaseManager/findList').reply(
 
 mock.onPost('menuManager/findList').reply(
     '200', {
-        list: menu_manager
+        list: menu
     }
 )
 

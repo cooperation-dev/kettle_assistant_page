@@ -453,6 +453,7 @@ const user_manager = []
 for(let i=0; i<=10; i++){
     user_manager.push(Mock.mock({
         id: i + 1,
+        key: i + 1,
         nick_name: 'Name' + (i + 1),
         login_account: i + '7' + i + '546',
         role: 'Role' + (i + 1)
@@ -466,6 +467,7 @@ const role_manager = []
 for(let i=0; i<=10; i++){
     role_manager.push(Mock.mock({
         id: i + 1,
+        key: i + 1,
         role_name: 'Name' + (i + 1),
         role_description: 'Description' + (i + 1)
     }))
@@ -478,6 +480,7 @@ const project_manager = []
 for(let i=0; i<=10; i++){
     project_manager.push(Mock.mock({
         obj_code: i + 1,
+        key: i + 1,
         obj_name: 'Name' + (i + 1),
         obj_sort: i + 1,
         create_time: '2018-11-05 00:00:00',
@@ -499,6 +502,7 @@ const menu = []
         parent_key: "",
         to: "",
         level: 0,
+        type: '功能菜单',
         component: '',
         children: [
             {
@@ -508,6 +512,7 @@ const menu = []
                 parent_key: "job_manager",
                 to: "/job_manager",
                 level: 1,
+                type: '功能菜单',
                 component: 'JobManager',
                 // component: 'bundle-loader?lazy&name=[name]!pages/JobManager/JobManager',
                 // component: 'pages/JobManager/JobManager',
@@ -518,6 +523,7 @@ const menu = []
                 parent_key: 'job_manager',
                 to: '/job_monitor',
                 level: 1,
+                type: '功能菜单',
                 component: 'JobMonitor',
                 // component: 'pages/JobMonitor/JobMonitor',
             },
@@ -529,6 +535,8 @@ const menu = []
         icon: 'tablet',
         parent_key: '',
         to: '',
+        level: 0,
+        type: '功能菜单',
         component: '',
         children: [
             {
@@ -538,6 +546,7 @@ const menu = []
                 parent_key: 'dic_manager',
                 to: '/sum_dic',
                 level: 1,
+                type: '功能菜单',
                 component: 'SumDic',
                 // component: 'pages/SumDic/SumDic',
             },
@@ -550,6 +559,8 @@ const menu = []
         parent_key: '',
         to: '',
         component: '',
+        level: 0,
+        type: '功能菜单',
         children: [
             {
                 key: 'database_manager',
@@ -558,6 +569,7 @@ const menu = []
                 parent_key: 'config_manager',
                 to: '/database_manager',
                 level: 1,
+                type: '功能菜单',
                 component: 'DatabaseManager',
                 // component: 'pages/DatabaseManager/DatabaseManager',
             },
@@ -570,6 +582,8 @@ const menu = []
         parent_key: '',
         to: '',
         component: '',
+        level: 0,
+        type: '功能菜单',
         children: [
             {
                 key: 'menu_manager',
@@ -578,6 +592,7 @@ const menu = []
                 parent_key: 'system_manager',
                 to: '/menu_manager',
                 level: 1,
+                type: '功能菜单',
                 component: 'MenuManager',
             },{
                 key: 'user_manager',
@@ -585,6 +600,7 @@ const menu = []
                 icon: '',
                 parent_key: 'system_manager',
                 to: '/user_manager',
+                type: '功能菜单',
                 level: 1,
                 component: 'UserManager',
             },{
@@ -592,6 +608,7 @@ const menu = []
                 title: '角色管理',
                 icon: '',
                 parent_key: 'system_manager',
+                type: '功能菜单',
                 to: '/role_manager',
                 level: 1,
                 component: 'RoleManager',
@@ -600,6 +617,7 @@ const menu = []
                 title: '项目管理',
                 icon: '',
                 parent_key: 'system_manager',
+                type: '功能菜单',
                 to: '/project_manager',
                 level: 1,
                 component: 'ProjectManager',
@@ -607,6 +625,7 @@ const menu = []
                 key: 'system_log',
                 title: '系统日志',
                 icon: '',
+                type: '功能菜单',
                 parent_key: 'system_manager',
                 to: '/system_log',
                 level: 1,
@@ -620,7 +639,9 @@ const menu = []
         icon: 'tag-o',
         parent_key: '',
         to: '',
+        level: 0,
         component: '',
+        type: '功能菜单',
         children: [
             {
                 key: 'database_pool',
@@ -628,6 +649,7 @@ const menu = []
                 icon: '',
                 parent_key: 'assistant_manager',
                 to: '/database_tool',
+                type: '功能菜单',
                 level: 1,
                 component: '',
             },{
@@ -636,6 +658,7 @@ const menu = []
                 icon: '',
                 parent_key: 'assistant_manager',
                 to: '/interval',
+                type: '功能菜单',
                 level: 1,
                 component: 'AuxCron',
             },{
@@ -644,6 +667,7 @@ const menu = []
                 icon: '',
                 parent_key: 'assistant_manager',
                 to: '/json',
+                type: '功能菜单',
                 level: 1,
                 component: 'AuxJson',
             },

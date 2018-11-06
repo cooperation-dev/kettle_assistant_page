@@ -14,8 +14,8 @@ class MenuManager extends Component{
         const columns = [
             {
                 title: '名称',
-                dataIndex: 'name',
-                key: 'name'
+                dataIndex: 'title',
+                key: 'title'
             },
             {
                 title: '类型',
@@ -24,18 +24,18 @@ class MenuManager extends Component{
             },
             {
                 title: '编码',
-                dataIndex: 'coding',
-                key: 'coding'
+                dataIndex: 'key',
+                key: 'key'
             },
             {
                 title: '序号',
-                dataIndex: 'num',
-                key: 'num'
+                dataIndex: 'level',
+                key: 'level'
             },
             {
                 title: '父节点',
-                dataIndex: 'parent_node',
-                key: 'parent_node'
+                dataIndex: 'parent_key',
+                key: 'parent_key'
             },
             {
                 title: '过滤条件',

@@ -78,7 +78,7 @@ class ProjectManager extends Component{
                                     <Checkbox></Checkbox>
                                 </Form.Item>
                             </Col>
-                            <Col span={6} key={3}>
+                            <Col span={6} key={4}>
                                 <Form.Item label="状态:">
                                     <Input placeholder="状态"/>
                                 </Form.Item>

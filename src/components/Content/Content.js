@@ -10,6 +10,9 @@ import SumDic from 'bundle-loader?lazy&name=[name]!pages/SumDic/SumDic';
 import DatabaseManager from 'bundle-loader?lazy&name=[name]!pages/DatabaseManager/DatabaseManager';
 import MenuManager from 'bundle-loader?lazy&name=[name]!pages/MenuManager/MenuManager';
 import SystemLog from 'bundle-loader?lazy&name=[name]!pages/SystemLog/SystemLog';
+import UserManager from 'bundle-loader?lazy&name=[name]!pages/UserManager/UserManager';
+import RoleManager from 'bundle-loader?lazy&name=[name]!pages/RoleManager/RoleManager';
+import ProjectManager from 'bundle-loader?lazy&name=[name]!pages/ProjectManager/ProjectManager';
 import Bundle from '../../router/Bundle';
 import {Layout, Icon, Breadcrumb} from 'antd';
 
@@ -51,6 +54,9 @@ class Content extends Component{
                     <Route exact path="/database_manager" component={createComponent(DatabaseManager)}></Route>
                     <Route exact path="/menu_manager" component={createComponent(MenuManager)}></Route>
                     <Route exact path="/system_log" component={createComponent(SystemLog)}></Route>
+                    <Route exact path="/user_manager" component={createComponent(UserManager)}></Route>
+                    <Route exact path="/role_manager" component={createComponent(RoleManager)}></Route>
+                    <Route exact path="/project_manager" component={createComponent(ProjectManager)}></Route>
                 </Switch>
             </Layout>
         )

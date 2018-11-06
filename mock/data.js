@@ -356,7 +356,7 @@ for(let i=1; i<=11; i++){
         obj_id: i+"",
         obj_name: "测试名称" + i,
         obj_sort: i+"",
-        create_time: '2018-10-17 00:00:00',
+        create_time: '2018-11-05 00:00:00',
         create_name: 'Dawn',
         whether_to_disable: Mock.Random.integer(0,1)==0?true:false,
         agency_name: 'Dawn',
@@ -446,9 +446,51 @@ for(let i=0; i<=10; i++){
     }))
 }
 
+/**
+ * 用户管理
+ */
+const user_manager = []
+for(let i=0; i<=10; i++){
+    user_manager.push(Mock.mock({
+        id: i + 1,
+        nick_name: 'Name' + (i + 1),
+        login_account: i + '7' + i + '546',
+        role: 'Role' + (i + 1)
+    }))
+}
+
+/**
+ * 角色管理
+ */
+const role_manager = []
+for(let i=0; i<=10; i++){
+    role_manager.push(Mock.mock({
+        id: i + 1,
+        role_name: 'Name' + (i + 1),
+        role_description: 'Description' + (i + 1)
+    }))
+}
+
+/**
+ * 项目管理
+ */
+const project_manager = []
+for(let i=0; i<=10; i++){
+    project_manager.push(Mock.mock({
+        obj_code: i + 1,
+        obj_name: 'Name' + (i + 1),
+        obj_sort: i + 1,
+        create_time: '2018-11-05 00:00:00',
+        create_name: 'CreateName' + (i + 1),
+        whether_to_disable:Mock.Random.integer(0,1) ==0 ? true:false,
+        project_url: 'www.test.com',
+        status: Mock.Random.integer(0,1) == 0?'成功':'失败'
+    }))
+}
+
 export {Jobs, job_monitor_analysis, 
     input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
     input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year,
     sum_dic_list, sum_dic_list_change, change_sum_dic_mysql,
-    database_manager, menu_manager,
+    database_manager, menu_manager,role_manager,user_manager,project_manager,
     data_system_log}

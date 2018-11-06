@@ -1,9 +1,11 @@
-import {TOGGLE_MENU, CHANGE_MENU} from '../actions/app';
+import {TOGGLE_MENU, CHANGE_MENU, LOAD_MENU} from '../actions/app';
 
 const initState = {
     collapsed: false,
     selectKeys: ['job_manager'],
     openKeys: ['job_manager'],
+    list: [],
+    sub_list: []
 }
 
 export default function reducers(state=initState, action){
@@ -19,6 +21,17 @@ export default function reducers(state=initState, action){
                 ...state,
                 selectKeys: [],
                 openKeys: [],
+            }
+        }
+        case LOAD_MENU: {
+            let sub = []
+            action.list.map(l => {
+                sub = sub.concat(l.children)
+            })
+            return {
+                ...state, 
+                list: action.list,
+                sub_list: sub
             }
         }
         default:

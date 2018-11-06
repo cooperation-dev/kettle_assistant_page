@@ -19,6 +19,8 @@ import Bundle from '../../router/Bundle';
 import {Layout, Icon, Breadcrumb} from 'antd';
 
 import './Content.css';
+import MenuItem from 'antd/lib/menu/MenuItem';
+import { runInThisContext } from 'vm';
 
 const Loading = function () {
     return <div>Loading...</div>
@@ -34,8 +36,9 @@ const createComponent = (component) => (props) => (
 
 
 class Content extends Component{
-
+    
     render(){
+        let a = require('bundle-loader?lazy&name=[name]!pages/JobManager/JobManager')
         return (
             <Layout>
                 <Layout.Header style={{ background: '#fff', padding: 0 }}>
@@ -50,17 +53,13 @@ class Content extends Component{
                     <Breadcrumb.Item>作业管理</Breadcrumb.Item>
                 </Breadcrumb>
                 <Switch>
-                    <Route exact path="/job_manager" component={createComponent(JobManager)}></Route>
-                    <Route exact path="/job_monitor" component={createComponent(JobMonitor)}></Route>
-                    <Route exact path="/sum_dic" component={createComponent(SumDic)}></Route>
-                    <Route exact path="/database_manager" component={createComponent(DatabaseManager)}></Route>
-                    <Route exact path="/menu_manager" component={createComponent(MenuManager)}></Route>
-                    <Route exact path="/system_log" component={createComponent(SystemLog)}></Route>
-                    <Route exact path="/aux_cron" component={createComponent(AuxCron)}></Route>
-                    <Route exact path="/aux_json" component={createComponent(AuxJson)}></Route>
-                    <Route exact path="/user_manager" component={createComponent(UserManager)}></Route>
-                    <Route exact path="/role_manager" component={createComponent(RoleManager)}></Route>
-                    <Route exact path="/project_manager" component={createComponent(ProjectManager)}></Route>
+                    {
+                        this.props.menu_list.filter(menu => menu.component!="").map(menu => {
+                            return (
+                                <Route key={menu.key} exact path={menu.to} component={createComponent(require(`bundle-loader?lazy&name=[name]!pages/${menu.component}/${menu.component}`))}></Route>
+                            )
+                        })
+                    }
                 </Switch>
             </Layout>
         )

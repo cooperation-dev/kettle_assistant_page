@@ -7,7 +7,8 @@ import {Jobs, job_monitor_analysis,
             output_range_date, output_range_week, output_range_month, output_range_year,
             sum_dic_list, change_sum_dic_mysql, database_manager,menu_manager,role_manager,
             user_manager,project_manager,
-            data_system_log} from './data';
+            data_system_log,
+            menu} from './data';
 
 const mock = new MockAdapter(axios);
 
@@ -162,3 +163,8 @@ mock.onPost('projectManager/findProjects').reply(
         list: project_manager
     }
 )
+
+mock.onPost('homeController/loadMenu')
+    .reply('200', {
+        list: menu
+    })

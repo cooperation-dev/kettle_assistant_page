@@ -5,7 +5,7 @@ class AuxJson extends Component{
     render(){
         return (
             <div>
-
+                
             </div>
         )
     }

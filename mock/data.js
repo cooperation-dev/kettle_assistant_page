@@ -488,9 +488,171 @@ for(let i=0; i<=10; i++){
     }))
 }
 
+/***
+ * 菜单
+ */
+const menu = []
+    menu.push(Mock.mock({
+        key: "job_manager",
+        title: "作业管理",
+        icon: "file",
+        parent_key: "",
+        to: "",
+        level: 0,
+        component: '',
+        children: [
+            {
+                key: "job_manager_detail",
+                title: "作业管理",
+                icon: "",
+                parent_key: "job_manager",
+                to: "/job_manager",
+                level: 1,
+                component: 'JobManager',
+                // component: 'bundle-loader?lazy&name=[name]!pages/JobManager/JobManager',
+                // component: 'pages/JobManager/JobManager',
+            },{
+                key: 'job_monitor',
+                title: '作业监控',
+                icon: '',
+                parent_key: 'job_manager',
+                to: '/job_monitor',
+                level: 1,
+                component: 'JobMonitor',
+                // component: 'pages/JobMonitor/JobMonitor',
+            },
+        ]
+    }))
+    menu.push(Mock.mock({
+        key: 'dic_manager',
+        title: '字典管理',
+        icon: 'tablet',
+        parent_key: '',
+        to: '',
+        component: '',
+        children: [
+            {
+                key: 'sum_dic',
+                title: '统一字典',
+                icon: '',
+                parent_key: 'dic_manager',
+                to: '/sum_dic',
+                level: 1,
+                component: 'SumDic',
+                // component: 'pages/SumDic/SumDic',
+            },
+        ]
+    }))
+    menu.push(Mock.mock({
+        key: 'config_manager',
+        title: '配置管理',
+        icon: 'database',
+        parent_key: '',
+        to: '',
+        component: '',
+        children: [
+            {
+                key: 'database_manager',
+                title: '数据库管理',
+                icon: '',
+                parent_key: 'config_manager',
+                to: '/database_manager',
+                level: 1,
+                component: 'DatabaseManager',
+                // component: 'pages/DatabaseManager/DatabaseManager',
+            },
+        ]
+    }))
+    menu.push(Mock.mock({
+        key: 'system_manager',
+        title: '系统管理',
+        icon: 'tool',
+        parent_key: '',
+        to: '',
+        component: '',
+        children: [
+            {
+                key: 'menu_manager',
+                title: '菜单管理',
+                icon: '',
+                parent_key: 'system_manager',
+                to: '/menu_manager',
+                level: 1,
+                component: 'MenuManager',
+            },{
+                key: 'user_manager',
+                title: '用户管理',
+                icon: '',
+                parent_key: 'system_manager',
+                to: '/user_manager',
+                level: 1,
+                component: 'UserManager',
+            },{
+                key: 'role_manager',
+                title: '角色管理',
+                icon: '',
+                parent_key: 'system_manager',
+                to: '/role_manager',
+                level: 1,
+                component: 'RoleManager',
+            },{
+                key: 'project_manager',
+                title: '项目管理',
+                icon: '',
+                parent_key: 'system_manager',
+                to: '/project_manager',
+                level: 1,
+                component: 'ProjectManager',
+            },{
+                key: 'system_log',
+                title: '系统日志',
+                icon: '',
+                parent_key: 'system_manager',
+                to: '/system_log',
+                level: 1,
+                component: 'SystemLog',
+            },
+        ]
+    }))
+    menu.push(Mock.mock({
+        key: 'assistant_manager',
+        title: '辅助工具',
+        icon: 'tag-o',
+        parent_key: '',
+        to: '',
+        component: '',
+        children: [
+            {
+                key: 'database_pool',
+                title: 'druid',
+                icon: '',
+                parent_key: 'assistant_manager',
+                to: '/database_tool',
+                level: 1,
+                component: '',
+            },{
+                key: 'interval',
+                title: 'cron',
+                icon: '',
+                parent_key: 'assistant_manager',
+                to: '/interval',
+                level: 1,
+                component: 'AuxCron',
+            },{
+                key: 'json',
+                title: 'json',
+                icon: '',
+                parent_key: 'assistant_manager',
+                to: '/json',
+                level: 1,
+                component: 'AuxJson',
+            },
+        ]
+    }))
+
 export {Jobs, job_monitor_analysis, 
     input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
     input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year,
     sum_dic_list, sum_dic_list_change, change_sum_dic_mysql,
     database_manager, menu_manager,role_manager,user_manager,project_manager,
-    data_system_log}
+    data_system_log, menu}

@@ -29,9 +29,28 @@ class LeftMenu extends Component{
                     theme="dark"
                     inlineCollapsed={this.props.app.collapsed}
                     onClick={(e) => this.props.selectMenu(e)}
-                    // selectedKeys={this.props.app.openKeys}
                 >
-                    <SubMenu 
+                    {
+                        this.props.menu_list.map(menu => {
+                            return (
+                                <SubMenu 
+                                    key={menu.key}
+                                    title={<span><Icon type={menu.icon}/><span>{menu.title}</span></span>}
+                                >
+                                    {
+                                        menu.children.map(child => {
+                                            return (
+                                                <Menu.Item key={child.key}>
+                                                    <Link to={child.to}>{child.title}</Link>
+                                                </Menu.Item>
+                                            )
+                                        })
+                                    }
+                                </SubMenu>
+                            )
+                        })
+                    }
+                    {/* <SubMenu 
                         key="job_manager" 
                         title={<span><Icon type="file"/><span>作业管理</span></span>}
                     >
@@ -88,7 +107,7 @@ class LeftMenu extends Component{
                         <Menu.Item key="json">
                             <Link to="/aux_json">JSON</Link>
                         </Menu.Item>
-                    </SubMenu>
+                    </SubMenu> */}
                 </Menu>
             </Sider>
         )

@@ -26,6 +26,7 @@ class ProjectManager extends Component{
                 title: '对象排序',
                 dataIndex: 'obj_sort',
                 key: 'obj_sort',
+                sorter: (a, b) => a.obj_sort - b.obj_sort
             },
             {
                 title: '创建时间',
@@ -40,7 +41,10 @@ class ProjectManager extends Component{
             {
                 title: '是否禁用',
                 dataIndex: 'whether_to_disable',
-                key: 'whether_to_disable'
+                key: 'whether_to_disable',
+                render: (text, record) => (
+                    record.whether_to_disable?<Checkbox defaultChecked></Checkbox>:<Checkbox></Checkbox>
+                )
             },
             {
                 title: '项目URL',
@@ -70,7 +74,8 @@ class ProjectManager extends Component{
                             </Col>
                             <Col span={6} key={3}>
                                 <Form.Item label="是否禁用:">
-                                    <Input placeholder="是否禁用"/>
+                                    {/* <Input placeholder="是否禁用"/> */}
+                                    <Checkbox></Checkbox>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={3}>

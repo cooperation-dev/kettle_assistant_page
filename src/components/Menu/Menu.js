@@ -75,8 +75,12 @@ class LeftMenu extends Component{
                         title={<span><Icon type="tag-o"/><span>辅助工具</span></span>} 
                     >
                         <Menu.Item key="database_pool">druid</Menu.Item>
-                        <Menu.Item key="interval">cron</Menu.Item>
-                        <Menu.Item key="json">JSON</Menu.Item>
+                        <Menu.Item key="interval">
+                            <Link to="/aux_cron">cron</Link>
+                        </Menu.Item>
+                        <Menu.Item key="json">
+                            <Link to="/aux_json">JSON</Link>
+                        </Menu.Item>
                     </SubMenu>
                 </Menu>
             </Sider>

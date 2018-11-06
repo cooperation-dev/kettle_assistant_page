@@ -10,6 +10,8 @@ import SumDic from 'bundle-loader?lazy&name=[name]!pages/SumDic/SumDic';
 import DatabaseManager from 'bundle-loader?lazy&name=[name]!pages/DatabaseManager/DatabaseManager';
 import MenuManager from 'bundle-loader?lazy&name=[name]!pages/MenuManager/MenuManager';
 import SystemLog from 'bundle-loader?lazy&name=[name]!pages/SystemLog/SystemLog';
+import AuxCron from 'bundle-loader?lazy&name=[name]!pages/AuxCron/AuxCron';
+import AuxJson from 'bundle-loader?lazy&name=[name]!pages/AuxJson/AuxJson';
 import Bundle from '../../router/Bundle';
 import {Layout, Icon, Breadcrumb} from 'antd';
 
@@ -51,6 +53,8 @@ class Content extends Component{
                     <Route exact path="/database_manager" component={createComponent(DatabaseManager)}></Route>
                     <Route exact path="/menu_manager" component={createComponent(MenuManager)}></Route>
                     <Route exact path="/system_log" component={createComponent(SystemLog)}></Route>
+                    <Route exact path="/aux_cron" component={createComponent(AuxCron)}></Route>
+                    <Route exact path="/aux_json" component={createComponent(AuxJson)}></Route>
                 </Switch>
             </Layout>
         )

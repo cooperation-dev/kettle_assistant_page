@@ -1,13 +1,20 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Button, Table} from 'antd';
+import {Row, Col, Form, Input, Button, Table, Modal} from 'antd';
 
-import {findJobs} from '../../redux/actions/job_manager';
+import {findJobs, 
+    addJobModalShow, addJobModalSure, addJobModalCancel,
+    updateJobModalShow, updateJobModalSure, updateJobModalCancel} from '../../redux/actions/job_manager';
 import {connect} from 'react-redux';
 
 import './JobManager.css';
 import 'antd/dist/antd.css';
 
 class JobManager extends Component{
+    constructor(props){
+        super(props)
+
+    }
+
     componentDidMount = () => {
         this.props.findJobs()
     }
@@ -107,8 +114,8 @@ class JobManager extends Component{
                 </Row>
                 <Row style={{marginTop:"15px"}}>
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
-                        <Button type="default" size="default" className="btn">新增作业</Button>
-                        <Button type="default" size="default" className="btn">修改作业</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.addJobModalShow()}>新增作业</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.updateJobModalShow()}>修改作业</Button>
                         <Button type="default" size="default" className="btn">删除作业</Button>
                         <Button type="default" size="default" className="btn">查看运行日志</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
@@ -116,15 +123,61 @@ class JobManager extends Component{
                         <Table dataSource={this.props.jobManager.list} columns={columns} />
                     </Form>
                 </Row>
+                <AddModal visible={this.props.jobManager.add_visible} onOk={() => this.props.addJobModalSure()} onCancel={() => this.props.addJobModalCancel()}></AddModal>
+                <UpdateModal visible={this.props.jobManager.update_visible} onOk={() => this.props.updateJobModalSure()} onCancel={() => this.props.updateJobModalCancel()}></UpdateModal>
             </div>
         )
     }
 }
-/* 
-ReactDOM.render(
-    <JobManager/>,
-    document.getElementById('jobmanager')
-) */
+
+class AddModal extends Component{
+    render(){
+        return (
+            <Modal
+                title="新增作业"
+                visible={this.props.visible}
+                onOk={() => this.props.onOk()}
+                onCancel={() => this.props.onCancel()}
+            >
+                <Form.Item label="作业名称">
+                    <Input placeholder="作业名称"/>
+                </Form.Item>
+                <Form.Item label="作业类型">
+                    <Input placeholder="作业类型"/>
+                </Form.Item>
+                <Form.Item label="作业描述">
+                    <Input placeholder="作业描述"/>
+                </Form.Item>
+            </Modal>
+        )
+    }
+}
+
+class UpdateModal extends Component{
+    render(){
+        return (
+            <Modal
+                title="修改作业"
+                visible={this.props.visible}
+                onOk={() => this.props.onOk()}
+                onCancel={() => this.props.onCancel()}
+            >
+                <Form.Item label="作业名称">
+                    <Input placeholder="作业名称"/>
+                </Form.Item>
+                <Form.Item label="作业类型">
+                    <Input placeholder="作业类型"/>
+                </Form.Item>
+                <Form.Item label="作业描述">
+                    <Input placeholder="作业描述"/>
+                </Form.Item>
+            </Modal>
+        )
+    }
+}
+
 export default connect((state) => ({
     jobManager: state.jobManager
-}), {findJobs})(JobManager)
+}), {findJobs, 
+    addJobModalShow, addJobModalSure, addJobModalCancel, 
+    updateJobModalShow, updateJobModalSure, updateJobModalCancel})(JobManager)

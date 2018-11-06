@@ -12,6 +12,9 @@ import MenuManager from 'bundle-loader?lazy&name=[name]!pages/MenuManager/MenuMa
 import SystemLog from 'bundle-loader?lazy&name=[name]!pages/SystemLog/SystemLog';
 import AuxCron from 'bundle-loader?lazy&name=[name]!pages/AuxCron/AuxCron';
 import AuxJson from 'bundle-loader?lazy&name=[name]!pages/AuxJson/AuxJson';
+import UserManager from 'bundle-loader?lazy&name=[name]!pages/UserManager/UserManager';
+import RoleManager from 'bundle-loader?lazy&name=[name]!pages/RoleManager/RoleManager';
+import ProjectManager from 'bundle-loader?lazy&name=[name]!pages/ProjectManager/ProjectManager';
 import Bundle from '../../router/Bundle';
 import {Layout, Icon, Breadcrumb} from 'antd';
 
@@ -55,6 +58,9 @@ class Content extends Component{
                     <Route exact path="/system_log" component={createComponent(SystemLog)}></Route>
                     <Route exact path="/aux_cron" component={createComponent(AuxCron)}></Route>
                     <Route exact path="/aux_json" component={createComponent(AuxJson)}></Route>
+                    <Route exact path="/user_manager" component={createComponent(UserManager)}></Route>
+                    <Route exact path="/role_manager" component={createComponent(RoleManager)}></Route>
+                    <Route exact path="/project_manager" component={createComponent(ProjectManager)}></Route>
                 </Switch>
             </Layout>
         )

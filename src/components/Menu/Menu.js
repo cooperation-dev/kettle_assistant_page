@@ -64,8 +64,15 @@ class LeftMenu extends Component{
                         <Menu.Item key="menu_manager">
                             <Link to="/menu_manager">菜单管理</Link>
                         </Menu.Item>
-                        <Menu.Item key="user_manager">用户管理</Menu.Item>
-                        <Menu.Item key="role_manager">角色管理</Menu.Item>
+                        <Menu.Item key="user_manager">
+                            <Link to="/user_manager">用户管理</Link>
+                        </Menu.Item>
+                        <Menu.Item key="role_manager">
+                            <Link to="/role_manager">角色管理</Link>
+                        </Menu.Item>
+                        <Menu.Item key="project_manager">
+                            <Link to="/project_manager">项目管理</Link>
+                        </Menu.Item>
                         <Menu.Item key="system_log">
                             <Link to="/system_log">日志管理</Link>
                         </Menu.Item>

@@ -7,6 +7,9 @@ import sumDic from './reducers/sum_dic';
 import databaseManager from './reducers/database_manager';
 import menuManager from './reducers/menu_manager';
 import systemLog from './reducers/system_log';
+import userManager from './reducers/user_manager'
+import roleManager from './reducers/role_manager'
+import projectManager from './reducers/project_manager'
 
 export default function combineReducers(state={}, action){
     const obj_counter = counter(state.counter, action);
@@ -18,6 +21,9 @@ export default function combineReducers(state={}, action){
     const obj_databaseManager = databaseManager(state.databaseManager, action);
     const obj_menuManager = menuManager(state.menuManager, action);
     const obj_systemLog = systemLog(state.systemLog, action);
+    const obj_userManager = userManager(state.userManager, action);
+    const obj_roleManager = roleManager(state.roleManager, action);
+    const obj_projectManager = projectManager(state.projectManager, action);
     return {
         counter: obj_counter,
         userInfo: obj_userInfo,
@@ -28,5 +34,8 @@ export default function combineReducers(state={}, action){
         databaseManager: obj_databaseManager,
         menuManager: obj_menuManager,
         systemLog: obj_systemLog,
+        userManager: obj_userManager,
+        roleManager: obj_roleManager,
+        projectManager: obj_projectManager,
     }
 }

@@ -1,21 +1,21 @@
 import React, {Component} from 'react'
 import {Form, Input, Checkbox, Button, Row, Col, Table} from 'antd'
 
-import {findList} from '../../redux/actions/database_manager'
+import {findProjects} from '../../redux/actions/project_manager'
 import {connect} from 'react-redux';
 
-import './DatabaseManager.css'
+import './ProjectManager.css'
 
-class DatabaseManager extends Component{
+class ProjectManager extends Component{
     componentDidMount = () => {
-        this.props.findList()
+        this.props.findProjects()
     }
     render(){
         const columns = [
             {
                 title: '对象代码',
-                dataIndex: 'obj_id',
-                key: 'obj_id'
+                dataIndex: 'obj_code',
+                key: 'obj_code'
             },
             {
                 title: '对象名称',
@@ -26,7 +26,6 @@ class DatabaseManager extends Component{
                 title: '对象排序',
                 dataIndex: 'obj_sort',
                 key: 'obj_sort',
-                // defaultSortOrder: 'descend',
                 sorter: (a, b) => a.obj_sort - b.obj_sort
             },
             {
@@ -48,34 +47,14 @@ class DatabaseManager extends Component{
                 )
             },
             {
-                title: '机构名称',
-                dataIndex: 'agency_name',
-                key: 'agency_name'
+                title: '项目URL',
+                dataIndex: 'project_url',
+                key: 'project_url'
             },
             {
-                title: '机构代码',
-                dataIndex: 'agency_code',
-                key: 'agency_code'
-            },
-            {
-                title: '数据库类型',
-                dataIndex: 'db_type',
-                key: 'db_type'
-            },
-            {
-                title: '访问方式',
-                dataIndex: 'interview_method',
-                key: 'interview_method'
-            },
-            {
-                title: 'JNDI名称',
-                dataIndex: 'jndi_name',
-                key: 'jndi_name'
-            },
-            {
-                title: '连接串',
-                dataIndex: 'connection_string',
-                key: 'connection_string'
+                title: '状态',
+                dataIndex: 'status',
+                key: 'status'
             }
         ];
         return (
@@ -100,28 +79,6 @@ class DatabaseManager extends Component{
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={4}>
-                                <Form.Item label="机构名称:">
-                                    <Input placeholder="机构名称"/>
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row gutter={24}>
-                            <Col span={6} key={5}>
-                                <Form.Item label="机构代码：">
-                                    <Input placeholder="机构代码"/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={6} key={6}>
-                                <Form.Item label="连接串：">
-                                    <Input placeholder="连接串"/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={6} key={7}>
-                                <Form.Item label="用户名:">
-                                    <Input placeholder="用户名"/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={6} key={8}>
                                 <Form.Item label="状态:">
                                     <Input placeholder="状态"/>
                                 </Form.Item>
@@ -141,7 +98,7 @@ class DatabaseManager extends Component{
                         <Button type="default" size="default" className="btn">修改</Button>
                         <Button type="default" size="default" className="btn">删除</Button>
                         <Button type="default" size="default" className="btn">查看</Button>
-                        <Table dataSource={this.props.databaseManager.list} columns={columns} />
+                        <Table dataSource={this.props.projectManager.list} columns={columns} />
                     </Form>
                 </Row>
             </div>
@@ -149,4 +106,4 @@ class DatabaseManager extends Component{
     }
 }
 
-export default connect((state) => ({databaseManager: state.databaseManager}), {findList})(DatabaseManager)
+export default connect((state) => ({projectManager: state.projectManager}), {findProjects})(ProjectManager)

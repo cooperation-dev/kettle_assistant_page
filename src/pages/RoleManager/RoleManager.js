@@ -75,7 +75,12 @@ class AddModal extends Component{
                 onOk={() => this.props.onOk()}
                 onCancel={() => this.props.onCancel()}
                 >
-                <p>新增对话框</p>
+                <Form.Item label="角色名">
+                    <Input placeholder="角色名"/>
+                </Form.Item>
+                <Form.Item label="角色描述">
+                    <Input placeholder="角色描述"/>
+                </Form.Item>
             </Modal>
         )
     }
@@ -89,7 +94,12 @@ class UpdateModal extends Component{
                 onOk={() => this.props.onOk()}
                 onCancel={() => this.props.onCancel()}
                 >
-                <p>修改对话框</p>
+                <Form.Item label="角色名">
+                    <Input placeholder="角色名"/>
+                </Form.Item>
+                <Form.Item label="角色描述">
+                    <Input placeholder="角色描述"/>
+                </Form.Item>
             </Modal>
         )
     }

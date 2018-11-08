@@ -110,6 +110,11 @@ class ProjectManager extends Component{
     }
 }
 
+const formItemLayout = {
+    labelCol: { span: 4 },
+    wrapperCol: { span: 8 },
+};
+
 class AddModal extends Component{
     render(){
         return (
@@ -118,7 +123,18 @@ class AddModal extends Component{
                 onOk={() => this.props.onOk()}
                 onCancel={() => this.props.onCancel()}
                 >
-                <p>新增对话框</p>
+                <Form.Item label="对象名称">
+                    <Input placeholder="对象名称"/>
+                </Form.Item>
+                <Form.Item label="项目URL">
+                    <Input placeholder="项目URL"/>
+                </Form.Item>
+                <Form.Item label="排序">
+                    <Input placeholder="排序"/>
+                </Form.Item>
+                <Form.Item {...formItemLayout} label="是否禁用">
+                    <Checkbox></Checkbox>
+                </Form.Item>
             </Modal>
         )
     }
@@ -132,7 +148,18 @@ class UpdateModal extends Component{
                 onOk={() => this.props.onOk()}
                 onCancel={() => this.props.onCancel()}
                 >
-                <p>修改对话框</p>
+                <Form.Item label="对象名称">
+                    <Input placeholder="对象名称"/>
+                </Form.Item>
+                <Form.Item label="项目URL">
+                    <Input placeholder="项目URL"/>
+                </Form.Item>
+                <Form.Item label="排序">
+                    <Input placeholder="排序"/>
+                </Form.Item>
+                <Form.Item {...formItemLayout} label="是否禁用">
+                    <Checkbox></Checkbox>
+                </Form.Item>
             </Modal>
         )
     }

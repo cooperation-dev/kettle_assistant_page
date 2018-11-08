@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
-import {Form, Input, Button, Row, Col, Table} from 'antd'
+import {Form, Input, Button, Row, Col, Table, Modal} from 'antd'
 
-import {findRoles} from '../../redux/actions/role_manager'
+import {findRoles, 
+        addRoleShow, addRoleCancel, addRoleSure, 
+        updateRoleShow, updateRoleCancel, updateRoleSure} from '../../redux/actions/role_manager'
 import {connect} from 'react-redux';
 
 import './RoleManager.css'
@@ -49,18 +51,68 @@ class RoleManager extends Component{
                 </Row>
                 <Row style={{marginTop:"15px"}}>
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
-                        <Button type="default" size="default" className="btn">新增</Button>
-                        <Button type="default" size="default" className="btn">修改</Button>
-                        <Button type="default" size="default" className="btn">删除</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.addRoleShow()}>新增</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.updateRoleShow()}>修改</Button>
+                        <Button type="default" size="default" className="btn" onClick={showDeleteConfirm}>删除</Button>
                         <Button type="default" size="default" className="btn">查看</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Button type="default" size="default" className="btn">权限分配</Button>
                         <Table dataSource={this.props.roleManager.list} columns={columns} />
                     </Form>
                 </Row>
+                <AddModal visible={this.props.roleManager.add_visible} onOk={() => this.props.addRoleSure()} onCancel={() => this.props.addRoleCancel()}></AddModal>
+                <UpdateModal visible={this.props.roleManager.update_visible} onOk={() => this.props.updateRoleSure()} onCancel={() => this.props.updateRoleCancel()}></UpdateModal>
             </div>
         )
     }
 }
 
-export default connect((state) => ({roleManager: state.roleManager}), {findRoles})(RoleManager)
+class AddModal extends Component{
+    render(){
+        return (
+            <Modal title="新增角色"
+                visible={this.props.visible}
+                onOk={() => this.props.onOk()}
+                onCancel={() => this.props.onCancel()}
+                >
+                <p>新增对话框</p>
+            </Modal>
+        )
+    }
+}
+
+class UpdateModal extends Component{
+    render(){
+        return (
+            <Modal title="修改角色"
+                visible={this.props.visible}
+                onOk={() => this.props.onOk()}
+                onCancel={() => this.props.onCancel()}
+                >
+                <p>修改对话框</p>
+            </Modal>
+        )
+    }
+}
+
+function showDeleteConfirm() {
+    Modal.confirm({
+      title: '删除角色',
+      content: '确定要删除吗？',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        console.log('OK');
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
+export default connect((state) => ({roleManager: state.roleManager}), {
+    findRoles, 
+    addRoleShow, addRoleCancel, addRoleSure, 
+    updateRoleShow, updateRoleCancel, updateRoleSure
+})(RoleManager)

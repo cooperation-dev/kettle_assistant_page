@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
-import {Form, Input, Checkbox, Button, Row, Col, Table} from 'antd'
+import {Form, Input, Checkbox, Button, Row, Col, Table, Modal} from 'antd'
 
-import {findProjects} from '../../redux/actions/project_manager'
+import {findProjects, 
+        addProjectShow, addProjectCancel, addProjectSure, 
+        updateProjectShow, updateProjectCancel, updateProjectSure} from '../../redux/actions/project_manager'
 import {connect} from 'react-redux';
 
 import './ProjectManager.css'
@@ -94,16 +96,93 @@ class ProjectManager extends Component{
                 </Row>
                 <Row style={{marginTop:"15px"}}>
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
-                        <Button type="default" size="default" className="btn">新增</Button>
-                        <Button type="default" size="default" className="btn">修改</Button>
-                        <Button type="default" size="default" className="btn">删除</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.addProjectShow()}>新增</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.updateProjectShow()}>修改</Button>
+                        <Button type="default" size="default" className="btn" onClick={showDeleteConfirm}>删除</Button>
                         <Button type="default" size="default" className="btn">查看</Button>
                         <Table dataSource={this.props.projectManager.list} columns={columns} />
                     </Form>
                 </Row>
+                <AddModal visible={this.props.projectManager.add_visible} onOk={() => this.props.addProjectSure()} onCancel={() => this.props.addProjectCancel()}></AddModal>
+                <UpdateModal visible={this.props.projectManager.update_visible} onOk={() => this.props.updateProjectSure()} onCancel={() => this.props.updateProjectCancel()}></UpdateModal>
             </div>
         )
     }
 }
 
-export default connect((state) => ({projectManager: state.projectManager}), {findProjects})(ProjectManager)
+const formItemLayout = {
+    labelCol: { span: 4 },
+    wrapperCol: { span: 8 },
+};
+
+class AddModal extends Component{
+    render(){
+        return (
+            <Modal title="新增项目"
+                visible={this.props.visible}
+                onOk={() => this.props.onOk()}
+                onCancel={() => this.props.onCancel()}
+                >
+                <Form.Item label="对象名称">
+                    <Input placeholder="对象名称"/>
+                </Form.Item>
+                <Form.Item label="项目URL">
+                    <Input placeholder="项目URL"/>
+                </Form.Item>
+                <Form.Item label="排序">
+                    <Input placeholder="排序"/>
+                </Form.Item>
+                <Form.Item {...formItemLayout} label="是否禁用">
+                    <Checkbox></Checkbox>
+                </Form.Item>
+            </Modal>
+        )
+    }
+}
+
+class UpdateModal extends Component{
+    render(){
+        return (
+            <Modal title="修改项目"
+                visible={this.props.visible}
+                onOk={() => this.props.onOk()}
+                onCancel={() => this.props.onCancel()}
+                >
+                <Form.Item label="对象名称">
+                    <Input placeholder="对象名称"/>
+                </Form.Item>
+                <Form.Item label="项目URL">
+                    <Input placeholder="项目URL"/>
+                </Form.Item>
+                <Form.Item label="排序">
+                    <Input placeholder="排序"/>
+                </Form.Item>
+                <Form.Item {...formItemLayout} label="是否禁用">
+                    <Checkbox></Checkbox>
+                </Form.Item>
+            </Modal>
+        )
+    }
+}
+
+function showDeleteConfirm() {
+    Modal.confirm({
+      title: '删除项目',
+      content: '确定要删除吗？',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        console.log('OK');
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
+export default connect((state) => ({projectManager: state.projectManager}), {
+    findProjects, 
+    addProjectShow, addProjectCancel, addProjectSure, 
+    updateProjectShow, updateProjectCancel, updateProjectSure, 
+})(ProjectManager)

@@ -8,7 +8,7 @@ import {Jobs, job_monitor_analysis,
             sum_dic_list, change_sum_dic_mysql, database_manager,menu_manager,role_manager,
             user_manager,project_manager,
             data_system_log,
-            menu} from './data';
+            menu, deleteJobs, firstJob, job_types, add_job} from './data';
 
 const mock = new MockAdapter(axios);
 
@@ -167,4 +167,25 @@ mock.onPost('projectManager/findProjects').reply(
 mock.onPost('homeController/loadMenu')
     .reply('200', {
         list: menu
+    })
+
+mock.onPost('jobManagerController/deleteJobById', {
+    job_id: '1'
+}).reply('200', {
+    list: deleteJobs
+})
+
+mock.onPost('jobManagerController/findJobById/1')
+    .reply('200', {
+        job: firstJob
+    })
+
+mock.onPost('jobManagerController/findJobTypes')
+    .reply('200', {
+        list: job_types
+    })
+
+mock.onPost('jobManager/saveJob')
+    .reply('200', {
+        job: add_job
     })

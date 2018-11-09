@@ -14,7 +14,8 @@ for(let i=1; i<=11; i++){
         run_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
         modify_time: '2018-10-17 00:00:00',
         creator: 'adan',
-        create_time: '2018-10-17 00:00:00'
+        create_time: '2018-10-17 00:00:00',
+        log: Mock.Random.string(2000)
     }))
 }
 
@@ -674,9 +675,51 @@ const menu = []
         ]
     }))
 
+const deleteJobs = []
+for(let i=1; i<Jobs.length; i++){
+    deleteJobs.push(Jobs[i])
+}
+
+const firstJob = Jobs[0]
+
+//作业类型
+const job_types = []
+job_types.push(Mock.mock({
+    name: '脚本作业',
+    code: 'script'
+}))
+job_types.push(Mock.mock({
+    name: '配置作业',
+    code: 'config'
+}))
+job_types.push(Mock.mock({
+    name: 'Shell作业',
+    code: 'shell'
+}))
+
+const add_job = 
+    Mock.mock({
+        key: +"21",
+        job_id: "21",
+        job_name: "测试作业21",
+        job_desc: "描述测试作业21",
+        cron_set: Mock.Random.integer(1, 10) + '分钟',
+        job_type: Mock.Random.integer(0,1)==0?'Ktr作业':'Kjb作业',
+        job_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
+        run_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
+        modify_time: '2018-10-17 00:00:00',
+        creator: 'adan',
+        create_time: '2018-10-17 00:00:00',
+        log: Mock.Random.string(2000)
+    })
+
 export {Jobs, job_monitor_analysis, 
     input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
     input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year,
     sum_dic_list, sum_dic_list_change, change_sum_dic_mysql,
     database_manager, menu_manager,role_manager,user_manager,project_manager,
-    data_system_log, menu}
+    data_system_log, menu,
+    deleteJobs,
+    firstJob,
+    job_types,
+    add_job}

@@ -13,15 +13,6 @@ import {Jobs, job_monitor_analysis,
 
 const mock = new MockAdapter(axios);
 
-mock.onGet('/user')
-    .reply(200, {
-        user: {
-            name: "aaa",
-            age: 11
-        }
-        
-    })
-
 mock.onPost('jobManagerController/findJobs')
     .reply(config => {
         let {job_id, job_name, job_desc, job_type, job_state, creator} = JSON.parse(config.data)
@@ -163,11 +154,19 @@ mock.onPost('sumDicController/showList')
         })
     })
 
-mock.onPost('sumDic/changeDisabled',{
-    record: ''
-}).reply('200', {
-    record: change_sum_dic_mysql
-})
+mock.onPost('sumDicController/changeDisabled')
+    .reply(config => {
+        let row = JSON.parse(config.data)
+        row.is_disabled = !row.is_disabled
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve([200, {
+                    record: row
+                }]);
+            }, 500);
+        })
+    })
+
 mock.onPost('databaseManager/findList').reply(
     '200', {
         list: database_manager
@@ -384,3 +383,36 @@ mock.onPost('jobManagerController/updateJob')
             }, 500);
         })
     })
+
+mock.onPost('sumDicController/updateDic')
+    .reply(config => {
+        let {dic_id, dic_name, dic_code, dic_type, belongs} = JSON.parse(config.data)
+        return new Promise((resolve, reject) => {
+            let newdic = sum_dic_list.filter(dic => dic.dic_id==dic_id)[0]
+            if(dic_name!=undefined && dic_name!=''){
+                newdic.dic_name = dic_name
+            }
+            if(dic_code!=undefined && dic_code!=''){
+                newdic.dic_code = dic_code
+            }
+            if(dic_type!=undefined && dic_type!=''){
+                newdic.dic_type = dic_type
+            }
+            if(belongs!=undefined && belongs!=''){
+                newdic.belongs = belongs
+            }
+            setTimeout(() => {
+                resolve([200, {
+                    dic: newdic
+                }]);
+            }, 500);
+        })
+    })
+
+for(let i=0; i<sum_dic_list.length; i++){
+    let dic = sum_dic_list[i]
+    mock.onPost('sumDicController/findDicById/'+dic.dic_id)
+    .reply('200', {
+        dic: dic
+    })
+}

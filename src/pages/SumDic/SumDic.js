@@ -4,7 +4,9 @@ import {connect} from 'react-redux';
 import {showList, changeDisabled,
         addModalShow, addModalSure, addModalCancel,
         deleteDicByIds,
-        findDicTypes} from '../../redux/actions/sum_dic';
+        findDicTypes,
+        changeModalName, changeModalCode, changeModalType, changeModalBelongs,
+        updateModalShow, updateModalSure, updateModalCancel} from '../../redux/actions/sum_dic';
 
 import './SumDic.css';
 
@@ -141,7 +143,7 @@ class SumDic extends Component{
                 <Row style={{marginTop:"15px"}}>
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.addModalShow()}>新增</Button>
-                        <Button type="default" size="default" className="btn">修改</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.updateModalShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.deleteDicByIds(this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Table rowSelection={rowSelection} dataSource={this.props.sumDic.list} >
@@ -201,6 +203,7 @@ class SumDic extends Component{
                     </Form>
                 </Row>
                 <AddModal visible={this.props.sumDic.add_visible} onOk={(dic) => this.props.addModalSure(dic)} onCancel={() => this.props.addModalCancel()} dic_types={this.props.sumDic.dic_types}></AddModal>
+                <UpdateModal visible={this.props.sumDic.update_visible} onOk={(dic) => this.props.updateModalSure(dic)} onCancel={() => this.props.updateModalCancel()} dic_id={this.props.sumDic.modal_dic_id} dic_name={this.props.sumDic.modal_dic_name} dic_code={this.props.sumDic.modal_dic_code}  dic_type={this.props.sumDic.modal_dic_type} belongs={this.props.sumDic.modal_belongs} changeName={(e) => this.props.changeModalName(e)} changeCode={(e) => this.props.changeModalCode(e)} changeType={(e) => this.props.changeModalType(e)} changeBelongs={(e) => this.props.changeModalBelongs(e)}></UpdateModal>
             </div>
         )
     }
@@ -284,9 +287,54 @@ class AddModal extends Component{
     }
 }
 
+class UpdateModal extends Component{
+
+    constructor(props){
+        super(props)
+
+    }
+
+    render(){                 
+        let dic = {
+            dic_id: this.props.dic_id,
+            dic_name: this.props.dic_name,
+            dic_code: this.props.dic_code,
+            dic_type: this.props.dic_type,
+            belongs: this.props.belongs,
+        }
+
+        return (
+            <Modal
+                title="修改字典"
+                visible={this.props.visible}
+                onOk={() => this.props.onOk(dic)}
+                onCancel={() => this.props.onCancel()}
+                okText="确认"
+                cancelText="取消"
+                destroyOnClose={true} 
+            >
+                <Form.Item label="字典名称">
+                    <Input placeholder="字典名称" onChange={(e) => this.props.changeName(e)} value={this.props.dic_name}/>
+                </Form.Item>
+                <Form.Item label="字典代码">
+                    <Input placeholder="字典代码" onChange={(e) => this.props.changeCode(e)} value={this.props.dic_code}/>
+                </Form.Item>
+                <Form.Item label="字典类型">
+                    <Input placeholder="字典类型" onChange={(e) => this.props.changeType(e)} value={this.props.dic_type}/>
+                </Form.Item>
+                <Form.Item label="所属对象">
+                    <Input placeholder="所属对象" onChange={(e) => this.props.changeBelongs(e)} value={this.props.belongs}/>
+                </Form.Item>
+            </Modal>
+        )
+    }
+}
+
 export default connect((state)=> ({
     sumDic: state.sumDic
 }), {showList, changeDisabled,
         addModalShow, addModalSure, addModalCancel,
         deleteDicByIds,
-        findDicTypes})(SumDic)
+        findDicTypes,
+        changeModalName, changeModalCode, changeModalType, changeModalBelongs,
+        updateModalShow, updateModalSure, updateModalCancel})(SumDic)

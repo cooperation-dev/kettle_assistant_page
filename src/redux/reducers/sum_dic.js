@@ -1,12 +1,20 @@
 import {SHOW_LIST, CHANGE_DISABLED, 
         ADD_MODAL_SHOW, ADD_MODAL_SURE, ADD_MODAL_CANCEL,
         DELETE_DIC,
-        FIND_DIC_TYPES} from '../actions/sum_dic';
+        FIND_DIC_TYPES,
+        CHANGE_MODAL_NAME, CHANGE_MODAL_CODE, CHANGE_MODAL_TYPE, CHANGE_MODAL_BELONGS,
+        UPDATE_MODAL_SHOW, UPDATE_MODAL_SURE, UPDATE_MODAL_CANCEL} from '../actions/sum_dic';
 
 const initState = {
     list: [],
     add_visible: false,
-    dic_types: []
+    update_visible: false,
+    dic_types: [],
+    modal_dic_id: '',
+    modal_dic_name: '',
+    modal_dic_code: '',
+    modal_dic_type: '',
+    modal_belongs: '',
 }
 
 export default function reducers(state=initState, action){
@@ -59,6 +67,60 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 dic_types: action.list
+            }
+        }
+        case CHANGE_MODAL_NAME: {
+            return {
+                ...state,
+                modal_dic_name: action.dic_name
+            }
+        }
+        case CHANGE_MODAL_CODE: {
+            return {
+                ...state,
+                modal_dic_code: action.dic_code
+            }
+        }
+        case CHANGE_MODAL_TYPE: {
+            return {
+                ...state,
+                modal_dic_type: action.dic_type
+            }
+        }
+        case CHANGE_MODAL_BELONGS: {
+            return {
+                ...state,
+                modal_belongs: action.belongs
+            }
+        }
+        case UPDATE_MODAL_SHOW: {
+            return {
+                ...state,
+                update_visible: true,
+                modal_dic_id: action.dic.dic_id,
+                modal_dic_name: action.dic.dic_name,
+                modal_dic_code: action.dic.dic_code,
+                modal_dic_type: action.dic.dic_type,
+                modal_belongs: action.dic.belongs,
+            }
+        }
+        case UPDATE_MODAL_SURE: {
+            let newlist = state.list.map(ele => {
+                if(ele.dic_id == action.dic.dic_id)
+                    return action.dic
+                else
+                    return ele
+            })
+            return {
+                ...state,
+                update_visible: false,
+                list: newlist
+            }
+        }
+        case UPDATE_MODAL_CANCEL: {
+            return {
+                ...state,
+                update_visible: false
             }
         }
         default: 

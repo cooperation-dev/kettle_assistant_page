@@ -258,6 +258,7 @@ const output_range_year = {
 const sum_dic_list = []
 const org_sum_dic_oracle = Mock.mock({
     index: 1,
+    dic_id: 1,
     key: 'oracle',
     dic_code: 'oracle',
     dic_name: 'oracle',
@@ -271,6 +272,7 @@ const org_sum_dic_oracle = Mock.mock({
 })
 const org_sum_dic_mysql = Mock.mock({
     index: 2,
+    dic_id: 2,
     key: 'mysql',
     dic_code: 'mysql',
     dic_name: 'mysql',
@@ -284,6 +286,7 @@ const org_sum_dic_mysql = Mock.mock({
 })
 const org_sum_dic_sqlserver = Mock.mock({
     index: 3,
+    dic_id: 3,
     key: 'sqlserver',
     dic_code: 'sqlserver',
     dic_name: 'sqlserver',
@@ -297,6 +300,7 @@ const org_sum_dic_sqlserver = Mock.mock({
 })
 const org_sum_dic_success_failed = Mock.mock({
     index: 4,
+    dic_id: 4,
     key: 'SUCCESS_FAILED',
     dic_code: 'SUCCESS_FAILED',
     dic_name: '成功失败',
@@ -310,6 +314,7 @@ const org_sum_dic_success_failed = Mock.mock({
 })
 const org_sum_dic_encoding = Mock.mock({
     index: 5,
+    dic_id: 5,
     key: 'ENCODING',
     dic_code: 'ENCODING',
     dic_name: '编码',

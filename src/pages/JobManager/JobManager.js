@@ -6,7 +6,7 @@ import {findJobs,
     updateJobModalShow, updateJobModalSure, updateJobModalCancel,
     deleteJob,
     displayLogShow, displayLogClose,
-    modalChangeJobName, modalChangeJobDesc} from '../../redux/actions/job_manager';
+    changeModalName, changeModalType, changeModalDesc} from '../../redux/actions/job_manager';
 import {connect} from 'react-redux';
 
 import './JobManager.css';
@@ -20,14 +20,98 @@ class JobManager extends Component{
         super(props)
 
         this.state = {
-            selectRows: []
+            selectRows: [],
+            job_id: '',
+            job_name: '',
+            job_desc: '',
+            job_type: '',
+            job_state: '',
+            creator: '',
         }
     }
 
     componentDidMount = () => {
-        this.props.findJobs()
+        let job = {
+            job_id: this.state.job_id,
+            job_name: this.state.job_name,
+            job_desc: this.state.job_desc,
+            job_type: this.state.job_type,
+            job_state: this.state.job_state,
+            creator: this.state.creator,
+        }
+        this.props.findJobs(job)
+    }
+
+    search = () => {
+        let job = {
+            job_id: this.state.job_id,
+            job_name: this.state.job_name,
+            job_desc: this.state.job_desc,
+            job_type: this.state.job_type,
+            job_state: this.state.job_state,
+            creator: this.state.creator,
+        }
+        this.props.findJobs(job)
+    }
+
+    reset = () => {
+        this.setState({
+            selectRows: [],
+            job_id: '',
+            job_name: '',
+            job_desc: '',
+            job_type: '',
+            job_state: '',
+            creator: '',
+        })
+
+        let job = {
+            job_id: '',
+            job_name: '',
+            job_desc: '',
+            job_type: '',
+            job_state: '',
+            creator: '',
+        }
+        this.props.findJobs(job)
     }
     
+    changeJobId = (e) => {
+        this.setState({
+            job_id: e.target.value
+        })
+    }
+
+    changeJobName = (e) => {
+        this.setState({
+            job_name: e.target.value
+        })
+    }
+
+    changeJobDesc = (e) => {
+        this.setState({
+            job_desc: e.target.value
+        })
+    }
+
+    changeJobType = (e) => {
+        this.setState({
+            job_type: e.target.value
+        })
+    }
+    
+    changeJobState = (e) => {
+        this.setState({
+            job_state: e.target.value
+        })
+    }
+
+    changeCreator = (e) => {
+        this.setState({
+            creator: e.target.value
+        })
+    }
+
     render(){
           
           const columns = [{
@@ -95,41 +179,41 @@ class JobManager extends Component{
                         <Row gutter={24}>
                             <Col span={8} key={1}>
                                 <Form.Item label="作业ID ">
-                                    <Input placeholder="作业ID"/>
+                                    <Input placeholder="作业ID" value={this.state.job_id} onChange={this.changeJobId}/>
                                 </Form.Item>
                             </Col>
                             <Col span={8} key={2}>
                                 <Form.Item label="作业名称">
-                                    <Input placeholder="作业名称"/>
+                                    <Input placeholder="作业名称" value={this.state.job_name} onChange={this.changeJobName}/>
                                 </Form.Item>
                             </Col>
                             <Col span={8} key={3}>
                                 <Form.Item label="作业描述">
-                                    <Input placeholder="作业描述"/>
+                                    <Input placeholder="作业描述" value={this.state.job_desc} onChange={this.changeJobDesc}/>
                                 </Form.Item>
                             </Col>
                         </Row>
                         <Row gutter={24}>
                             <Col span={8} key={4}>
                                 <Form.Item label="作业类别">
-                                    <Input placeholder="作业类别"/>
+                                    <Input placeholder="作业类别" value={this.state.job_type} onChange={this.changeJobType}/>
                                 </Form.Item>
                             </Col>
                             <Col span={8} key={5}>
                                 <Form.Item label="作业状态">
-                                    <Input placeholder="作业状态"/>
+                                    <Input placeholder="作业状态" value={this.state.job_state} onChange={this.changeJobState}/>
                                 </Form.Item>
                             </Col>
                             <Col span={8} key={6}>
                                 <Form.Item label="创建人">
-                                    <Input placeholder="创建人"/>
+                                    <Input placeholder="创建人" value={this.state.creator} onChange={this.changeCreator}/>
                                 </Form.Item>
                             </Col>
                         </Row>
                         <Row>
                             <Col span={24} style={{ textAlign: 'center' }}>
-                                <Button type="primary" htmlType="submit" onClick={() => this.props.findJobs()}>查询</Button>
-                                <Button style={{ marginLeft: 8 }} >重置</Button>
+                                <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
+                                <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
                     </Form>
@@ -145,9 +229,9 @@ class JobManager extends Component{
                         <Table rowSelection={rowSelection} dataSource={this.props.jobManager.list} columns={columns} scroll={{x: 1200}}/>
                     </Form>
                 </Row>
-                <AddModal visible={this.props.jobManager.add_visible} onOk={(job_name, job_desc) => this.props.addJobModalSure(job_name, job_desc)} onCancel={() => this.props.addJobModalCancel()} job_types={this.props.jobManager.job_types} ></AddModal>
-                <UpdateModal visible={this.props.jobManager.update_visible} onOk={() => this.props.updateJobModalSure()} onCancel={() => this.props.updateJobModalCancel()} value={this.props.jobManager.job}></UpdateModal>
-                <LogModal visible={this.props.jobManager.log_visible} value={this.props.jobManager.job} onOk={() => this.props.displayLogClose()} onCancel={() => this.props.displayLogClose()}></LogModal>
+                <AddModal visible={this.props.jobManager.add_visible} onOk={(job) => this.props.addJobModalSure(job)} onCancel={() => this.props.addJobModalCancel()} job_types={this.props.jobManager.job_types} ></AddModal>
+                <UpdateModal visible={this.props.jobManager.update_visible} onOk={(job) => this.props.updateJobModalSure(job)} onCancel={() => this.props.updateJobModalCancel()} job_id={this.props.jobManager.modal_job_id} job_name={this.props.jobManager.modal_job_name} job_type={this.props.jobManager.modal_job_type} job_desc={this.props.jobManager.modal_job_desc} changeName={(e) => this.props.changeModalName(e)} changeType={(e) => this.props.changeModalType(e)} changeDesc={(e) => this.props.changeModalDesc(e)}></UpdateModal>
+                <LogModal visible={this.props.jobManager.log_visible} job_name={this.props.jobManager.modal_job_name} log={this.props.jobManager.modal_log} onOk={() => this.props.displayLogClose()} onCancel={() => this.props.displayLogClose()}></LogModal>
             </div>
         )
     }
@@ -176,11 +260,15 @@ class AddModal extends Component{
     }
 
     render(){
+        let job = {
+            job_name: this.state.job_name,
+            job_desc: this.state.job_desc
+        }
         return (
             <Modal
                 title="新增作业"
                 visible={this.props.visible}
-                onOk={() => this.props.onOk(this.state.job_name, this.state.job_desc)}
+                onOk={() => this.props.onOk(job)}
                 onCancel={() => this.props.onCancel()}
                 okText="确认"
                 cancelText="取消"
@@ -188,7 +276,6 @@ class AddModal extends Component{
             >
                 <Form.Item label="作业名称">
                     <Input placeholder="作业名称" value={this.state.job_name} onChange={this.changeJobName}/>
-                    {/* <Input placeholder="作业名称" value={this.props.value.job_name} onChange={this.props.changeJobName}/> */}
                 </Form.Item>
                 <Form.Item label="作业类型">
                     <Select style={{width: 120}}>
@@ -201,7 +288,6 @@ class AddModal extends Component{
                 </Form.Item>
                 <Form.Item label="作业描述">
                     <Input placeholder="作业描述" value={this.state.job_desc} onChange={this.changeJobDesc}/>
-                    {/* <Input placeholder="作业描述" value={this.props.value.job_desc} onChange={() => this.props.changeJobName()}/> */}
                 </Form.Item>
             </Modal>
         )
@@ -213,51 +299,34 @@ class UpdateModal extends Component{
     constructor(props){
         super(props)
 
-        this.state = {
-            job_name: '',
-            job_type: '',
-            job_desc: ''
+    }
+
+    render(){                 
+        let job = {
+            job_id: this.props.job_id,
+            job_name: this.props.job_name,
+            job_type: this.props.job_type,
+            job_desc: this.props.job_desc,
         }
 
-    }
-
-    changeJobName = (e) => {
-        this.setState({
-            job_name: e.target.value
-        })
-    }
-
-    changeJobType = (e) => {
-        this.setState({
-            job_type: e.target.value
-        })
-    }
-
-    changeJobDesc = (e) => {
-        this.setState({
-            job_desc: e.target.value
-        })
-    }
-
-    render(){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
         return (
             <Modal
                 title="修改作业"
                 visible={this.props.visible}
-                onOk={() => this.props.onOk()}
+                onOk={() => this.props.onOk(job)}
                 onCancel={() => this.props.onCancel()}
                 okText="确认"
                 cancelText="取消"
                 destroyOnClose={true} 
             >
                 <Form.Item label="作业名称">
-                    <Input placeholder="作业名称" onChange={() => this.changeJobName()} value={this.props.value.job_name}/>
+                    <Input placeholder="作业名称" onChange={(e) => this.props.changeName(e)} value={this.props.job_name}/>
                 </Form.Item>
                 <Form.Item label="作业类型">
-                    <Input placeholder="作业类型" onChange={(e) => this.changeJobType(e)} value={this.props.value.job_type}/>
+                    <Input placeholder="作业类型" onChange={(e) => this.props.changeType(e)} value={this.props.job_type}/>
                 </Form.Item>
                 <Form.Item label="作业描述">
-                    <Input placeholder="作业描述" onChange={(e) => this.changeJobDesc(e)} value={this.props.value.job_desc}/>
+                    <Input placeholder="作业描述" onChange={(e) => this.props.changeDesc(e)} value={this.props.job_desc}/>
                 </Form.Item>
             </Modal>
         )
@@ -277,10 +346,10 @@ class LogModal extends Component{
                 destroyOnClose={true} 
             >
                 <Form.Item label="作业名称">
-                    <Input disabled={true} placeholder="作业名称" onChange={(e) => this.changeJobName(e)} value={this.props.value.job_name}/>
+                    <Input disabled={true} placeholder="作业名称" onChange={(e) => this.changeJobName(e)} value={this.props.job_name}/>
                 </Form.Item>
                 <Form.Item label="日志">
-                    <TextArea disabled={true} autosize={{minRows: 8, maxRows: 8}} placeholder="日志" onChange={(e) => this.changeJobDesc(e)} value={this.props.value.log}/>
+                    <TextArea disabled={true} autosize={{minRows: 8, maxRows: 8}} placeholder="日志" onChange={(e) => this.changeJobDesc(e)} value={this.props.log}/>
                 </Form.Item>
             </Modal>
         )
@@ -294,4 +363,4 @@ export default connect((state) => ({
     updateJobModalShow, updateJobModalSure, updateJobModalCancel,
     deleteJob,
     displayLogShow, displayLogClose,
-    modalChangeJobName, modalChangeJobDesc})(JobManager)
+    changeModalName, changeModalType, changeModalDesc})(JobManager)

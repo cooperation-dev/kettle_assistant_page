@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table, Row, Col, Input, Form, Button} from 'antd';
+import {Form, Table, Row, Col, Input, Button} from 'antd';
 import {findLogs} from '../../redux/actions/system_log';
 import {connect} from 'react-redux';
 
@@ -45,7 +45,14 @@ class SystemLog extends Component{
     }
 
     componentDidMount = () => {
-        this.props.findLogs(this.state.operator, this.state.log_type, this.state.operate_ip, this.state.details, this.state.create_time)
+        let log = {
+            operator: this.state.operator,
+            log_type: this.state.log_type,
+            operate_ip: this.state.operate_ip,
+            details: this.state.details,
+            create_time: this.state.create_time
+        }
+        this.props.findLogs(log)
     }
 
     changeOperator = (e) => {
@@ -76,6 +83,36 @@ class SystemLog extends Component{
         this.setState({
             create_time: e.target.value
         })
+    }
+
+    findLog = () => {
+        let log = {
+            operator: this.state.operator,
+            log_type: this.state.log_type,
+            operate_ip: this.state.operate_ip,
+            details: this.state.details,
+            create_time: this.state.create_time
+        }
+        this.props.findLogs(log)
+    }
+
+    reset = () => {
+        this.setState({
+            operator: '',
+            log_type: '',
+            operate_ip: '',
+            details: '',
+            create_time: '',
+        })
+
+        let log = {
+            operator: '',
+            log_type: '',
+            operate_ip: '',
+            details: '',
+            create_time: '',
+        }
+        this.props.findLogs(log)
     }
 
     render(){
@@ -116,8 +153,8 @@ class SystemLog extends Component{
                         </Row>
                         <Row>
                             <Col span={24} style={{ textAlign: 'center' }}>
-                                <Button type="primary" htmlType="submit" onClick={() => this.props.findLogs(this.state.operator, this.state.log_type, this.state.operate_ip, this.state.details, this.state.create_time)}>查询</Button>
-                                <Button style={{ marginLeft: 8 }} >重置</Button>
+                                <Button type="primary" htmlType="submit" onClick={this.findLog}>查询</Button>
+                                <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
                     </Form>

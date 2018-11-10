@@ -53,12 +53,21 @@ export const find_dic_types = (list) => {
     }
 }
 
-export const showList = (dic_code, dic_name, dic_type) => {
+export const showList = (dic) => {
     return (dispatch) => {
-        axios.post('sumDic/showList', {
+        /* axios.post('sumDic/showList', {
             dic_code: dic_code,
             dic_name: dic_name,
             dic_type: dic_type  
+        }).then((response) => {
+            return response.data.list
+        }).then((data) => {
+            dispatch(show_list(data))
+        }) */
+        axios({
+            method: 'post',
+            url: 'sumDicController/showList',
+            data: dic
         }).then((response) => {
             return response.data.list
         }).then((data) => {
@@ -93,13 +102,12 @@ export const addModalShow = () => {
     }
 }
 
-export const addModalSure = (dic_name, dic_code, dic_type, belongs) => {
+export const addModalSure = (dic) => {
     return (dispatch) => {
-        axios.post('sumDic/saveDic', {
-            dic_name: '',
-            dic_code: '',
-            dic_type: '',
-            belongs: '',
+        axios({
+            method: 'post',
+            url: 'sumDicController/saveDic',
+            data: dic
         }).then((r) => {
             return r.data.dic
         }).then((d) => {
@@ -119,14 +127,17 @@ export const deleteDicByIds = (selectRows) => {
         if(selectRows.length == 0){
             message.error('请选择行')
         }else{
-            axios.post('sumDic/deleteDicByIds')
-                .then((r) => {
-                    return r.data.list
-                }).then((list) => {
-                    // dispatch(delete_dic_by_ids(list))
-                    dispatch(show_list(list))
-                })
-
+            let codes = []
+            selectRows.map(row => codes.push(row.dic_code))
+            axios({
+                method: 'post',
+                url: 'sumDicController/deleteDicByIds',
+                data: codes
+            }).then((response) => {
+                return response.data.list
+            }).then((list) => {
+                dispatch(show_list(list))
+            })
         }
 
     }

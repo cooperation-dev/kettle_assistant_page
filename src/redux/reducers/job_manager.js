@@ -3,7 +3,8 @@ import {FIND_JOBS,
     UPDATE_JOB_MODAL_SHOW, UPDATE_JOB_MODAL_SURE, UPDATE_JOB_MODAL_CANCEL,
     DELETE_JOB,
     DISPLAY_LOG_SHOW, DISPLAY_LOG_CLOSE,
-    FIND_JOB_TYPES} from '../actions/job_manager';
+    FIND_JOB_TYPES,
+    CHANGE_MODAL_NAME, CHANGE_MODAL_TYPE, CHANGE_MODAL_DESC} from '../actions/job_manager';
 
 const initState = {
     list: [],
@@ -11,12 +12,11 @@ const initState = {
     update_visible: false,
     log_visible: false,
     job_types: [],
-    job: {
-        job_name: '',
-        job_type: '',
-        job_desc: '',
-        log: ''
-    },
+    modal_job_id: '',
+    modal_job_name: '',
+    modal_job_type: '',
+    modal_job_desc: '',
+    modal_log: '',
 }
 
 export default function reducers(state=initState, action){
@@ -50,13 +50,23 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 update_visible: true,
-                job: action.job
+                modal_job_id: action.job.job_id,
+                modal_job_name: action.job.job_name,
+                modal_job_type: action.job.job_type,
+                modal_job_desc: action.job.job_desc,
             }
         }
         case UPDATE_JOB_MODAL_SURE: {
+            let newlist = state.list.map(ele => {
+                if(ele.job_id == action.job.job_id)
+                    return action.job
+                else
+                    return ele
+            })
             return {
                 ...state,
-                update_visible: false
+                update_visible: false,
+                list: newlist
             }
         }
         case UPDATE_JOB_MODAL_CANCEL: {
@@ -69,7 +79,7 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 log_visible: true,
-                job: action.job
+                log: action.log
             }
         }
         case DISPLAY_LOG_CLOSE: {
@@ -82,6 +92,24 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 job_types: action.list
+            }
+        }
+        case CHANGE_MODAL_NAME: {
+            return {
+                ...state,
+                modal_job_name: action.job_name
+            }
+        }
+        case CHANGE_MODAL_TYPE: {
+            return {
+                ...state,
+                modal_job_type: action.job_type
+            }
+        }
+        case CHANGE_MODAL_DESC: {
+            return {
+                ...state,
+                modal_job_desc: action.job_desc
             }
         }
         default:

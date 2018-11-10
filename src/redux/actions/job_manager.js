@@ -1,6 +1,7 @@
 import '../../../mock/api';
 import axios from 'axios';
 import {message} from 'antd';
+import { job_types } from '../../../mock/data';
 
 export const FIND_JOBS = "jobManager/findJobs";
 //新增作业框弹出
@@ -21,6 +22,12 @@ export const DISPLAY_LOG_SHOW = "jobManager/displayLogShow";
 export const DISPLAY_LOG_CLOSE = "jobManager/displayLogClose";
 //作业类型下拉框
 export const FIND_JOB_TYPES = "jobManager/findJobTypes";
+//修改弹出框名称
+export const CHANGE_MODAL_NAME = 'jobManager/changeModalName';
+//修改弹出框类型
+export const CHANGE_MODAL_TYPE = 'jobManager/changeModalType';
+//修改弹出框描述
+export const CHANGE_MODAL_DESC = 'jobManager/changeModalDesc';
 
 export const find_jobs = (list) => {
     return {
@@ -55,9 +62,10 @@ export const update_job_modal_show = (row) => {
     }
 }
 
-export const update_job_modal_sure = () => {
+export const update_job_modal_sure = (job) => {
     return {
-        type: UPDATE_JOB_MODAL_SURE
+        type: UPDATE_JOB_MODAL_SURE,
+        job: job
     }
 }
 
@@ -87,29 +95,39 @@ export const find_job_types = (list) => {
     }
 }
 
-export const modal_change_job_name = (job_name) => {
+export const change_modal_name = (job_name) => {
     return {
-        type: MODAL_CHANGE_JOB_NAME,
+        type: CHANGE_MODAL_NAME,
         job_name: job_name
     }
 }
 
-export const modal_change_job_desc = (job_desc) => {
+export const change_modal_type = (job_type) => {
     return {
-        type: MODAL_CHANGE_JOB_DESC,
+        type: CHANGE_MODAL_TYPE,
+        job_desc: job_type
+    }
+}
+
+export const change_modal_desc = (job_desc) => {
+    return {
+        type: CHANGE_MODAL_DESC,
         job_desc: job_desc
     }
 }
 
-export const findJobs = () => {
+export const findJobs = (job) => {
     return (dispatch) => {
-        axios.post('findJobs')
-                .then((response) => {
-                    return response.data.list
-                })
-                .then((list) => {
-                    dispatch(find_jobs(list))
-                })
+        axios({
+            method: 'post',
+            url: 'jobManagerController/findJobs',
+            data: job
+        }).then((response) => {
+            return response.data.list
+        })
+        .then((list) => {
+            dispatch(find_jobs(list))
+        }) 
     }
 }
 
@@ -127,14 +145,17 @@ export const addJobModalShow = () => {
     }
 }
 
-export const addJobModalSure = (job_name, job_desc) => {
+export const addJobModalSure = (job) => {
     return (dispatch) => {
-        axios.post('jobManager/saveJob')
-            .then((response) => {
-                return response.data.job
-            }).then((job) => {
-                dispatch(add_job_modal_sure(job))
-            })
+        axios({
+            method: 'post',
+            url: 'jobManager/saveJob',
+            data: job
+        }).then((res) => {
+            return res.data.job
+        }).then((job) => {
+            dispatch(add_job_modal_sure(job))
+        })
     }
 }
 
@@ -157,14 +178,21 @@ export const updateJobModalShow = (selectRows) => {
                 }).then((data) => {
                     dispatch(update_job_modal_show(data))
                 })
-            // dispatch(update_job_modal_show(selectRows[0]))
         }
     }
 }
 
-export const updateJobModalSure = () => {
+export const updateJobModalSure = (job) => {
     return (dispatch) => {
-        dispatch(update_job_modal_sure())
+        axios({
+            method: 'post',
+            url: 'jobManagerController/updateJob',
+            data: job
+        }).then((res) => {
+            return res.data.job
+        }).then((job) => {
+            dispatch(update_job_modal_sure(job))
+        })
     }
 }
 
@@ -179,8 +207,12 @@ export const deleteJob = (selectRows) => {
         if(selectRows.length == 0){
             message.error('请选择行')
         }else{
-            axios.post('jobManagerController/deleteJobById', {
-                job_id: selectRows[0].job_id
+            let ids = []
+            selectRows.map(row => ids.push(row.job_id))
+            axios({
+                method: 'post',
+                url: 'jobManagerController/deleteJobByIds',
+                data: ids
             }).then((response) => {
                 return response.data.list
             }).then((list) => {
@@ -222,5 +254,23 @@ export const findJobTypes = () => {
             }).then((list) => {
                 dispatch(find_job_types(list))
             })
+    }
+}
+
+export const changeModalName = (e) => {
+    return (dispatch) => {
+        dispatch(change_modal_name(e.target.value))
+    }
+}
+
+export const changeModalType = (e) => {
+    return (dispatch) => {
+        dispatch(change_modal_type(e.target.value))
+    }
+}
+
+export const changeModalDesc = (e) => {
+    return (dispatch) => {
+        dispatch(change_modal_desc(e.target.value))
     }
 }

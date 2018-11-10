@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
-import {Table, Row, Col, Input, Form, Button, Checkbox} from 'antd';
+import {Table, Row, Col, Input, Form, Button, Checkbox, Modal, Select} from 'antd';
 import {connect} from 'react-redux';
-import {showList, changeDisabled} from '../../redux/actions/sum_dic';
+import {showList, changeDisabled,
+        addModalShow, addModalSure, addModalCancel,
+        deleteDicByIds,
+        findDicTypes} from '../../redux/actions/sum_dic';
 
 import './SumDic.css';
 
 const {Column} = Table
+const {Option} = Select
 
 class SumDic extends Component{
     constructor(props){
@@ -15,7 +19,8 @@ class SumDic extends Component{
             input_dic_code: '',
             input_dic_name: '',
             input_disabled: false,
-            input_dic_type: ''
+            input_dic_type: '',
+            selectRows: []
         }
 
     }
@@ -56,7 +61,10 @@ class SumDic extends Component{
        
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                this.setState({
+                    selectRows: selectedRows
+                })
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -103,10 +111,10 @@ class SumDic extends Component{
                 </Row>
                 <Row style={{marginTop:"15px"}}>
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
-                        <Button type="default" size="default" className="btn">新增</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.addModalShow()}>新增</Button>
                         <Button type="default" size="default" className="btn">修改</Button>
-                        <Button type="default" size="default" className="btn">删除</Button>
-                        <Button type="default" size="default" className="btn">查看</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.deleteDicByIds(this.state.selectRows)}>删除</Button>
+                        {/* <Button type="default" size="default" className="btn">查看</Button> */}
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Table rowSelection={rowSelection} dataSource={this.props.sumDic.list} >
                         <Column 
@@ -164,12 +172,87 @@ class SumDic extends Component{
                         </Table>
                     </Form>
                 </Row>
+                <AddModal visible={this.props.sumDic.add_visible} onOk={(dic_name, dic_code, dic_type, belongs) => this.props.addModalSure(dic_name, dic_code, dic_type, belongs)} onCancel={() => this.props.addModalCancel()} dic_types={this.props.sumDic.dic_types}></AddModal>
             </div>
         )
     }
 
 }
 
+class AddModal extends Component{
+    constructor(props){
+        super(props)
+
+        this.state = {
+            dic_name: '',
+            dic_code: '',
+            dic_type: '',
+            belongs: '',
+        }
+    }
+
+    changeDicName = (e) => {
+        this.setState({
+            dic_name: e.target.value
+        })
+    }
+
+    changeDicCode = (e) => {
+        this.setState({
+            dic_code: e.target.value
+        })
+    }
+
+    changeDicType = (e) => {
+        this.setState({
+            dic_type: e.target.value
+        })
+    }
+
+    changeBelongs = (e) => {
+        this.setState({
+            belongs: e.target.value
+        })
+    }
+
+    render(){
+        return (
+            <Modal
+                title="新增字典"
+                visible={this.props.visible}
+                okText="确认"
+                onOk={() => this.props.onOk(this.state.dic_name, this.state.dic_code, this.state.dic_type, this.state.belongs)}
+                onCancel={() => this.props.onCancel()}
+                cancelText="取消"
+                destroyOnClose={true} 
+            >
+                <Form.Item label="字典名称">
+                    <Input placeholder="字典名称" value={this.state.dic_name} onChange={this.changeDicName}/>
+                </Form.Item>
+                <Form.Item label="字典代码">
+                    <Input placeholder="字典代码" value={this.state.dic_code} onChange={this.changeDicCode}/>
+                </Form.Item>
+                <Form.Item label="字典类别">
+                    {/* <Input placeholder="字典类型" value={this.state.dic_type} onChange={this.changeDicType}/> */}
+                    <Select style={{width: 120}}>
+                    {this.props.dic_types.map(type => {
+                        return (
+                            <Option key={type.code} value={type.code}>{type.name}</Option>
+                        )
+                    })}
+                    </Select>
+                </Form.Item>
+                <Form.Item label="所属对象">
+                    <Input placeholder="所属对象" value={this.state.belongs} onChange={this.changeBelongs}/>
+                </Form.Item>
+            </Modal>
+        )
+    }
+}
+
 export default connect((state)=> ({
     sumDic: state.sumDic
-}), {showList, changeDisabled})(SumDic)
+}), {showList, changeDisabled,
+        addModalShow, addModalSure, addModalCancel,
+        deleteDicByIds,
+        findDicTypes})(SumDic)

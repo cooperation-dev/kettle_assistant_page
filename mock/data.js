@@ -326,19 +326,6 @@ const org_sum_dic_encoding = Mock.mock({
     dic_type: '字典类型',
     belongs: ''
 })
-const change_sum_dic_mysql = Mock.mock({
-    index: 2,
-    key: 'mysql',
-    dic_code: 'mysql',
-    dic_name: 'mysql',
-    sort: 11,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
-    creator: 'adan',
-    is_disabled: false,
-    dic_type: '数据库类型',
-    belongs: ''
-})
 sum_dic_list.push(org_sum_dic_oracle)
 sum_dic_list.push(org_sum_dic_mysql)
 sum_dic_list.push(org_sum_dic_sqlserver)
@@ -347,7 +334,6 @@ sum_dic_list.push(org_sum_dic_encoding)
 
 const sum_dic_list_change = []
 sum_dic_list_change.push(org_sum_dic_oracle)
-sum_dic_list_change.push(change_sum_dic_mysql)
 sum_dic_list_change.push(org_sum_dic_sqlserver)
 sum_dic_list_change.push(org_sum_dic_success_failed)
 sum_dic_list_change.push(org_sum_dic_encoding)
@@ -373,68 +359,6 @@ for(let i=1; i<=11; i++){
         connection_string: ''
     }))
 }
-
-/**
- * 菜单管理
- */
-const menu_manager = []
-    menu_manager.push(Mock.mock({
-        key: 1,
-        name: "1菜单",
-        type: "类型1",
-        coding: "1编码",
-        num: 1,
-        parent_node: '',
-        filter_condition: '',
-        custom_func: '',
-        whether_to_hide: Mock.Random.integer(0,1)==0?true:false,
-        children:[
-            {
-                key: 11,
-                name: "11菜单",
-                type: "类型11",
-                coding: "11编码",
-                num: 11,
-                parent_node: '11菜单',
-                filter_condition: '',
-                custom_func: '',
-                whether_to_hide: Mock.Random.integer(0,1)==0?true:false,
-            },{
-                key: 12,
-                name: "12菜单",
-                type: "类型12",
-                coding: "2编码",
-                num: 12,
-                parent_node: '12菜单',
-                filter_condition: '',
-                custom_func: '',
-                whether_to_hide: Mock.Random.integer(0,1)==0?true:false,
-                children:[
-                    {
-                        key: 121,
-                        name: "121菜单",
-                        type: "类型121",
-                        coding: "121编码",
-                        num: 121,
-                        parent_node: '121菜单',
-                        filter_condition: '',
-                        custom_func: '',
-                        whether_to_hide: Mock.Random.integer(0,1)==0?true:false,
-                    },{
-                        key: 122,
-                        name: "122菜单",
-                        type: "类型122",
-                        coding: "122编码",
-                        num: 122,
-                        parent_node: '122菜单',
-                        filter_condition: '',
-                        custom_func: '',
-                        whether_to_hide: Mock.Random.integer(0,1)==0?true:false,
-                    },
-                ]
-            },
-        ]
-    }))
 
 /***
  * 日志管理
@@ -680,13 +604,6 @@ const menu = []
         ]
     }))
 
-const deleteJobs = []
-for(let i=1; i<Jobs.length; i++){
-    deleteJobs.push(Jobs[i])
-}
-
-const firstJob = Jobs[0]
-
 //作业类型
 const job_types = []
 job_types.push(Mock.mock({
@@ -700,65 +617,6 @@ job_types.push(Mock.mock({
 job_types.push(Mock.mock({
     name: 'Shell作业',
     code: 'shell'
-}))
-
-const add_job = 
-    Mock.mock({
-        key: +"21",
-        job_id: "21",
-        job_name: "测试作业21",
-        job_desc: "描述测试作业21",
-        cron_set: Mock.Random.integer(1, 10) + '分钟',
-        job_type: Mock.Random.integer(0,1)==0?'Ktr作业':'Kjb作业',
-        job_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
-        run_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
-        modify_time: '2018-10-17 00:00:00',
-        creator: 'adan',
-        create_time: '2018-10-17 00:00:00',
-        log: Mock.Random.string(2000)
-    })
-
-const add_dic = 
-    Mock.mock({
-        index: 8,
-        key: 'test',
-        dic_code: 'test',
-        dic_name: 'test',
-        sort: 80,
-        create_time: "2018-09-09 12:34:44",
-        modify_time: '2018-09-18 01:23:46',
-        creator: 'adan',
-        is_disabled: true,
-        dic_type: '测试类型',
-        belongs: ''
-    })
-
-const remain_dic = []
-remain_dic.push(Mock.mock({
-    index: 1,
-    key: 'test1',
-    dic_code: 'test',
-    dic_name: 'test',
-    sort: 80,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
-    creator: 'adan',
-    is_disabled: true,
-    dic_type: '测试类型',
-    belongs: ''
-}))
-remain_dic.push(Mock.mock({
-    index: 2,
-    key: 'test2',
-    dic_code: 'test',
-    dic_name: 'test',
-    sort: 80,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
-    creator: 'adan',
-    is_disabled: true,
-    dic_type: '测试类型',
-    belongs: ''
 }))
 
 //字典类型
@@ -775,11 +633,8 @@ dic_types.push(Mock.mock({
 export {Jobs, job_monitor_analysis, 
     input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
     input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year,
-    sum_dic_list, sum_dic_list_change, change_sum_dic_mysql,
-    database_manager, menu_manager,role_manager,user_manager,project_manager,
+    sum_dic_list, sum_dic_list_change,
+    database_manager,role_manager,user_manager,project_manager,
     data_system_log, menu,
-    deleteJobs,
-    firstJob,
     job_types,
-    add_job, add_dic, remain_dic,
     dic_types}

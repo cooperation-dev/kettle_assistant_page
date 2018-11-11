@@ -79,7 +79,8 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 log_visible: true,
-                log: action.log
+                modal_job_name: action.job.job_name,
+                modal_log: action.job.log,
             }
         }
         case DISPLAY_LOG_CLOSE: {

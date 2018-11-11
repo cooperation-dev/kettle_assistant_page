@@ -140,9 +140,7 @@ mock.onPost('sumDicController/showList')
             if(dic_name!=undefined && dic_name!=""){
                 newdic = newdic.filter(dic => dic.dic_name==dic_name)
             }
-            if(disabled!=undefined && disabled!=""){
-                newdic = newdic.filter(dic => dic.disabled==disabled)
-            }
+            newdic = newdic.filter(dic => dic.is_disabled==disabled)
             if(dic_type!=undefined && dic_type!=""){
                 newdic = newdic.filter(dic => dic.dic_type==dic_type)
             }
@@ -280,7 +278,8 @@ mock.onPost('jobManagerController/findJobTypes')
 
 mock.onPost('jobManager/saveJob')
     .reply(config => {
-        let {job_name, job_desc} = JSON.parse(config.data)
+        let {job_name, job_type, job_desc} = JSON.parse(config.data)
+        let job_type_cn = job_types.filter(t => t.code==job_type)[0].name
         return new Promise((resolve, reject) => {
             let max_key = Jobs[Jobs.length-1].key+1
             let newjob = Mock.mock({
@@ -289,7 +288,7 @@ mock.onPost('jobManager/saveJob')
                 job_name: job_name,
                 job_desc: job_desc,
                 cron_set: Mock.Random.integer(1, 10) + '分钟',
-                job_type: Mock.Random.integer(0,1)==0?'Ktr作业':'Kjb作业',
+                job_type: job_type_cn,
                 job_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
                 run_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
                 modify_time: '2018-10-17 00:00:00',

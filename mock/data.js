@@ -9,7 +9,7 @@ for(let i=1; i<=11; i++){
         job_name: "测试作业" + i,
         job_desc: "描述测试作业" + i,
         cron_set: Mock.Random.integer(1, 10) + '分钟',
-        job_type: Mock.Random.integer(0,1)==0?'Ktr作业':'Kjb作业',
+        "job_type|1": ['脚本作业', '配置作业', 'Shell作业'],
         job_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
         run_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
         modify_time: '2018-10-17 00:00:00',

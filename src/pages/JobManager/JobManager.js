@@ -230,7 +230,7 @@ class JobManager extends Component{
                     </Form>
                 </Row>
                 <AddModal visible={this.props.jobManager.add_visible} onOk={(job) => this.props.addJobModalSure(job)} onCancel={() => this.props.addJobModalCancel()} job_types={this.props.jobManager.job_types} ></AddModal>
-                <UpdateModal visible={this.props.jobManager.update_visible} onOk={(job) => this.props.updateJobModalSure(job)} onCancel={() => this.props.updateJobModalCancel()} job_id={this.props.jobManager.modal_job_id} job_name={this.props.jobManager.modal_job_name} job_type={this.props.jobManager.modal_job_type} job_desc={this.props.jobManager.modal_job_desc} changeName={(e) => this.props.changeModalName(e)} changeType={(e) => this.props.changeModalType(e)} changeDesc={(e) => this.props.changeModalDesc(e)}></UpdateModal>
+                <UpdateModal visible={this.props.jobManager.update_visible} onOk={(job) => this.props.updateJobModalSure(job)} onCancel={() => this.props.updateJobModalCancel()} job_id={this.props.jobManager.modal_job_id} job_name={this.props.jobManager.modal_job_name} job_type={this.props.jobManager.modal_job_type} job_desc={this.props.jobManager.modal_job_desc} changeName={(e) => this.props.changeModalName(e)} changeType={(e) => this.props.changeModalType(e)} changeDesc={(e) => this.props.changeModalDesc(e)} job_types={this.props.jobManager.job_types}></UpdateModal>
                 <LogModal visible={this.props.jobManager.log_visible} job_name={this.props.jobManager.modal_job_name} log={this.props.jobManager.modal_log} onOk={() => this.props.displayLogClose()} onCancel={() => this.props.displayLogClose()}></LogModal>
             </div>
         )
@@ -243,13 +243,20 @@ class AddModal extends Component{
         
         this.state = {
             job_name: '',
-            job_desc: ''
+            job_type: '',
+            job_desc: '',
         }
     }
 
     changeJobName = (e) => {
         this.setState({
             job_name: e.target.value
+        })
+    }
+
+    changeJobType = (e) => {
+        this.setState({
+            job_type: e
         })
     }
 
@@ -262,7 +269,8 @@ class AddModal extends Component{
     render(){
         let job = {
             job_name: this.state.job_name,
-            job_desc: this.state.job_desc
+            job_type: this.state.job_type,
+            job_desc: this.state.job_desc,
         }
         return (
             <Modal
@@ -278,7 +286,7 @@ class AddModal extends Component{
                     <Input placeholder="作业名称" value={this.state.job_name} onChange={this.changeJobName}/>
                 </Form.Item>
                 <Form.Item label="作业类型">
-                    <Select style={{width: 120}}>
+                    <Select style={{width: 120}} onChange={this.changeJobType} value={this.state.job_type}>
                     {this.props.job_types.map(type => {
                         return (
                             <Option key={type.code} value={type.code}>{type.name}</Option>
@@ -323,7 +331,14 @@ class UpdateModal extends Component{
                     <Input placeholder="作业名称" onChange={(e) => this.props.changeName(e)} value={this.props.job_name}/>
                 </Form.Item>
                 <Form.Item label="作业类型">
-                    <Input placeholder="作业类型" onChange={(e) => this.props.changeType(e)} value={this.props.job_type}/>
+                    <Select style={{width: 120}} onChange={(e) => this.props.changeType(e)} value={this.props.job_type} defaultValue={this.props.job_type}>
+                        {this.props.job_types.map(type => {
+                            return (
+                                <Option key={type.code} value={type.code}>{type.name}</Option>
+                            )
+                        })}
+                    </Select>
+                    {/* <Input placeholder="作业类型" onChange={(e) => this.props.changeType(e)} value={this.props.job_type}/> */}
                 </Form.Item>
                 <Form.Item label="作业描述">
                     <Input placeholder="作业描述" onChange={(e) => this.props.changeDesc(e)} value={this.props.job_desc}/>

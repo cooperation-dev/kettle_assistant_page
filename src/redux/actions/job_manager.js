@@ -105,7 +105,7 @@ export const change_modal_name = (job_name) => {
 export const change_modal_type = (job_type) => {
     return {
         type: CHANGE_MODAL_TYPE,
-        job_desc: job_type
+        job_type: job_type
     }
 }
 
@@ -265,7 +265,7 @@ export const changeModalName = (e) => {
 
 export const changeModalType = (e) => {
     return (dispatch) => {
-        dispatch(change_modal_type(e.target.value))
+        dispatch(change_modal_type(e))
     }
 }
 

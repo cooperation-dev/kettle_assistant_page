@@ -141,7 +141,7 @@ class DatabaseManager extends Component{
                         <Button type="default" size="default" className="btn">修改</Button>
                         <Button type="default" size="default" className="btn">删除</Button>
                         <Button type="default" size="default" className="btn">查看</Button>
-                        <Table dataSource={this.props.databaseManager.list} columns={columns} />
+                        <Table dataSource={this.props.databaseManager.list} columns={columns} scroll={{x: 1300}}/>
                     </Form>
                 </Row>
             </div>

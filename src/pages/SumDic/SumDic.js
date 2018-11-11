@@ -55,9 +55,9 @@ class SumDic extends Component{
         })
     }
 
-    changeDisabled = () => {
+    changeIsDisabled = () => {
         this.setState({
-            disabled: !this.state.input_disabled
+            disabled: !this.state.disabled
         })
     }
 
@@ -123,7 +123,7 @@ class SumDic extends Component{
                             </Col>
                             <Col span={6} key={3}>
                                 <Form.Item label="是否禁用">
-                                    <Checkbox checked={this.state.input_disabled?true:false} onClick={this.changeDisabled}></Checkbox>
+                                    <Checkbox checked={this.state.disabled?true:false} onClick={this.changeIsDisabled}></Checkbox>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={4}>

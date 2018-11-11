@@ -9,6 +9,13 @@ import {connect} from 'react-redux';
 import './RoleManager.css'
 
 class RoleManager extends Component{
+    constructor(props){
+        super(props)
+
+        this.state = {
+            selectRows:[]
+        }
+    }
     componentDidMount = () => {
         this.props.findRoles()
     }
@@ -30,6 +37,17 @@ class RoleManager extends Component{
                 key: 'role_description'
             }
         ];
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+              this.setState({
+                  selectRows: selectedRows
+              })
+            },
+            getCheckboxProps: record => ({
+              disabled: record.name === 'Disabled User', // Column configuration not to be checked
+              name: record.name,
+            }),
+          };
         return (
             <div style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto"}}>
                 <Row>
@@ -52,16 +70,16 @@ class RoleManager extends Component{
                 <Row style={{marginTop:"15px"}}>
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.addRoleShow()}>新增</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => this.props.updateRoleShow()}>修改</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.updateRoleShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={showDeleteConfirm}>删除</Button>
                         <Button type="default" size="default" className="btn">查看</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Button type="default" size="default" className="btn">权限分配</Button>
-                        <Table dataSource={this.props.roleManager.list} columns={columns} />
+                        <Table rowSelection={rowSelection} dataSource={this.props.roleManager.list} columns={columns} />
                     </Form>
                 </Row>
                 <AddModal visible={this.props.roleManager.add_visible} onOk={() => this.props.addRoleSure()} onCancel={() => this.props.addRoleCancel()}></AddModal>
-                <UpdateModal visible={this.props.roleManager.update_visible} onOk={() => this.props.updateRoleSure()} onCancel={() => this.props.updateRoleCancel()}></UpdateModal>
+                <UpdateModal visible={this.props.roleManager.update_visible} onOk={() => this.props.updateRoleSure()} onCancel={() => this.props.updateRoleCancel()} value={this.props.roleManager.role}></UpdateModal>
             </div>
         )
     }
@@ -95,10 +113,10 @@ class UpdateModal extends Component{
                 onCancel={() => this.props.onCancel()}
                 >
                 <Form.Item label="角色名">
-                    <Input placeholder="角色名"/>
+                    <Input placeholder="角色名" value={this.props.value.role_name}/>
                 </Form.Item>
                 <Form.Item label="角色描述">
-                    <Input placeholder="角色描述"/>
+                    <Input placeholder="角色描述" value={this.props.value.role_description}/>
                 </Form.Item>
             </Modal>
         )

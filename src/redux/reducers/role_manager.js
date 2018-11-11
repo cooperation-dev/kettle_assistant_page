@@ -6,6 +6,10 @@ const initState = {
     list:[],
     add_visible: false,
     update_visible: false,
+    role:{
+        role_name: '',
+        role_description: ''
+    }
 }
 
 export default function reducers(state = initState, action){
@@ -37,7 +41,8 @@ export default function reducers(state = initState, action){
         case UPDATE_ROLE_MODAL_SHOW:{
             return {
                 ...state,
-                update_visible: true
+                update_visible: true,
+                role: action.role
             }
         }
         case UPDATE_ROLE_MODAL_CANCEL:{

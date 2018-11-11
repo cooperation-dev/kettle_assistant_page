@@ -1,20 +1,21 @@
 import '../../../mock/api';
 import axios from 'axios';
+import {message} from 'antd';
 
 //请求数据
 export const FIND_ROLES = "roleManager/findRoles";
 //新增显示
-export const ADD_ROLE_MODAL_SHOW = "projectManager/addProjectShow"
+export const ADD_ROLE_MODAL_SHOW = "roleManager/addRoleShow"
 //新增取消
-export const ADD_ROLE_MODAL_CANCEL = "projectManager/addProjectCancel"
+export const ADD_ROLE_MODAL_CANCEL = "roleManager/addRoleCancel"
 //新增确认
-export const ADD_ROLE_MODAL_SURE = "projectManager/addProjectSure"
+export const ADD_ROLE_MODAL_SURE = "roleManager/addRoleSure"
 //修改显示
-export const UPDATE_ROLE_MODAL_SHOW = "projectManager/updateProjectShow"
+export const UPDATE_ROLE_MODAL_SHOW = "roleManager/updateRoleShow"
 //修改取消
-export const UPDATE_ROLE_MODAL_CANCEL = "projectManager/updateProjectCancel"
+export const UPDATE_ROLE_MODAL_CANCEL = "roleManager/updateRoleCancel"
 //修改确认
-export const UPDATE_ROLE_MODAL_SURE = "projectManager/updateProjectSure"
+export const UPDATE_ROLE_MODAL_SURE = "roleManager/updateRoleSure"
 
 export const find_roles = (list) => {
     return {
@@ -35,15 +36,17 @@ export const add_role_modal_cancel = () => {
     }
 }
 
-export const add_role_modal_sure = () => {
+export const add_role_modal_sure = (role) => {
     return {
-        type: ADD_ROLE_MODAL_SURE
+        type: ADD_ROLE_MODAL_SURE,
+        role: role
     }
 }
 
-export const update_role_modal_show = () => {
+export const update_role_modal_show = (row) => {
     return {
-        type: UPDATE_ROLE_MODAL_SHOW
+        type: UPDATE_ROLE_MODAL_SHOW,
+        role: row
     }
 }
 
@@ -89,9 +92,15 @@ export const addRoleSure = () => {
     }
 }
 
-export const updateRoleShow = () => {
+export const updateRoleShow = (selectRows) => {
     return (dispatch) => {
-        dispatch(update_role_modal_show());
+        if(selectRows.length == 0){
+            message.error('请选择行!')
+        }else if(selectRows.length > 1){
+            message.error('选中纪录超过一行!')
+        }else {
+            dispatch(update_role_modal_show(selectRows[0]));
+        }
     }
 }
 

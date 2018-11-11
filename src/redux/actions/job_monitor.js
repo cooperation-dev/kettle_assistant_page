@@ -49,9 +49,21 @@ export const loadData = () => {
 
 export const loadEcharts = (type, datet) => {
     return (dispatch) => {
-        axios.post('jobMonitor/loadEcharts', {
+        /* axios.post('jobMonitor/loadEcharts', {
             type: type,
             datet: datet
+        }).then((response) => {
+            return response.data.list
+        }).then((data) => {
+            dispatch(load_echarts(data))
+        }) */
+        axios({
+            method: 'post',
+            url: 'jobMonitorController/loadEcharts',
+            data: {
+                type: type,
+                datet: datet
+            }
         }).then((response) => {
             return response.data.list
         }).then((data) => {
@@ -62,9 +74,21 @@ export const loadEcharts = (type, datet) => {
 
 export const showRange = (type, datet) => {
     return (dispatch) => {
-        axios.post('jobMonitor/showRange', {
+        /* axios.post('jobMonitor/showRange', {
             type: type,
             datet: datet
+        }).then((response) => {
+            return response.data.rangeData
+        }).then((data) => {
+            dispatch(show_range(data))
+        }) */
+        axios({
+            method: 'post',
+            url: 'jobMonitorController/showRange',
+            data: {
+                type: type,
+                datet: datet
+            }
         }).then((response) => {
             return response.data.rangeData
         }).then((data) => {

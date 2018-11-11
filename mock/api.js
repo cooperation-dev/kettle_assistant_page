@@ -49,7 +49,7 @@ mock.onPost('jobMonitor/loadData')
         list: job_monitor_analysis
     })
 
-mock.onPost('jobMonitor/loadEcharts', { type: 'input' , datet: 'date'} )
+/* mock.onPost('jobMonitor/loadEcharts', { type: 'input' , datet: 'date'} )
     .reply('200', {
         list: input_date
     })
@@ -87,9 +87,38 @@ mock.onPost('jobMonitor/loadEcharts', { type: 'input' , datet: 'year'} )
 mock.onPost('jobMonitor/loadEcharts', { type: 'output' , datet: 'year'} )
     .reply('200', {
         list: output_year
-})
+}) */
+mock.onPost('jobMonitorController/loadEcharts')
+    .reply(config => {
+        let {type, datet} = JSON.parse(config.data)
+        return new Promise((resolve, reject) => {
+            let newlist
+            if(type=='input' && datet=='date'){
+                newlist = input_date
+            }else if(type=='input' && datet=='week'){
+                newlist = input_week
+            }else if(type=='input' && datet=='month'){
+                newlist = input_month
+            }else if(type=='input' && datet=='year'){
+                newlist = input_year
+            }else if(type=='output' && datet=='date'){
+                newlist = output_date
+            }else if(type=='output' && datet=='week'){
+                newlist = output_week
+            }else if(type=='output' && datet=='month'){
+                newlist = output_month
+            }else if(type=='output' && datet=='year'){
+                newlist = output_year
+            }
+            setTimeout(() => {
+                resolve([200, {
+                    list: newlist
+                }]);
+            }, 500);
+        })
+    })
 
-mock.onPost('jobMonitor/showRange', {type: 'input', datet: 'date'})
+/* mock.onPost('jobMonitor/showRange', {type: 'input', datet: 'date'})
     .reply('200', {
         rangeData: input_range_date
     })
@@ -127,6 +156,35 @@ mock.onPost('jobMonitor/showRange', {type: 'output', datet: 'month'})
 mock.onPost('jobMonitor/showRange', {type: 'output', datet: 'year'})
     .reply('200', {
         rangeData: output_range_year
+    }) */
+mock.onPost('jobMonitorController/showRange')
+    .reply(config => {
+        let {type, datet} = JSON.parse(config.data)
+        return new Promise((resolve, reject) => {
+            let rangeData
+            if(type=='input' && datet=='date'){
+                rangeData = input_range_date
+            }else if(type=='input' && datet=='week'){
+                rangeData = input_range_week
+            }else if(type=='input' && datet=='month'){
+                rangeData = input_range_month
+            }else if(type=='input' && datet=='year'){
+                rangeData = input_range_year
+            }else if(type=='output' && datet=='date'){
+                rangeData = output_range_date
+            }else if(type=='output' && datet=='week'){
+                rangeData = output_range_week
+            }else if(type=='output' && datet=='month'){
+                rangeData = output_range_month
+            }else if(type=='output' && datet=='year'){
+                rangeData = output_range_year
+            }
+            setTimeout(() => {
+                resolve([200, {
+                    rangeData: rangeData
+                }]);
+            }, 500);
+        })
     })
 
 mock.onPost('sumDicController/showList')

@@ -1,4 +1,4 @@
-import '../../../mock/api';
+// import '../../../mock/api';
 import axios from 'axios';
 import {message} from 'antd';
 
@@ -115,7 +115,7 @@ export const showList = (dic) => {
             url: 'sumDicController/showList',
             data: dic
         }).then((response) => {
-            return response.data.list
+            return response.data
         }).then((data) => {
             dispatch(show_list(data))
         })
@@ -129,7 +129,7 @@ export const changeDisabled = (row) => {
             url: 'sumDicController/changeDisabled',
             data: row
         }).then((response) => {
-            return response.data.record
+            return response.data
         }).then((data) => {
             return dispatch(change_disabled(data))
         }) 
@@ -142,7 +142,7 @@ export const addModalShow = () => {
 
         axios.post('sumDic/findDicTypes')
         .then((response) => {
-            return response.data.list
+            return response.data
         }).then((list) => {
             dispatch(find_dic_types(list))
         })
@@ -157,7 +157,7 @@ export const addModalSure = (dic) => {
             url: 'sumDicController/saveDic',
             data: dic
         }).then((r) => {
-            return r.data.dic
+            return r.data
         }).then((d) => {
             dispatch(add_modal_sure(d))
         })
@@ -182,7 +182,7 @@ export const deleteDicByIds = (selectRows) => {
                 url: 'sumDicController/deleteDicByIds',
                 data: codes
             }).then((response) => {
-                return response.data.list
+                return response.data
             }).then((list) => {
                 dispatch(show_list(list))
             })
@@ -195,7 +195,7 @@ export const findDicTypes = () => {
     return (dispatch) => {
         axios.post('sumDic/findDicTypes')
                 .then((r) => {
-                    return r.data.list
+                    return r.data
                 }).then((list) => {
                     dispatch(find_dic_types(list))
                 })
@@ -235,7 +235,7 @@ export const updateModalShow = (selectRows) => {
         }else{
             axios.post('sumDicController/findDicById/'+selectRows[0].dic_id)
                 .then((response) => {
-                    return response.data.dic
+                    return response.data
                 }).then((data) => {
                     dispatch(update_modal_show(data))
                 })
@@ -250,7 +250,7 @@ export const updateModalSure = (dic) => {
             url: 'sumDicController/updateDic',
             data: dic
         }).then((res) => {
-            return res.data.dic
+            return res.data
         }).then((dic) => {
             dispatch(update_modal_sure(dic))
         })

@@ -1,7 +1,6 @@
-import '../../../mock/api';
+// import '../../../mock/api';
 import axios from 'axios';
 import {message} from 'antd';
-import { job_types } from '../../../mock/data';
 
 export const FIND_JOBS = "jobManager/findJobs";
 //新增作业框弹出
@@ -120,10 +119,10 @@ export const findJobs = (job) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: 'jobManagerController/findJobs',
+            url: '/api/jobManagerController/findJobs',
             data: job
         }).then((response) => {
-            return response.data.list
+            return response.data
         })
         .then((list) => {
             dispatch(find_jobs(list))
@@ -137,7 +136,7 @@ export const addJobModalShow = () => {
 
         axios.post('jobManagerController/findJobTypes')
         .then((response) => {
-            return response.data.list
+            return response.data
         }).then((list) => {
             dispatch(find_job_types(list))
         })
@@ -152,7 +151,7 @@ export const addJobModalSure = (job) => {
             url: 'jobManager/saveJob',
             data: job
         }).then((res) => {
-            return res.data.job
+            return res.data
         }).then((job) => {
             dispatch(add_job_modal_sure(job))
         })
@@ -174,7 +173,7 @@ export const updateJobModalShow = (selectRows) => {
         }else{
             axios.post('jobManagerController/findJobById/'+selectRows[0].job_id)
                 .then((response) => {
-                    return response.data.job
+                    return response.data
                 }).then((data) => {
                     dispatch(update_job_modal_show(data))
                 })
@@ -189,7 +188,7 @@ export const updateJobModalSure = (job) => {
             url: 'jobManagerController/updateJob',
             data: job
         }).then((res) => {
-            return res.data.job
+            return res.data
         }).then((job) => {
             dispatch(update_job_modal_sure(job))
         })
@@ -214,7 +213,7 @@ export const deleteJob = (selectRows) => {
                 url: 'jobManagerController/deleteJobByIds',
                 data: ids
             }).then((response) => {
-                return response.data.list
+                return response.data
             }).then((list) => {
                 dispatch(find_jobs(list))
             })
@@ -232,7 +231,7 @@ export const displayLogShow = (selectRows) => {
             const id = selectRows[0].job_id;
             axios.post('jobManagerController/findJobById/'+id)
                 .then((response) => {
-                    return response.data.job
+                    return response.data
                 }).then((data) => {
                     dispatch(display_log_show(data))
                 })
@@ -250,7 +249,7 @@ export const findJobTypes = () => {
     return (dispatch) => {
         axios.post('jobManagerController/findJobTypes')
             .then((response) => {
-                return response.data.list
+                return response.data
             }).then((list) => {
                 dispatch(find_job_types(list))
             })

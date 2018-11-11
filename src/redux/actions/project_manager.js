@@ -1,4 +1,4 @@
-import '../../../mock/api';
+// import '../../../mock/api';
 import axios from 'axios';
 
 //请求数据

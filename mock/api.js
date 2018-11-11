@@ -37,57 +37,14 @@ mock.onPost('jobManagerController/findJobs')
                 newjob = newjob.filter(job => job.creator==creator)
             }
             setTimeout(() => {
-                resolve([200, {
-                    list: newjob
-                }]);
+                resolve([200, newjob]);
             }, 500);
         })
     })
 
 mock.onPost('jobMonitor/loadData')
-    .reply('200', {
-        list: job_monitor_analysis
-    })
+    .reply('200', job_monitor_analysis)
 
-/* mock.onPost('jobMonitor/loadEcharts', { type: 'input' , datet: 'date'} )
-    .reply('200', {
-        list: input_date
-    })
-
-mock.onPost('jobMonitor/loadEcharts', { type: 'output' , datet: 'date'} )
-    .reply('200', {
-        list: output_date
-    })
-
-mock.onPost('jobMonitor/loadEcharts', { type: 'input' , datet: 'week'} )
-    .reply('200', {
-        list: input_week
-    })
-
-mock.onPost('jobMonitor/loadEcharts', { type: 'output' , datet: 'week'} )
-.reply('200', {
-    list: output_week
-})
-
-mock.onPost('jobMonitor/loadEcharts', { type: 'input' , datet: 'month'} )
-    .reply('200', {
-        list: input_month
-    })
-
-mock.onPost('jobMonitor/loadEcharts', { type: 'output' , datet: 'month'} )
-.reply('200', {
-    list: output_month
-})
-
-mock.onPost('jobMonitor/loadEcharts', { type: 'input' , datet: 'year'} )
-    .reply('200', {
-        list: input_year
-    })
-
-mock.onPost('jobMonitor/loadEcharts', { type: 'output' , datet: 'year'} )
-    .reply('200', {
-        list: output_year
-}) */
 mock.onPost('jobMonitorController/loadEcharts')
     .reply(config => {
         let {type, datet} = JSON.parse(config.data)
@@ -111,52 +68,11 @@ mock.onPost('jobMonitorController/loadEcharts')
                 newlist = output_year
             }
             setTimeout(() => {
-                resolve([200, {
-                    list: newlist
-                }]);
+                resolve([200, newlist]);
             }, 500);
         })
     })
 
-/* mock.onPost('jobMonitor/showRange', {type: 'input', datet: 'date'})
-    .reply('200', {
-        rangeData: input_range_date
-    })
-
-mock.onPost('jobMonitor/showRange', {type: 'input', datet: 'week'})
-    .reply('200', {
-        rangeData: input_range_week
-    })
-
-mock.onPost('jobMonitor/showRange', {type: 'input', datet: 'month'})
-    .reply('200', {
-        rangeData: input_range_month
-    })
-
-mock.onPost('jobMonitor/showRange', {type: 'input', datet: 'year'})
-    .reply('200', {
-        rangeData: input_range_year
-    })
-
-mock.onPost('jobMonitor/showRange', {type: 'output', datet: 'date'})
-    .reply('200', {
-        rangeData: output_range_date
-    })
-
-mock.onPost('jobMonitor/showRange', {type: 'output', datet: 'week'})
-    .reply('200', {
-        rangeData: output_range_week
-    })
-
-mock.onPost('jobMonitor/showRange', {type: 'output', datet: 'month'})
-    .reply('200', {
-        rangeData: output_range_month
-    })
-
-mock.onPost('jobMonitor/showRange', {type: 'output', datet: 'year'})
-    .reply('200', {
-        rangeData: output_range_year
-    }) */
 mock.onPost('jobMonitorController/showRange')
     .reply(config => {
         let {type, datet} = JSON.parse(config.data)
@@ -180,9 +96,7 @@ mock.onPost('jobMonitorController/showRange')
                 rangeData = output_range_year
             }
             setTimeout(() => {
-                resolve([200, {
-                    rangeData: rangeData
-                }]);
+                resolve([200, rangeData]);
             }, 500);
         })
     })
@@ -203,9 +117,7 @@ mock.onPost('sumDicController/showList')
                 newdic = newdic.filter(dic => dic.dic_type==dic_type)
             }
             setTimeout(() => {
-                resolve([200, {
-                    list: newdic
-                }]);
+                resolve([200, newdic]);
             }, 500);
         })
     })
@@ -216,9 +128,7 @@ mock.onPost('sumDicController/changeDisabled')
         row.is_disabled = !row.is_disabled
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve([200, {
-                    record: row
-                }]);
+                resolve([200, row]);
             }, 500);
         })
     })
@@ -241,9 +151,7 @@ mock.onPost('systemLog/findLogs', {
     operate_ip: '',
     details: '',
     create_time: ''
-}).reply('200', {
-    list: data_system_log
-})
+}).reply('200', data_system_log)
 
 mock.onPost('systemLogController/findLogs')
     .reply(config => {
@@ -266,9 +174,7 @@ mock.onPost('systemLogController/findLogs')
                 newlog = newlog.filter(log => log.create_time==create_time)
             }
             setTimeout(() => {
-                resolve([200, {
-                    list: newlog
-                }]);
+                resolve([200, newlog]);
             }, 500);
         })
     })
@@ -292,9 +198,7 @@ mock.onPost('projectManager/findProjects').reply(
 )
 
 mock.onPost('homeController/loadMenu')
-    .reply('200', {
-        list: menu
-    })
+    .reply('200', menu)
 
 mock.onPost('jobManagerController/deleteJobByIds')
     .reply(config => {
@@ -314,9 +218,7 @@ mock.onPost('jobManagerController/deleteJobByIds')
                 }
             }
             setTimeout(() => {
-                resolve([200, {
-                    list: newjob
-                }]);
+                resolve([200, newjob]);
             }, 500);
         })
     })
@@ -324,15 +226,11 @@ mock.onPost('jobManagerController/deleteJobByIds')
 for(let i=0; i<Jobs.length; i++){
     let job = Jobs[i]
     mock.onPost('jobManagerController/findJobById/'+job.job_id)
-    .reply('200', {
-        job: job
-    })
+    .reply('200', job)
 }
 
 mock.onPost('jobManagerController/findJobTypes')
-    .reply('200', {
-        list: job_types
-    })
+    .reply('200', job_types)
 
 mock.onPost('jobManager/saveJob')
     .reply(config => {
@@ -356,9 +254,7 @@ mock.onPost('jobManager/saveJob')
             })
             // Jobs.push(newjob)
             setTimeout(() => {
-                resolve([200, {
-                    job: newjob
-                }]);
+                resolve([200, newjob]);
             }, 500);
         })
     })
@@ -382,9 +278,7 @@ mock.onPost('sumDicController/saveDic')
                 belongs: belongs
             }
             setTimeout(() => {
-                resolve([200, {
-                    dic: newdic
-                }]);
+                resolve([200, newdic]);
             }, 500);
         })
     })
@@ -407,17 +301,13 @@ mock.onPost('sumDicController/deleteDicByIds')
                 }
             }
             setTimeout(() => {
-                resolve([200, {
-                    list: newdic
-                }]);
+                resolve([200, newdic]);
             }, 500);
         })
     })
 
 mock.onPost('sumDic/findDicTypes')
-    .reply('200', {
-        list: dic_types
-    })
+    .reply('200', dic_types)
 
 mock.onPost('jobManagerController/updateJob')
     .reply(config => {
@@ -434,9 +324,7 @@ mock.onPost('jobManagerController/updateJob')
                 newjob.job_desc = job_desc
             }
             setTimeout(() => {
-                resolve([200, {
-                    job: newjob
-                }]);
+                resolve([200, newjob]);
             }, 500);
         })
     })
@@ -459,9 +347,7 @@ mock.onPost('sumDicController/updateDic')
                 newdic.belongs = belongs
             }
             setTimeout(() => {
-                resolve([200, {
-                    dic: newdic
-                }]);
+                resolve([200, newdic]);
             }, 500);
         })
     })
@@ -469,7 +355,5 @@ mock.onPost('sumDicController/updateDic')
 for(let i=0; i<sum_dic_list.length; i++){
     let dic = sum_dic_list[i]
     mock.onPost('sumDicController/findDicById/'+dic.dic_id)
-    .reply('200', {
-        dic: dic
-    })
+    .reply('200', dic)
 }

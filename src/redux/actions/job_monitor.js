@@ -1,4 +1,4 @@
-import '../../../mock/api';
+// import '../../../mock/api';
 import axios from 'axios';
 
 export const LOAD_DATA = "jobMonitor/loadData";
@@ -30,7 +30,7 @@ export const loadData = () => {
     return (dispatch) => {
         axios.post('jobMonitor/loadData')
                 .then((response) => {
-                    let cards = response.data.list
+                    let cards = response.data
                     return cards.map(card => {
                         return {
                             ...card,
@@ -40,7 +40,6 @@ export const loadData = () => {
                             d_quantity: card.key=="4"?parseFloat(card.d_quantity*100).toFixed(2)+'%':card.d_quantity,
                         }
                     })
-                    // return response.data.list
                 }).then((data) => {
                     dispatch(load_data(data))
                 })
@@ -49,14 +48,6 @@ export const loadData = () => {
 
 export const loadEcharts = (type, datet) => {
     return (dispatch) => {
-        /* axios.post('jobMonitor/loadEcharts', {
-            type: type,
-            datet: datet
-        }).then((response) => {
-            return response.data.list
-        }).then((data) => {
-            dispatch(load_echarts(data))
-        }) */
         axios({
             method: 'post',
             url: 'jobMonitorController/loadEcharts',
@@ -65,7 +56,7 @@ export const loadEcharts = (type, datet) => {
                 datet: datet
             }
         }).then((response) => {
-            return response.data.list
+            return response.data
         }).then((data) => {
             dispatch(load_echarts(data))
         })
@@ -74,14 +65,6 @@ export const loadEcharts = (type, datet) => {
 
 export const showRange = (type, datet) => {
     return (dispatch) => {
-        /* axios.post('jobMonitor/showRange', {
-            type: type,
-            datet: datet
-        }).then((response) => {
-            return response.data.rangeData
-        }).then((data) => {
-            dispatch(show_range(data))
-        }) */
         axios({
             method: 'post',
             url: 'jobMonitorController/showRange',
@@ -90,7 +73,7 @@ export const showRange = (type, datet) => {
                 datet: datet
             }
         }).then((response) => {
-            return response.data.rangeData
+            return response.data
         }).then((data) => {
             dispatch(show_range(data))
         })

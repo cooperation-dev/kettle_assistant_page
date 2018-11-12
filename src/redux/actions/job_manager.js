@@ -94,24 +94,24 @@ export const find_job_types = (list) => {
     }
 }
 
-export const change_modal_name = (job_name) => {
+export const change_modal_name = (jobName) => {
     return {
         type: CHANGE_MODAL_NAME,
-        job_name: job_name
+        jobName: jobName
     }
 }
 
-export const change_modal_type = (job_type) => {
+export const change_modal_type = (jobType) => {
     return {
         type: CHANGE_MODAL_TYPE,
-        job_type: job_type
+        jobType: jobType
     }
 }
 
-export const change_modal_desc = (job_desc) => {
+export const change_modal_desc = (jobDesc) => {
     return {
         type: CHANGE_MODAL_DESC,
-        job_desc: job_desc
+        jobDesc: jobDesc
     }
 }
 
@@ -134,7 +134,7 @@ export const addJobModalShow = () => {
     return (dispatch) => {
         dispatch(add_job_modal_show())
 
-        axios.post('jobManagerController/findJobTypes')
+        axios.post('/api/jobManagerController/findJobTypes')
         .then((response) => {
             return response.data
         }).then((list) => {
@@ -148,7 +148,7 @@ export const addJobModalSure = (job) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: 'jobManager/saveJob',
+            url: '/api/jobManagerController/saveJob',
             data: job
         }).then((res) => {
             return res.data
@@ -171,7 +171,7 @@ export const updateJobModalShow = (selectRows) => {
         }else if(selectRows.length > 1){
             message.error('选中纪录超过一行')
         }else{
-            axios.post('jobManagerController/findJobById/'+selectRows[0].job_id)
+            axios.post('/api/jobManagerController/findJobById/'+selectRows[0].jobId)
                 .then((response) => {
                     return response.data
                 }).then((data) => {
@@ -185,7 +185,7 @@ export const updateJobModalSure = (job) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: 'jobManagerController/updateJob',
+            url: '/api/jobManagerController/updateJob',
             data: job
         }).then((res) => {
             return res.data
@@ -207,10 +207,10 @@ export const deleteJob = (selectRows) => {
             message.error('请选择行')
         }else{
             let ids = []
-            selectRows.map(row => ids.push(row.job_id))
+            selectRows.map(row => ids.push(row.jobId))
             axios({
                 method: 'post',
-                url: 'jobManagerController/deleteJobByIds',
+                url: '/api/jobManagerController/deleteJobByIds',
                 data: ids
             }).then((response) => {
                 return response.data
@@ -228,8 +228,8 @@ export const displayLogShow = (selectRows) => {
         }else if(selectRows.length > 1){
             message.error('选中纪录超过一行')
         }else{
-            const id = selectRows[0].job_id;
-            axios.post('jobManagerController/findJobById/'+id)
+            const id = selectRows[0].jobId;
+            axios.post('/api/jobManagerController/findJobById/'+id)
                 .then((response) => {
                     return response.data
                 }).then((data) => {
@@ -247,7 +247,7 @@ export const displayLogClose = () => {
 
 export const findJobTypes = () => {
     return (dispatch) => {
-        axios.post('jobManagerController/findJobTypes')
+        axios.post('/api/jobManagerController/findJobTypes')
             .then((response) => {
                 return response.data
             }).then((list) => {

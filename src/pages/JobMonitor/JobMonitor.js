@@ -80,14 +80,14 @@ class JobMonitor extends Component{
                                         <p className="quantity">{card.quantity}</p>
                                         <Row>
                                             <Col span={6}>周同比</Col>
-                                            <Col span={6}>{card.w_yoy}</Col>
+                                            <Col span={6}>{card.wYoy}</Col>
                                             <Col span={6}>日同比</Col>
-                                            <Col span={6}>{card.d_yoy}</Col>
+                                            <Col span={6}>{card.dYoy}</Col>
                                         </Row>
                                         <Divider></Divider>
                                         <Row>
-                                            <Col span={8} className="real">{card.d_title}</Col>
-                                            <Col span={16} className="real">{card.d_quantity}</Col>
+                                            <Col span={8} className="real">{card.dTitle}</Col>
+                                            <Col span={16} className="real">{card.dQuantity}</Col>
                                         </Row>
                                     </Card>
                                 </Col>

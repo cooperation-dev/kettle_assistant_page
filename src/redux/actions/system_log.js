@@ -14,7 +14,7 @@ export const findLogs = (log) => {//包含操作用户、日志类型、操作IP
     return (dispatch) => {
         axios({
             method: 'post',
-            url: 'systemLogController/findLogs',
+            url: '/api/systemLogController/findLogs',
             data: log
         }).then((response) => {
             return response.data

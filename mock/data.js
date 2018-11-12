@@ -5,16 +5,16 @@ const Jobs = []
 for(let i=1; i<=11; i++){
     Jobs.push(Mock.mock({
         key: i+"",
-        job_id: i+"",
-        job_name: "测试作业" + i,
-        job_desc: "描述测试作业" + i,
-        cron_set: Mock.Random.integer(1, 10) + '分钟',
-        "job_type|1": ['脚本作业', '配置作业', 'Shell作业'],
-        job_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
-        run_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
-        modify_time: '2018-10-17 00:00:00',
+        jobId: i+"",
+        jobName: "测试作业" + i,
+        jobDesc: "描述测试作业" + i,
+        cronSet: Mock.Random.integer(1, 10) + '分钟',
+        "jobType|1": ['脚本作业', '配置作业', 'Shell作业'],
+        jobState: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
+        runState: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
+        modifyTime: '2018-10-17 00:00:00',
         creator: 'adan',
-        create_time: '2018-10-17 00:00:00',
+        createTime: '2018-10-17 00:00:00',
         log: Mock.Random.string(2000)
     }))
 }
@@ -29,40 +29,40 @@ const trans = Mock.mock({
     key: "1",
     title: '总转换量',
     quantity: 126560,
-    w_yoy: 0.12,    //周同比
-    d_yoy: 0.11,    //日同比
-    d_title: '日转换量',
-    d_quantity: 12345  //日转换量
+    wYoy: 0.12,    //周同比
+    dYoy: 0.11,    //日同比
+    dTitle: '日转换量',
+    dQuantity: 12345  //日转换量
 })
 //输入量
 const input = Mock.mock({
     key: "2",
     title: '总输入量',
     quantity: 88888,
-    w_yoy: 0.34,   
-    d_yoy: 0.57,    
-    d_title: '日输入量',
-    d_quantity: 3212
+    wYoy: 0.34,   
+    dYoy: 0.57,    
+    dTitle: '日输入量',
+    dQuantity: 3212
 })
 //输出量
 const output = Mock.mock({
     key: "3",
     title: '总输出量',
     quantity: 37672,
-    w_yoy: 0.23,   
-    d_yoy: 0.14,    
-    d_title: '日转出量',
-    d_quantity: 3212
+    wYoy: 0.23,   
+    dYoy: 0.14,    
+    dTitle: '日转出量',
+    dQuantity: 3212
 })
 //转换率
 const trans_rate = Mock.mock({
     key: "4",
     title: '总转换率',
     quantity: 0.4238,
-    w_yoy: 0.12,   
-    d_yoy: 0.13,   
-    d_title: '日转换率',
-    d_quantity: 0.3125
+    wYoy: 0.12,   
+    dYoy: 0.13,   
+    dTitle: '日转换率',
+    dQuantity: 0.3125
 })
 job_monitor_analysis.push(trans)
 job_monitor_analysis.push(input)
@@ -258,72 +258,72 @@ const output_range_year = {
 const sum_dic_list = []
 const org_sum_dic_oracle = Mock.mock({
     index: 1,
-    dic_id: 1,
+    dicId: 1,
     key: 'oracle',
-    dic_code: 'oracle',
-    dic_name: 'oracle',
+    dicCode: 'oracle',
+    dicName: 'oracle',
     sort: 10,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
+    createTime: "2018-09-09 12:34:44",
+    modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    is_disabled: false,
-    dic_type: '数据库类型',
+    isDisabled: false,
+    dicType: '数据库类型',
     belongs: ''
 })
 const org_sum_dic_mysql = Mock.mock({
     index: 2,
-    dic_id: 2,
+    dicId: 2,
     key: 'mysql',
-    dic_code: 'mysql',
-    dic_name: 'mysql',
+    dicCode: 'mysql',
+    dicName: 'mysql',
     sort: 11,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
+    createTime: "2018-09-09 12:34:44",
+    modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    is_disabled: true,
-    dic_type: '数据库类型',
+    isDisabled: true,
+    dicType: '数据库类型',
     belongs: ''
 })
 const org_sum_dic_sqlserver = Mock.mock({
     index: 3,
-    dic_id: 3,
+    dicId: 3,
     key: 'sqlserver',
-    dic_code: 'sqlserver',
-    dic_name: 'sqlserver',
+    dicCode: 'sqlserver',
+    dicName: 'sqlserver',
     sort: 12,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
+    createTime: "2018-09-09 12:34:44",
+    modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    is_disabled: true,
-    dic_type: '数据库类型',
+    isDisabled: true,
+    dicType: '数据库类型',
     belongs: ''
 })
 const org_sum_dic_success_failed = Mock.mock({
     index: 4,
-    dic_id: 4,
+    dicId: 4,
     key: 'SUCCESS_FAILED',
-    dic_code: 'SUCCESS_FAILED',
-    dic_name: '成功失败',
+    dicCode: 'SUCCESS_FAILED',
+    dicName: '成功失败',
     sort: 20,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
+    createTime: "2018-09-09 12:34:44",
+    modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    is_disabled: false,
-    dic_type: '字典类型',
+    isDisabled: false,
+    dicType: '字典类型',
     belongs: ''
 })
 const org_sum_dic_encoding = Mock.mock({
     index: 5,
-    dic_id: 5,
+    dicId: 5,
     key: 'ENCODING',
-    dic_code: 'ENCODING',
-    dic_name: '编码',
+    dicCode: 'ENCODING',
+    dicName: '编码',
     sort: 21,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
+    createTime: "2018-09-09 12:34:44",
+    modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    is_disabled: false,
-    dic_type: '字典类型',
+    isDisabled: false,
+    dicType: '字典类型',
     belongs: ''
 })
 sum_dic_list.push(org_sum_dic_oracle)
@@ -369,10 +369,10 @@ for(let i=0; i<=10; i++){
         key: i+1,
         id: i+1,
         "operator|1": ['adan', "zhangsan", "lisi", "wangwu"],
-        "log_type|1": ['普通日志', '登陆日志', '系统日志'],
-        "operate_ip|1": ['122.334.43.123', '124.56.46.35', '23.142.34.14', '32.142.134.1'],
+        "logType|1": ['普通日志', '登陆日志', '系统日志'],
+        "operateIp|1": ['122.334.43.123', '124.56.46.35', '23.142.34.14', '32.142.134.1'],
         "details": Mock.Random.string(20),
-        create_time: '2018-11-05 00:00:00'
+        createTime: '2018-11-05 00:00:00'
     }))
 }
 
@@ -605,16 +605,16 @@ const menu = []
     }))
 
 //作业类型
-const job_types = []
-job_types.push(Mock.mock({
+const jobTypes = []
+jobTypes.push(Mock.mock({
     name: '脚本作业',
     code: 'script'
 }))
-job_types.push(Mock.mock({
+jobTypes.push(Mock.mock({
     name: '配置作业',
     code: 'config'
 }))
-job_types.push(Mock.mock({
+jobTypes.push(Mock.mock({
     name: 'Shell作业',
     code: 'shell'
 }))
@@ -636,5 +636,5 @@ export {Jobs, job_monitor_analysis,
     sum_dic_list, sum_dic_list_change,
     database_manager,role_manager,user_manager,project_manager,
     data_system_log, menu,
-    job_types,
+    jobTypes,
     dic_types}

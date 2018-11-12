@@ -50,15 +50,15 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 updateVisible: true,
-                modalJobId: action.job.jobId,
-                modalJobName: action.job.jobName,
+                modalJobId: action.job.id,
+                modalJobName: action.job.name,
                 modalJobType: action.job.jobType,
-                modalJobDesc: action.job.jobDesc,
+                modalJobDesc: action.job.desc,
             }
         }
         case UPDATE_JOB_MODAL_SURE: {
             let newlist = state.list.map(ele => {
-                if(ele.jobId == action.job.jobId)
+                if(ele.id == action.job.id)
                     return action.job
                 else
                     return ele
@@ -79,7 +79,7 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 logVisible: true,
-                modalJobName: action.job.jobName,
+                modalJobName: action.job.name,
                 modalLog: action.job.log,
             }
         }
@@ -98,7 +98,7 @@ export default function reducers(state=initState, action){
         case CHANGE_MODAL_NAME: {
             return {
                 ...state,
-                modalJobName: action.jobName
+                modalJobName: action.name
             }
         }
         case CHANGE_MODAL_TYPE: {
@@ -110,7 +110,7 @@ export default function reducers(state=initState, action){
         case CHANGE_MODAL_DESC: {
             return {
                 ...state,
-                modalJobDesc: action.jobDesc
+                modalJobDesc: action.desc
             }
         }
         default:

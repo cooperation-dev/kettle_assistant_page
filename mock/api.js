@@ -9,29 +9,29 @@ import {Jobs, job_monitor_analysis,
             sum_dic_list, database_manager,role_manager,
             user_manager,project_manager,
             data_system_log,
-            menu, jobTypes, remain_dic, dic_types} from './data';
+            menu, jobTypes, dic_types} from './data';
 
 const mock = new MockAdapter(axios);
 
 mock.onPost('/api/jobManagerController/findJobs')
     .reply(config => {
-        let {jobId, jobName, jobDesc, jobType, jobState, creator} = JSON.parse(config.data)
+        let {id, name, desc, jobType, state, creator} = JSON.parse(config.data)
         return new Promise((resolve, reject) => {
             let newjob = Jobs
-            if(jobId!=undefined && jobId!=""){
-                newjob = newjob.filter(job => job.jobId==jobId)
+            if(id!=undefined && id!=""){
+                newjob = newjob.filter(job => job.id==id)
             }
-            if(jobName!=undefined && jobName!=""){
-                newjob = newjob.filter(job => job.jobName==jobName)
+            if(name!=undefined && name!=""){
+                newjob = newjob.filter(job => job.name==name)
             }
-            if(jobDesc!=undefined && jobDesc!=""){
-                newjob = newjob.filter(job => job.jobDesc==jobDesc)
+            if(desc!=undefined && desc!=""){
+                newjob = newjob.filter(job => job.desc==desc)
             }
             if(jobType!=undefined && jobType!=""){
                 newjob = newjob.filter(job => job.jobType==jobType)
             }
-            if(jobState!=undefined && jobState!=""){
-                newjob = newjob.filter(job => job.jobState==jobState)
+            if(state!=undefined && state!=""){
+                newjob = newjob.filter(job => job.state==state)
             }
             if(creator!=undefined && creator!=""){
                 newjob = newjob.filter(job => job.creator==creator)
@@ -208,7 +208,7 @@ mock.onPost('/api/jobManagerController/deleteJobByIds')
             for(let i=0; i<Jobs.length; i++){
                 let flag = true
                 for(let j=0; j<ids.length; j++){
-                    if(ids[j] == Jobs[i].jobId){
+                    if(ids[j] == Jobs[i].id){
                         flag = false
                         break;
                     }
@@ -225,7 +225,7 @@ mock.onPost('/api/jobManagerController/deleteJobByIds')
 
 for(let i=0; i<Jobs.length; i++){
     let job = Jobs[i]
-    mock.onPost('/api/jobManagerController/findJobById/'+job.jobId)
+    mock.onPost('/api/jobManagerController/findJobById/'+job.id)
     .reply('200', job)
 }
 
@@ -234,18 +234,18 @@ mock.onPost('/api/jobManagerController/findJobTypes')
 
 mock.onPost('/api/jobManagerController/saveJob')
     .reply(config => {
-        let {jobName, jobType, jobDesc} = JSON.parse(config.data)
+        let {name, jobType, desc} = JSON.parse(config.data)
         let jobTypeCn = jobTypes.filter(t => t.code==jobType)[0].name
         return new Promise((resolve, reject) => {
             let maxKey = Jobs[Jobs.length-1].key+1
             let newjob = Mock.mock({
                 key: "" + (maxKey),
-                jobId: ""+(maxKey),
-                jobName: jobName,
-                jobDesc: jobDesc,
+                id: ""+(maxKey),
+                name: name,
+                desc: desc,
                 cronSet: Mock.Random.integer(1, 10) + '分钟',
                 jobType: jobTypeCn,
-                jobState: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
+                state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
                 runState: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
                 modifyTime: '2018-10-17 00:00:00',
                 creator: 'adan',
@@ -311,17 +311,17 @@ mock.onPost('/api/sumDicController/findDicTypes')
 
 mock.onPost('/api/jobManagerController/updateJob')
     .reply(config => {
-        let {jobId, jobName, jobType, jobDesc} = JSON.parse(config.data)
+        let {id, name, jobType, desc} = JSON.parse(config.data)
         return new Promise((resolve, reject) => {
-            let newjob = Jobs.filter(job => job.jobId==jobId)[0]
-            if(jobName!=undefined && jobName!=''){
-                newjob.jobName = jobName
+            let newjob = Jobs.filter(job => job.id==id)[0]
+            if(name!=undefined && name!=''){
+                newjob.name = name
             }
             if(jobType!=undefined && jobType!=''){
                 newjob.jobType = jobType
             }
-            if(jobDesc!=undefined && jobDesc!=''){
-                newjob.jobDesc = jobDesc
+            if(desc!=undefined && desc!=''){
+                newjob.desc = desc
             }
             setTimeout(() => {
                 resolve([200, newjob]);

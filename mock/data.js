@@ -5,12 +5,12 @@ const Jobs = []
 for(let i=1; i<=11; i++){
     Jobs.push(Mock.mock({
         key: i+"",
-        jobId: i+"",
-        jobName: "测试作业" + i,
-        jobDesc: "描述测试作业" + i,
+        id: i+"",
+        name: "测试作业" + i,
+        desc: "描述测试作业" + i,
         cronSet: Mock.Random.integer(1, 10) + '分钟',
         "jobType|1": ['脚本作业', '配置作业', 'Shell作业'],
-        jobState: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
+        state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
         runState: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
         modifyTime: '2018-10-17 00:00:00',
         creator: 'adan',

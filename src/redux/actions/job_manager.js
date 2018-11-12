@@ -1,4 +1,4 @@
-// import '../../../mock/api';
+import '../../../mock/api';
 import axios from 'axios';
 import {message} from 'antd';
 
@@ -94,10 +94,10 @@ export const find_job_types = (list) => {
     }
 }
 
-export const change_modal_name = (jobName) => {
+export const change_modal_name = (name) => {
     return {
         type: CHANGE_MODAL_NAME,
-        jobName: jobName
+        name: name
     }
 }
 
@@ -108,10 +108,10 @@ export const change_modal_type = (jobType) => {
     }
 }
 
-export const change_modal_desc = (jobDesc) => {
+export const change_modal_desc = (desc) => {
     return {
         type: CHANGE_MODAL_DESC,
-        jobDesc: jobDesc
+        desc: desc
     }
 }
 
@@ -171,11 +171,17 @@ export const updateJobModalShow = (selectRows) => {
         }else if(selectRows.length > 1){
             message.error('选中纪录超过一行')
         }else{
-            axios.post('/api/jobManagerController/findJobById/'+selectRows[0].jobId)
+            axios.post('/api/jobManagerController/findJobById/'+selectRows[0].id)
                 .then((response) => {
                     return response.data
                 }).then((data) => {
                     dispatch(update_job_modal_show(data))
+                })
+            axios.post('/api/jobManagerController/findJobTypes')
+                .then((response) => {
+                    return response.data
+                }).then((list) => {
+                    dispatch(find_job_types(list))
                 })
         }
     }
@@ -207,7 +213,7 @@ export const deleteJob = (selectRows) => {
             message.error('请选择行')
         }else{
             let ids = []
-            selectRows.map(row => ids.push(row.jobId))
+            selectRows.map(row => ids.push(row.id))
             axios({
                 method: 'post',
                 url: '/api/jobManagerController/deleteJobByIds',
@@ -228,7 +234,7 @@ export const displayLogShow = (selectRows) => {
         }else if(selectRows.length > 1){
             message.error('选中纪录超过一行')
         }else{
-            const id = selectRows[0].jobId;
+            const id = selectRows[0].id;
             axios.post('/api/jobManagerController/findJobById/'+id)
                 .then((response) => {
                     return response.data

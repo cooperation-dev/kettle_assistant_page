@@ -53,7 +53,7 @@ export default function reducers(state=initState, action){
                 modalJobId: action.job.id,
                 modalJobName: action.job.name,
                 modalJobType: action.job.jobType,
-                modalJobDesc: action.job.desc,
+                modalJobDesc: action.job.description,
             }
         }
         case UPDATE_JOB_MODAL_SURE: {
@@ -110,7 +110,7 @@ export default function reducers(state=initState, action){
         case CHANGE_MODAL_DESC: {
             return {
                 ...state,
-                modalJobDesc: action.desc
+                modalJobDesc: action.description
             }
         }
         default:

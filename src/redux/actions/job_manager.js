@@ -1,4 +1,4 @@
-import '../../../mock/api';
+// import '../../../mock/api';
 import axios from 'axios';
 import {message} from 'antd';
 
@@ -108,10 +108,10 @@ export const change_modal_type = (jobType) => {
     }
 }
 
-export const change_modal_desc = (desc) => {
+export const change_modal_desc = (description) => {
     return {
         type: CHANGE_MODAL_DESC,
-        desc: desc
+        description: description
     }
 }
 

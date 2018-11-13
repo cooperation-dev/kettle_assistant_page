@@ -72,13 +72,13 @@ export default function reducers(state=initState, action){
         case CHANGE_MODAL_NAME: {
             return {
                 ...state,
-                modalDicName: action.dicName
+                modalDicName: action.name
             }
         }
         case CHANGE_MODAL_CODE: {
             return {
                 ...state,
-                modalDicCode: action.dicCode
+                modalDicCode: action.code
             }
         }
         case CHANGE_MODAL_TYPE: {
@@ -97,16 +97,16 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 updateVisible: true,
-                modalDicId: action.dic.dicId,
-                modalDicName: action.dic.dicName,
-                modalDicCode: action.dic.dicCode,
+                modalDicId: action.dic.id,
+                modalDicName: action.dic.name,
+                modalDicCode: action.dic.code,
                 modalDicType: action.dic.dicType,
                 modalBelongs: action.dic.belongs,
             }
         }
         case UPDATE_MODAL_SURE: {
             let newlist = state.list.map(ele => {
-                if(ele.dicId == action.dic.dicId)
+                if(ele.id == action.dic.id)
                     return action.dic
                 else
                     return ele

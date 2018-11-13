@@ -43,7 +43,7 @@ class Content extends Component{
                     {
                         this.props.menu_list.filter(menu => menu.component!="").map(menu => {
                             return (
-                                <Route key={menu.key} exact path={menu.to} component={createComponent(require(`bundle-loader?lazy&name=[name]!pages/${menu.component}/${menu.component}`))}></Route>
+                                <Route key={menu.code} exact path={menu.direction} component={createComponent(require(`bundle-loader?lazy&name=[name]!pages/${menu.component}/${menu.component}`))}></Route>
                             )
                         })
                     }

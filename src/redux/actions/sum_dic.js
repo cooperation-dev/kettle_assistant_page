@@ -2,6 +2,8 @@
 import axios from 'axios';
 import {message} from 'antd';
 
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
 export const SHOW_LIST = "sumDic/showList"
 export const CHANGE_DISABLED = "sumDic/changeDisabled"
 //新增字典显示
@@ -60,17 +62,17 @@ export const find_dic_types = (list) => {
     }
 }
 
-export const change_modal_name = (dicName) => {
+export const change_modal_name = (name) => {
     return {
         type: CHANGE_MODAL_NAME,
-        dicName: dicName
+        name: name
     }
 }
 
-export const change_modal_code = (dicCode) => {
+export const change_modal_code = (code) => {
     return {
         type: CHANGE_MODAL_CODE,
-        dicCode: dicCode
+        code: code
     }
 }
 
@@ -175,12 +177,12 @@ export const deleteDicByIds = (selectRows) => {
         if(selectRows.length == 0){
             message.error('请选择行')
         }else{
-            let codes = []
-            selectRows.map(row => codes.push(row.dicCode))
+            let ids = []
+            selectRows.map(row => ids.push(row.id))
             axios({
                 method: 'post',
                 url: '/api/sumDicController/deleteDicByIds',
-                data: codes
+                data: ids
             }).then((response) => {
                 return response.data
             }).then((list) => {
@@ -233,7 +235,7 @@ export const updateModalShow = (selectRows) => {
         }else if(selectRows.length > 1){
             message.error('选中纪录超过一行')
         }else{
-            axios.post('/api/sumDicController/findDicById/'+selectRows[0].dicId)
+            axios.post('/api/sumDicController/findDicById/'+selectRows[0].id)
                 .then((response) => {
                     return response.data
                 }).then((data) => {

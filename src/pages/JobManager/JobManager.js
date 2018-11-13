@@ -23,7 +23,7 @@ class JobManager extends Component{
             selectRows: [],
             id: '',
             name: '',
-            desc: '',
+            description: '',
             jobType: '',
             state: '',
             creator: '',
@@ -34,7 +34,7 @@ class JobManager extends Component{
         let job = {
             id: this.state.id,
             name: this.state.name,
-            desc: this.state.desc,
+            description: this.state.description,
             jobType: this.state.jobType,
             state: this.state.state,
             creator: this.state.creator,
@@ -46,7 +46,7 @@ class JobManager extends Component{
         let job = {
             id: this.state.id,
             name: this.state.name,
-            desc: this.state.desc,
+            description: this.state.description,
             jobType: this.state.jobType,
             state: this.state.state,
             creator: this.state.creator,
@@ -59,7 +59,7 @@ class JobManager extends Component{
             selectRows: [],
             id: '',
             name: '',
-            desc: '',
+            description: '',
             jobType: '',
             state: '',
             creator: '',
@@ -68,7 +68,7 @@ class JobManager extends Component{
         let job = {
             id: '',
             name: '',
-            desc: '',
+            description: '',
             jobType: '',
             state: '',
             creator: '',
@@ -90,7 +90,7 @@ class JobManager extends Component{
 
     changeJobDesc = (e) => {
         this.setState({
-            desc: e.target.value
+            description: e.target.value
         })
     }
 
@@ -124,8 +124,8 @@ class JobManager extends Component{
             key: 'name',
           }, {
             title: '作业描述',
-            dataIndex: 'desc',
-            key: 'desc',
+            dataIndex: 'description',
+            key: 'description',
           },{
             title: '定时设置',
             dataIndex: 'cronSet',
@@ -189,7 +189,7 @@ class JobManager extends Component{
                             </Col>
                             <Col span={8} key={3}>
                                 <Form.Item label="作业描述">
-                                    <Input placeholder="作业描述" value={this.state.desc} onChange={this.changeJobDesc}/>
+                                    <Input placeholder="作业描述" value={this.state.description} onChange={this.changeJobDesc}/>
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -226,11 +226,11 @@ class JobManager extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => this.props.displayLogShow(this.state.selectRows)}>查看运行日志</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Button type="default" size="default" className="btn">导出</Button>
-                        <Table rowSelection={rowSelection} dataSource={this.props.jobManager.list} columns={columns} scroll={{x: 1200}}/>
+                        <Table rowKey={(record) => {return record.id}} rowSelection={rowSelection} dataSource={this.props.jobManager.list} columns={columns} scroll={{x: 1200}}/>
                     </Form>
                 </Row>
                 <AddModal visible={this.props.jobManager.addVisible} onOk={(job) => this.props.addJobModalSure(job)} onCancel={() => this.props.addJobModalCancel()} jobTypes={this.props.jobManager.jobTypes} ></AddModal>
-                <UpdateModal visible={this.props.jobManager.updateVisible} onOk={(job) => this.props.updateJobModalSure(job)} onCancel={() => this.props.updateJobModalCancel()} id={this.props.jobManager.modalJobId} name={this.props.jobManager.modalJobName} jobType={this.props.jobManager.modalJobType} desc={this.props.jobManager.modalJobDesc} changeName={(e) => this.props.changeModalName(e)} changeType={(e) => this.props.changeModalType(e)} changeDesc={(e) => this.props.changeModalDesc(e)} jobTypes={this.props.jobManager.jobTypes}></UpdateModal>
+                <UpdateModal visible={this.props.jobManager.updateVisible} onOk={(job) => this.props.updateJobModalSure(job)} onCancel={() => this.props.updateJobModalCancel()} id={this.props.jobManager.modalJobId} name={this.props.jobManager.modalJobName} jobType={this.props.jobManager.modalJobType} description={this.props.jobManager.modalJobDesc} changeName={(e) => this.props.changeModalName(e)} changeType={(e) => this.props.changeModalType(e)} changeDesc={(e) => this.props.changeModalDesc(e)} jobTypes={this.props.jobManager.jobTypes}></UpdateModal>
                 <LogModal visible={this.props.jobManager.logVisible} name={this.props.jobManager.modalJobName} log={this.props.jobManager.modalLog} onOk={() => this.props.displayLogClose()} onCancel={() => this.props.displayLogClose()}></LogModal>
             </div>
         )
@@ -244,7 +244,7 @@ class AddModal extends Component{
         this.state = {
             name: '',
             jobType: '',
-            desc: '',
+            description: '',
         }
     }
 
@@ -262,7 +262,7 @@ class AddModal extends Component{
 
     changeJobDesc = (e) => {
         this.setState({
-            desc: e.target.value
+            description: e.target.value
         })
     }
 
@@ -270,7 +270,7 @@ class AddModal extends Component{
         let job = {
             name: this.state.name,
             jobType: this.state.jobType,
-            desc: this.state.desc,
+            description: this.state.description,
         }
         return (
             <Modal
@@ -295,7 +295,7 @@ class AddModal extends Component{
                     </Select>
                 </Form.Item>
                 <Form.Item label="作业描述">
-                    <Input placeholder="作业描述" value={this.state.desc} onChange={this.changeJobDesc}/>
+                    <Input placeholder="作业描述" value={this.state.description} onChange={this.changeJobDesc}/>
                 </Form.Item>
             </Modal>
         )
@@ -314,7 +314,7 @@ class UpdateModal extends Component{
             id: this.props.id,
             name: this.props.name,
             jobType: this.props.jobType,
-            desc: this.props.desc,
+            description: this.props.description,
         }
 
         return (
@@ -340,7 +340,7 @@ class UpdateModal extends Component{
                     </Select>
                 </Form.Item>
                 <Form.Item label="作业描述">
-                    <Input placeholder="作业描述" onChange={(e) => this.props.changeDesc(e)} value={this.props.desc}/>
+                    <Input placeholder="作业描述" onChange={(e) => this.props.changeDesc(e)} value={this.props.description}/>
                 </Form.Item>
             </Modal>
         )

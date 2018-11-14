@@ -8,15 +8,15 @@ import {FIND_JOBS,
 
 const initState = {
     list: [],
-    add_visible: false,
-    update_visible: false,
-    log_visible: false,
-    job_types: [],
-    modal_job_id: '',
-    modal_job_name: '',
-    modal_job_type: '',
-    modal_job_desc: '',
-    modal_log: '',
+    addVisible: false,
+    updateVisible: false,
+    logVisible: false,
+    jobTypes: [],
+    modalJobId: '',
+    modalJobName: '',
+    modalJobType: '',
+    modalJobDesc: '',
+    modalLog: '',
 }
 
 export default function reducers(state=initState, action){
@@ -30,87 +30,87 @@ export default function reducers(state=initState, action){
         case ADD_JOB_MODAL_SHOW: {
             return {
                 ...state,
-                add_visible: true
+                addVisible: true
             }
         }
         case ADD_JOB_MODAL_SURE: {
             state.list.push(action.job)
             return {
                 ...state,
-                add_visible: false,
+                addVisible: false,
             }
         }
         case ADD_JOB_MODAL_CANCEL: {
             return {
                 ...state,
-                add_visible: false
+                addVisible: false
             }
         }
         case UPDATE_JOB_MODAL_SHOW: {
             return {
                 ...state,
-                update_visible: true,
-                modal_job_id: action.job.job_id,
-                modal_job_name: action.job.job_name,
-                modal_job_type: action.job.job_type,
-                modal_job_desc: action.job.job_desc,
+                updateVisible: true,
+                modalJobId: action.job.id,
+                modalJobName: action.job.name,
+                modalJobType: action.job.jobType,
+                modalJobDesc: action.job.description,
             }
         }
         case UPDATE_JOB_MODAL_SURE: {
             let newlist = state.list.map(ele => {
-                if(ele.job_id == action.job.job_id)
+                if(ele.id == action.job.id)
                     return action.job
                 else
                     return ele
             })
             return {
                 ...state,
-                update_visible: false,
+                updateVisible: false,
                 list: newlist
             }
         }
         case UPDATE_JOB_MODAL_CANCEL: {
             return {
                 ...state,
-                update_visible: false
+                updateVisible: false
             }
         }
         case DISPLAY_LOG_SHOW: {
             return {
                 ...state,
-                log_visible: true,
-                modal_job_name: action.job.job_name,
-                modal_log: action.job.log,
+                logVisible: true,
+                modalJobName: action.job.name,
+                modalLog: action.job.log,
             }
         }
         case DISPLAY_LOG_CLOSE: {
             return {
                 ...state, 
-                log_visible: false
+                logVisible: false
             }
         }
         case FIND_JOB_TYPES: {
             return {
                 ...state,
-                job_types: action.list
+                jobTypes: action.list
             }
         }
         case CHANGE_MODAL_NAME: {
             return {
                 ...state,
-                modal_job_name: action.job_name
+                modalJobName: action.name
             }
         }
         case CHANGE_MODAL_TYPE: {
             return {
                 ...state,
-                modal_job_type: action.job_type
+                modalJobType: action.jobType
             }
         }
         case CHANGE_MODAL_DESC: {
             return {
                 ...state,
-                modal_job_desc: action.job_desc
+                modalJobDesc: action.description
             }
         }
         default:

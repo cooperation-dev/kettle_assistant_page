@@ -13,21 +13,21 @@ const columns = [
         title: '操作用户',
         dataIndex: 'operator'
     },{
-        key: 'log_type',
+        key: 'logType',
         title: '日志类型',
-        dataIndex: 'log_type'
+        dataIndex: 'logType'
     },{
-        key: 'operate_ip',
+        key: 'operateIp',
         title: '操作ip',
-        dataIndex: 'operate_ip'
+        dataIndex: 'operateIp'
     },{
         key: 'details',
         title: '详情',
         dataIndex: 'details'
     },{
-        key: 'create_time',
+        key: 'createTime',
         title: '创建时间',
-        dataIndex: 'create_time'
+        dataIndex: 'createTime'
     },
 ]
 
@@ -37,20 +37,20 @@ class SystemLog extends Component{
 
         this.state = {
             operator: '',
-            log_type: '',
-            operate_ip: '',
+            logType: '',
+            operateIp: '',
             details: '',
-            create_time: ''
+            createTime: ''
         }
     }
 
     componentDidMount = () => {
         let log = {
             operator: this.state.operator,
-            log_type: this.state.log_type,
-            operate_ip: this.state.operate_ip,
+            logType: this.state.logType,
+            operateIp: this.state.operateIp,
             details: this.state.details,
-            create_time: this.state.create_time
+            createTime: this.state.createTime
         }
         this.props.findLogs(log)
     }
@@ -63,13 +63,13 @@ class SystemLog extends Component{
 
     changeLogType = (e) => {
         this.setState({
-            log_type: e.target.value
+            logType: e.target.value
         })
     }
 
     changeOperateIP = (e) => {
         this.setState({
-            operate_ip: e.target.value
+            operateIp: e.target.value
         })
     }
 
@@ -81,17 +81,17 @@ class SystemLog extends Component{
 
     changeCreateTime = (e) => {
         this.setState({
-            create_time: e.target.value
+            createTime: e.target.value
         })
     }
 
     findLog = () => {
         let log = {
             operator: this.state.operator,
-            log_type: this.state.log_type,
-            operate_ip: this.state.operate_ip,
+            logType: this.state.logType,
+            operateIp: this.state.operateIp,
             details: this.state.details,
-            create_time: this.state.create_time
+            createTime: this.state.createTime
         }
         this.props.findLogs(log)
     }
@@ -99,18 +99,18 @@ class SystemLog extends Component{
     reset = () => {
         this.setState({
             operator: '',
-            log_type: '',
-            operate_ip: '',
+            logType: '',
+            operateIp: '',
             details: '',
-            create_time: '',
+            createTime: '',
         })
 
         let log = {
             operator: '',
-            log_type: '',
-            operate_ip: '',
+            logType: '',
+            operateIp: '',
             details: '',
-            create_time: '',
+            createTime: '',
         }
         this.props.findLogs(log)
     }
@@ -130,12 +130,12 @@ class SystemLog extends Component{
                             </Col>
                             <Col span={8} key={2}>
                                 <Form.Item label="日志类型">
-                                    <Input placeholder="日志类型" onChange={this.changeLogType} value={this.state.log_type}/>
+                                    <Input placeholder="日志类型" onChange={this.changeLogType} value={this.state.logType}/>
                                 </Form.Item>
                             </Col>
                             <Col span={8} key={3}>
                                 <Form.Item label="操作IP">
-                                    <Input placeholder="操作IP" onChange={this.changeOperateIP} value={this.state.operate_ip}/>
+                                    <Input placeholder="操作IP" onChange={this.changeOperateIP} value={this.state.operateIp}/>
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -147,7 +147,7 @@ class SystemLog extends Component{
                             </Col>
                             <Col span={8} key={5}>
                                 <Form.Item label="创建时间">
-                                    <Input placeholder="创建时间" onChange={this.changeCreateTime} value={this.state.create_time}/>
+                                    <Input placeholder="创建时间" onChange={this.changeCreateTime} value={this.state.createTime}/>
                                 </Form.Item>
                             </Col>
                         </Row>

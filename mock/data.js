@@ -4,17 +4,16 @@ import Mock from 'mockjs';
 const Jobs = []
 for(let i=1; i<=11; i++){
     Jobs.push(Mock.mock({
-        key: i+"",
-        job_id: i+"",
-        job_name: "测试作业" + i,
-        job_desc: "描述测试作业" + i,
-        cron_set: Mock.Random.integer(1, 10) + '分钟',
-        "job_type|1": ['脚本作业', '配置作业', 'Shell作业'],
-        job_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
-        run_state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
-        modify_time: '2018-10-17 00:00:00',
+        id: i+"",
+        name: "测试作业" + i,
+        description: "描述测试作业" + i,
+        cronSet: Mock.Random.integer(1, 10) + '分钟',
+        "jobType|1": ['脚本作业', '配置作业', 'Shell作业'],
+        state: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
+        runState: Mock.Random.integer(0,1)==0?'正在运行':'运行完成',
+        modifyTime: '2018-10-17 00:00:00',
         creator: 'adan',
-        create_time: '2018-10-17 00:00:00',
+        createTime: '2018-10-17 00:00:00',
         log: Mock.Random.string(2000)
     }))
 }
@@ -29,40 +28,40 @@ const trans = Mock.mock({
     key: "1",
     title: '总转换量',
     quantity: 126560,
-    w_yoy: 0.12,    //周同比
-    d_yoy: 0.11,    //日同比
-    d_title: '日转换量',
-    d_quantity: 12345  //日转换量
+    wYoy: 0.12,    //周同比
+    dYoy: 0.11,    //日同比
+    dTitle: '日转换量',
+    dQuantity: 12345  //日转换量
 })
 //输入量
 const input = Mock.mock({
     key: "2",
     title: '总输入量',
     quantity: 88888,
-    w_yoy: 0.34,   
-    d_yoy: 0.57,    
-    d_title: '日输入量',
-    d_quantity: 3212
+    wYoy: 0.34,   
+    dYoy: 0.57,    
+    dTitle: '日输入量',
+    dQuantity: 3212
 })
 //输出量
 const output = Mock.mock({
     key: "3",
     title: '总输出量',
     quantity: 37672,
-    w_yoy: 0.23,   
-    d_yoy: 0.14,    
-    d_title: '日转出量',
-    d_quantity: 3212
+    wYoy: 0.23,   
+    dYoy: 0.14,    
+    dTitle: '日转出量',
+    dQuantity: 3212
 })
 //转换率
 const trans_rate = Mock.mock({
     key: "4",
     title: '总转换率',
     quantity: 0.4238,
-    w_yoy: 0.12,   
-    d_yoy: 0.13,   
-    d_title: '日转换率',
-    d_quantity: 0.3125
+    wYoy: 0.12,   
+    dYoy: 0.13,   
+    dTitle: '日转换率',
+    dQuantity: 0.3125
 })
 job_monitor_analysis.push(trans)
 job_monitor_analysis.push(input)
@@ -257,86 +256,74 @@ const output_range_year = {
  */
 const sum_dic_list = []
 const org_sum_dic_oracle = Mock.mock({
-    index: 1,
-    dic_id: 1,
-    key: 'oracle',
-    dic_code: 'oracle',
-    dic_name: 'oracle',
+    id: 1,
+    code: 'oracle',
+    name: 'oracle',
     sort: 10,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
+    createTime: "2018-09-09 12:34:44",
+    modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    is_disabled: false,
-    dic_type: '数据库类型',
-    belongs: ''
+    valid: 'Y',
+    dicType: '数据库类型',
+    belongs: '',
+    parentId: ''
 })
 const org_sum_dic_mysql = Mock.mock({
-    index: 2,
-    dic_id: 2,
-    key: 'mysql',
-    dic_code: 'mysql',
-    dic_name: 'mysql',
+    id: 2,
+    code: 'mysql',
+    name: 'mysql',
     sort: 11,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
+    createTime: "2018-09-09 12:34:44",
+    modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    is_disabled: true,
-    dic_type: '数据库类型',
-    belongs: ''
+    valid: 'N',
+    dicType: '数据库类型',
+    belongs: '',
+    parentId: ''
 })
 const org_sum_dic_sqlserver = Mock.mock({
-    index: 3,
-    dic_id: 3,
-    key: 'sqlserver',
-    dic_code: 'sqlserver',
-    dic_name: 'sqlserver',
+    id: 3,
+    code: 'sqlserver',
+    name: 'sqlserver',
     sort: 12,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
+    createTime: "2018-09-09 12:34:44",
+    modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    is_disabled: true,
-    dic_type: '数据库类型',
+    valid: 'N',
+    dicType: '数据库类型',
     belongs: ''
 })
 const org_sum_dic_success_failed = Mock.mock({
-    index: 4,
-    dic_id: 4,
-    key: 'SUCCESS_FAILED',
-    dic_code: 'SUCCESS_FAILED',
-    dic_name: '成功失败',
+    id: 4,
+    code: 'SUCCESS_FAILED',
+    name: '成功失败',
     sort: 20,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
+    createTime: "2018-09-09 12:34:44",
+    modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    is_disabled: false,
-    dic_type: '字典类型',
-    belongs: ''
+    valid: 'Y',
+    dicType: '字典类型',
+    belongs: '',
+    parentId: ''
 })
 const org_sum_dic_encoding = Mock.mock({
-    index: 5,
-    dic_id: 5,
-    key: 'ENCODING',
-    dic_code: 'ENCODING',
-    dic_name: '编码',
+    id: 5,
+    code: 'ENCODING',
+    name: '编码',
     sort: 21,
-    create_time: "2018-09-09 12:34:44",
-    modify_time: '2018-09-18 01:23:46',
+    createTime: "2018-09-09 12:34:44",
+    modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    is_disabled: false,
-    dic_type: '字典类型',
-    belongs: ''
+    valid: 'N',
+    dicType: '字典类型',
+    belongs: '',
+    parentId: ''
 })
 sum_dic_list.push(org_sum_dic_oracle)
 sum_dic_list.push(org_sum_dic_mysql)
 sum_dic_list.push(org_sum_dic_sqlserver)
 sum_dic_list.push(org_sum_dic_success_failed)
 sum_dic_list.push(org_sum_dic_encoding)
-
-const sum_dic_list_change = []
-sum_dic_list_change.push(org_sum_dic_oracle)
-sum_dic_list_change.push(org_sum_dic_sqlserver)
-sum_dic_list_change.push(org_sum_dic_success_failed)
-sum_dic_list_change.push(org_sum_dic_encoding)
 
 /**
  * 数据库管理
@@ -369,10 +356,10 @@ for(let i=0; i<=10; i++){
         key: i+1,
         id: i+1,
         "operator|1": ['adan', "zhangsan", "lisi", "wangwu"],
-        "log_type|1": ['普通日志', '登陆日志', '系统日志'],
-        "operate_ip|1": ['122.334.43.123', '124.56.46.35', '23.142.34.14', '32.142.134.1'],
+        "logType|1": ['普通日志', '登陆日志', '系统日志'],
+        "operateIp|1": ['122.334.43.123', '124.56.46.35', '23.142.34.14', '32.142.134.1'],
         "details": Mock.Random.string(20),
-        create_time: '2018-11-05 00:00:00'
+        createTime: '2018-11-05 00:00:00'
     }))
 }
 
@@ -426,195 +413,229 @@ for(let i=0; i<=10; i++){
  */
 const menu = []
     menu.push(Mock.mock({
-        key: "job_manager",
-        title: "作业管理",
+        id: 1,
+        code: "job_manager",
+        name: "作业管理",
         icon: "file",
-        parent_key: "",
-        to: "",
+        parentId: "",
+        direction: "",
         level: 0,
         type: '功能菜单',
         component: '',
+        valid: 'Y',
         children: [
             {
-                key: "job_manager_detail",
-                title: "作业管理",
+                id: 11,
+                code: 'job_manager_detail',
+                name: "作业管理",
                 icon: "",
-                parent_key: "job_manager",
-                to: "/job_manager",
+                parentId: "job_manager",
+                direction: "/job_manager",
                 level: 1,
                 type: '功能菜单',
                 component: 'JobManager',
+                valid: 'Y',
                 // component: 'bundle-loader?lazy&name=[name]!pages/JobManager/JobManager',
                 // component: 'pages/JobManager/JobManager',
             },{
-                key: 'job_monitor',
-                title: '作业监控',
+                id: 12,
+                code: 'job_monitor',
+                name: '作业监控',
                 icon: '',
-                parent_key: 'job_manager',
-                to: '/job_monitor',
+                parentId: 'job_manager',
+                direction: '/job_monitor',
                 level: 1,
                 type: '功能菜单',
                 component: 'JobMonitor',
+                valid: 'Y',
                 // component: 'pages/JobMonitor/JobMonitor',
             },
         ]
     }))
     menu.push(Mock.mock({
-        key: 'dic_manager',
-        title: '字典管理',
+        id: 2,
+        code: 'dic_manager',
+        name: '字典管理',
         icon: 'tablet',
-        parent_key: '',
-        to: '',
+        parentId: '',
+        direction: '',
         level: 0,
         type: '功能菜单',
         component: '',
+        valid: 'Y',
         children: [
             {
-                key: 'sum_dic',
-                title: '统一字典',
+                id: 21,
+                code: 'sum_dic',
+                name: '统一字典',
                 icon: '',
-                parent_key: 'dic_manager',
-                to: '/sum_dic',
+                parentId: 'dic_manager',
+                direction: '/sum_dic',
                 level: 1,
                 type: '功能菜单',
                 component: 'SumDic',
+                valid: 'Y',
                 // component: 'pages/SumDic/SumDic',
             },
         ]
     }))
     menu.push(Mock.mock({
-        key: 'config_manager',
-        title: '配置管理',
+        id: 3,
+        code: 'config_manager',
+        name: '配置管理',
         icon: 'database',
-        parent_key: '',
-        to: '',
+        parentId: '',
+        direction: '',
         component: '',
         level: 0,
         type: '功能菜单',
+        valid: 'Y',
         children: [
             {
-                key: 'database_manager',
-                title: '数据库管理',
+                id: 31,
+                code: 'database_manager',
+                name: '数据库管理',
                 icon: '',
-                parent_key: 'config_manager',
-                to: '/database_manager',
+                parentId: 'config_manager',
+                direction: '/database_manager',
                 level: 1,
                 type: '功能菜单',
                 component: 'DatabaseManager',
+                valid: 'Y',
                 // component: 'pages/DatabaseManager/DatabaseManager',
             },
         ]
     }))
     menu.push(Mock.mock({
-        key: 'system_manager',
-        title: '系统管理',
+        id: 4,
+        code: 'system_manager',
+        name: '系统管理',
         icon: 'tool',
-        parent_key: '',
-        to: '',
+        parentId: '',
+        direction: '',
         component: '',
         level: 0,
         type: '功能菜单',
+        valid: 'Y',
         children: [
             {
-                key: 'menu_manager',
-                title: '菜单管理',
+                id: 41,
+                code: 'menu_manager',
+                name: '菜单管理',
                 icon: '',
-                parent_key: 'system_manager',
-                to: '/menu_manager',
+                parentId: 'system_manager',
+                direction: '/menu_manager',
                 level: 1,
                 type: '功能菜单',
                 component: 'MenuManager',
+                valid: 'Y',
             },{
-                key: 'user_manager',
-                title: '用户管理',
+                id: 42,
+                code: 'user_manager',
+                name: '用户管理',
                 icon: '',
-                parent_key: 'system_manager',
-                to: '/user_manager',
+                parentId: 'system_manager',
+                direction: '/user_manager',
                 type: '功能菜单',
                 level: 1,
                 component: 'UserManager',
+                valid: 'Y',
             },{
-                key: 'role_manager',
-                title: '角色管理',
+                id: 43,
+                code: 'role_manager',
+                name: '角色管理',
                 icon: '',
-                parent_key: 'system_manager',
+                parentId: 'system_manager',
                 type: '功能菜单',
-                to: '/role_manager',
+                direction: '/role_manager',
                 level: 1,
                 component: 'RoleManager',
+                valid: 'Y',
             },{
-                key: 'project_manager',
-                title: '项目管理',
+                id: 44,
+                code: 'project_manager',
+                name: '项目管理',
                 icon: '',
-                parent_key: 'system_manager',
+                parentId: 'system_manager',
                 type: '功能菜单',
-                to: '/project_manager',
+                direction: '/project_manager',
                 level: 1,
                 component: 'ProjectManager',
+                valid: 'Y',
             },{
-                key: 'system_log',
-                title: '系统日志',
+                id: 45,
+                code: 'system_log',
+                name: '系统日志',
                 icon: '',
                 type: '功能菜单',
-                parent_key: 'system_manager',
-                to: '/system_log',
+                parentId: 'system_manager',
+                direction: '/system_log',
                 level: 1,
                 component: 'SystemLog',
+                valid: 'Y',
             },
         ]
     }))
     menu.push(Mock.mock({
-        key: 'assistant_manager',
-        title: '辅助工具',
+        id: 5,
+        code: 'assistant_tool',
+        name: '辅助工具',
         icon: 'tag-o',
-        parent_key: '',
-        to: '',
+        parentId: '',
+        direction: '',
         level: 0,
         component: '',
         type: '功能菜单',
+        valid: 'Y',
         children: [
             {
-                key: 'database_pool',
-                title: 'druid',
+                id: 51,
+                code: 'database_pool',
+                name: 'druid',
                 icon: '',
-                parent_key: 'assistant_manager',
-                to: '/database_tool',
+                parentId: 'assistant_tool',
+                direction: '/database_tool',
                 type: '功能菜单',
                 level: 1,
                 component: '',
+                valid: 'Y',
             },{
-                key: 'interval',
-                title: 'cron',
+                id: 52,
+                code: 'interval',
+                name: 'cron',
                 icon: '',
-                parent_key: 'assistant_manager',
-                to: '/interval',
+                parentId: 'assistant_manager',
+                direction: '/interval',
                 type: '功能菜单',
                 level: 1,
                 component: 'AuxCron',
+                valid: 'Y',
             },{
-                key: 'json',
-                title: 'json',
+                id: 53,
+                code: 'json',
+                name: 'json',
                 icon: '',
-                parent_key: 'assistant_manager',
-                to: '/json',
+                parentId: 'assistant_manager',
+                direction: '/json',
                 type: '功能菜单',
                 level: 1,
                 component: 'AuxJson',
+                valid: 'Y',
             },
         ]
     }))
 
 //作业类型
-const job_types = []
-job_types.push(Mock.mock({
+const jobTypes = []
+jobTypes.push(Mock.mock({
     name: '脚本作业',
     code: 'script'
 }))
-job_types.push(Mock.mock({
+jobTypes.push(Mock.mock({
     name: '配置作业',
     code: 'config'
 }))
-job_types.push(Mock.mock({
+jobTypes.push(Mock.mock({
     name: 'Shell作业',
     code: 'shell'
 }))
@@ -633,8 +654,8 @@ dic_types.push(Mock.mock({
 export {Jobs, job_monitor_analysis, 
     input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
     input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year,
-    sum_dic_list, sum_dic_list_change,
+    sum_dic_list, 
     database_manager,role_manager,user_manager,project_manager,
     data_system_log, menu,
-    job_types,
+    jobTypes,
     dic_types}

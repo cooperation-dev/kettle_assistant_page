@@ -18,10 +18,10 @@ class SumDic extends Component{
         super(props)
 
         this.state = {
-            dic_code: '',
-            dic_name: '',
-            disabled: false,
-            dic_type: '',
+            code: '',
+            name: '',
+            valid: 'Y',
+            dicType: '',
             selectRows: []
         }
 
@@ -29,44 +29,44 @@ class SumDic extends Component{
 
     componentDidMount = () => {
         let dic = {
-            dic_code: this.state.dic_code,
-            dic_name: this.state.dic_name,
-            disabled: this.state.disabled,
-            dic_type: this.state.dic_type,
+            code: this.state.code,
+            name: this.state.name,
+            valid: this.state.valid,
+            dicType: this.state.dicType,
         }
         this.props.showList(dic)
     }
 
     changeDicCode = (e) => {
         this.setState({
-            dic_code: e.target.value
+            code: e.target.value
         })
     }
 
     changeDicName = (e) => {
         this.setState({
-            dic_name: e.target.value
+            name: e.target.value
         })
     }
 
     changeDicType = (e) => {
         this.setState({
-            dic_type: e.target.value
+            dicType: e.target.value
         })
     }
 
     changeIsDisabled = () => {
         this.setState({
-            disabled: !this.state.disabled
+            valid: this.state.valid=='Y'?'N':'Y'
         })
     }
 
     search = () => {
         let dic = {
-            dic_code: this.state.dic_code,
-            dic_name: this.state.dic_name,
-            disabled: this.state.disabled,
-            dic_type: this.state.dic_type,
+            code: this.state.code,
+            name: this.state.name,
+            valid: this.state.valid,
+            dicType: this.state.dicType,
         }
         this.props.showList(dic)
     }
@@ -74,17 +74,17 @@ class SumDic extends Component{
     reset = () => {
         this.setState({
             selectRows: [],
-            dic_code: '',
-            dic_name: '',
-            disabled: '',
-            dic_type: '',
+            code: '',
+            name: '',
+            valid: 'Y',
+            dicType: '',
         })
 
         let dic = {
-            dic_code: '',
-            dic_name: '',
-            disabled: '',
-            dic_type: '',
+            code: '',
+            name: '',
+            valid: 'Y',
+            dicType: '',
         }
         this.props.showList(dic)
     }
@@ -113,22 +113,22 @@ class SumDic extends Component{
                         <Row gutter={24}>
                             <Col span={6} key={1}>
                                 <Form.Item label="代码">
-                                    <Input placeholder="代码" onChange={this.changeDicCode} value={this.state.dic_code}/>
+                                    <Input placeholder="代码" onChange={this.changeDicCode} value={this.state.code}/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={2}>
                                 <Form.Item label="名称">
-                                    <Input placeholder="名称" onChange={this.changeDicName} value={this.state.dic_name}/>
+                                    <Input placeholder="名称" onChange={this.changeDicName} value={this.state.name}/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={3}>
                                 <Form.Item label="是否禁用">
-                                    <Checkbox checked={this.state.disabled?true:false} onClick={this.changeIsDisabled}></Checkbox>
+                                    <Checkbox checked={this.state.valid=='N'?true:false} onClick={this.changeIsDisabled}></Checkbox>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={4}>
                                 <Form.Item label="字典类别">
-                                    <Input placeholder="字典类别" onChange={this.changeDicType} value={this.state.dic_type}/>
+                                    <Input placeholder="字典类别" onChange={this.changeDicType} value={this.state.dicType}/>
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -146,35 +146,31 @@ class SumDic extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateModalShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.deleteDicByIds(this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
-                        <Table rowSelection={rowSelection} dataSource={this.props.sumDic.list} >
-                        <Column 
-                            dataIndex = 'index'
-                            key ='index'
-                        />
-                        <Column 
-                            title = '代码'
-                            dataIndex = 'dic_code'
-                            key = 'dic_code'
-                        />
-                        <Column 
-                            title = '名称'
-                            dataIndex = 'dic_name'
-                            key = 'dic_name'
-                        />
+                        <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.sumDic.list} >
                         <Column 
                             title = '排序'
                             dataIndex = 'sort'
                             key = 'sort'
                         />
                         <Column 
+                            title = '代码'
+                            dataIndex = 'code'
+                            key = 'code'
+                        />
+                        <Column 
+                            title = '名称'
+                            dataIndex = 'name'
+                            key = 'name'
+                        />
+                        <Column 
                             title = '创建时间'
-                            dataIndex = 'create_time'
-                            key = 'create_time'
+                            dataIndex = 'createTime'
+                            key = 'createTime'
                         />
                         <Column 
                             title = '修改时间'
-                            dataIndex = 'modify_time'
-                            key = 'modify_time'
+                            dataIndex = 'modifyTime'
+                            key = 'modifyTime'
                         />
                         <Column 
                             title = '创建人'
@@ -183,16 +179,16 @@ class SumDic extends Component{
                         />
                         <Column 
                             title = '是否禁用'
-                            dataIndex = 'is_disabled'
-                            key = 'is_disabled'
+                            dataIndex = 'valid'
+                            key = 'valid'
                             render = {(text, record) => (
-                                <Checkbox checked={record.is_disabled?true:false} onClick={() => this.props.changeDisabled(record)}></Checkbox>
+                                <Checkbox checked={record.valid=='Y'?false:true} onClick={() => this.props.changeDisabled(record)}></Checkbox>
                             )}
                         />
                         <Column 
                             title = '字典类别'
-                            dataIndex = 'dic_type'
-                            key = 'dic_type'
+                            dataIndex = 'dicType'
+                            key = 'dicType'
                         />
                         <Column 
                             title = '所属对象'
@@ -202,8 +198,8 @@ class SumDic extends Component{
                         </Table>
                     </Form>
                 </Row>
-                <AddModal visible={this.props.sumDic.add_visible} onOk={(dic) => this.props.addModalSure(dic)} onCancel={() => this.props.addModalCancel()} dic_types={this.props.sumDic.dic_types}></AddModal>
-                <UpdateModal visible={this.props.sumDic.update_visible} onOk={(dic) => this.props.updateModalSure(dic)} onCancel={() => this.props.updateModalCancel()} dic_id={this.props.sumDic.modal_dic_id} dic_name={this.props.sumDic.modal_dic_name} dic_code={this.props.sumDic.modal_dic_code}  dic_type={this.props.sumDic.modal_dic_type} belongs={this.props.sumDic.modal_belongs} changeName={(e) => this.props.changeModalName(e)} changeCode={(e) => this.props.changeModalCode(e)} changeType={(e) => this.props.changeModalType(e)} changeBelongs={(e) => this.props.changeModalBelongs(e)}></UpdateModal>
+                <AddModal visible={this.props.sumDic.addVisible} onOk={(dic) => this.props.addModalSure(dic)} onCancel={() => this.props.addModalCancel()} dicTypes={this.props.sumDic.dicTypes}></AddModal>
+                <UpdateModal visible={this.props.sumDic.updateVisible} onOk={(dic) => this.props.updateModalSure(dic)} onCancel={() => this.props.updateModalCancel()} id={this.props.sumDic.modalDicId} name={this.props.sumDic.modalDicName} code={this.props.sumDic.modalDicCode}  dicType={this.props.sumDic.modalDicType} belongs={this.props.sumDic.modalBelongs} changeName={(e) => this.props.changeModalName(e)} changeCode={(e) => this.props.changeModalCode(e)} changeType={(e) => this.props.changeModalType(e)} changeBelongs={(e) => this.props.changeModalBelongs(e)}></UpdateModal>
             </div>
         )
     }
@@ -215,28 +211,28 @@ class AddModal extends Component{
         super(props)
 
         this.state = {
-            dic_name: '',
-            dic_code: '',
-            dic_type: '',
+            name: '',
+            code: '',
+            dicType: '',
             belongs: '',
         }
     }
 
     changeDicName = (e) => {
         this.setState({
-            dic_name: e.target.value
+            name: e.target.value
         })
     }
 
     changeDicCode = (e) => {
         this.setState({
-            dic_code: e.target.value
+            code: e.target.value
         })
     }
 
     changeDicType = (e) => {
         this.setState({
-            dic_type: e.target.value
+            dicType: e.target.value
         })
     }
 
@@ -248,9 +244,9 @@ class AddModal extends Component{
 
     render(){
         let dic = {
-            dic_name: this.state.dic_name,
-            dic_code: this.state.dic_code,
-            dic_type: this.state.dic_type,
+            name: this.state.name,
+            code: this.state.code,
+            dicType: this.state.dicType,
             belongs: this.state.belongs,
         }
 
@@ -265,14 +261,14 @@ class AddModal extends Component{
                 destroyOnClose={true} 
             >
                 <Form.Item label="字典名称">
-                    <Input placeholder="字典名称" value={this.state.dic_name} onChange={this.changeDicName}/>
+                    <Input placeholder="字典名称" value={this.state.name} onChange={this.changeDicName}/>
                 </Form.Item>
                 <Form.Item label="字典代码">
-                    <Input placeholder="字典代码" value={this.state.dic_code} onChange={this.changeDicCode}/>
+                    <Input placeholder="字典代码" value={this.state.code} onChange={this.changeDicCode}/>
                 </Form.Item>
                 <Form.Item label="字典类别">
                     <Select style={{width: 120}}>
-                    {this.props.dic_types.map(type => {
+                    {this.props.dicTypes.map(type => {
                         return (
                             <Option key={type.code} value={type.code}>{type.name}</Option>
                         )
@@ -296,10 +292,10 @@ class UpdateModal extends Component{
 
     render(){                 
         let dic = {
-            dic_id: this.props.dic_id,
-            dic_name: this.props.dic_name,
-            dic_code: this.props.dic_code,
-            dic_type: this.props.dic_type,
+            id: this.props.id,
+            name: this.props.name,
+            code: this.props.code,
+            dicType: this.props.dicType,
             belongs: this.props.belongs,
         }
 
@@ -314,13 +310,13 @@ class UpdateModal extends Component{
                 destroyOnClose={true} 
             >
                 <Form.Item label="字典名称">
-                    <Input placeholder="字典名称" onChange={(e) => this.props.changeName(e)} value={this.props.dic_name}/>
+                    <Input placeholder="字典名称" onChange={(e) => this.props.changeName(e)} value={this.props.name}/>
                 </Form.Item>
                 <Form.Item label="字典代码">
-                    <Input placeholder="字典代码" onChange={(e) => this.props.changeCode(e)} value={this.props.dic_code}/>
+                    <Input placeholder="字典代码" onChange={(e) => this.props.changeCode(e)} value={this.props.code}/>
                 </Form.Item>
                 <Form.Item label="字典类型">
-                    <Input placeholder="字典类型" onChange={(e) => this.props.changeType(e)} value={this.props.dic_type}/>
+                    <Input placeholder="字典类型" onChange={(e) => this.props.changeType(e)} value={this.props.dicType}/>
                 </Form.Item>
                 <Form.Item label="所属对象">
                     <Input placeholder="所属对象" onChange={(e) => this.props.changeBelongs(e)} value={this.props.belongs}/>

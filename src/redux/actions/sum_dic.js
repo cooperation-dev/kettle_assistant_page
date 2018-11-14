@@ -1,6 +1,8 @@
-import '../../../mock/api';
+// import '../../../mock/api';
 import axios from 'axios';
 import {message} from 'antd';
+
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 export const SHOW_LIST = "sumDic/showList"
 export const CHANGE_DISABLED = "sumDic/changeDisabled"
@@ -60,24 +62,24 @@ export const find_dic_types = (list) => {
     }
 }
 
-export const change_modal_name = (dic_name) => {
+export const change_modal_name = (name) => {
     return {
         type: CHANGE_MODAL_NAME,
-        dic_name: dic_name
+        name: name
     }
 }
 
-export const change_modal_code = (dic_code) => {
+export const change_modal_code = (code) => {
     return {
         type: CHANGE_MODAL_CODE,
-        dic_code: dic_code
+        code: code
     }
 }
 
-export const change_modal_type = (dic_type) => {
+export const change_modal_type = (dicType) => {
     return {
         type: CHANGE_MODAL_TYPE,
-        dic_type: dic_type
+        dicType: dicType
     }
 }
 
@@ -112,10 +114,10 @@ export const showList = (dic) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: 'sumDicController/showList',
+            url: '/api/sumDicController/showList',
             data: dic
         }).then((response) => {
-            return response.data.list
+            return response.data
         }).then((data) => {
             dispatch(show_list(data))
         })
@@ -126,10 +128,10 @@ export const changeDisabled = (row) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: 'sumDicController/changeDisabled',
+            url: '/api/sumDicController/changeDisabled',
             data: row
         }).then((response) => {
-            return response.data.record
+            return response.data
         }).then((data) => {
             return dispatch(change_disabled(data))
         }) 
@@ -140,9 +142,9 @@ export const addModalShow = () => {
     return (dispatch) => {
         dispatch(add_modal_show())
 
-        axios.post('sumDic/findDicTypes')
+        axios.post('/api/sumDicController/findDicTypes')
         .then((response) => {
-            return response.data.list
+            return response.data
         }).then((list) => {
             dispatch(find_dic_types(list))
         })
@@ -154,10 +156,10 @@ export const addModalSure = (dic) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: 'sumDicController/saveDic',
+            url: '/api/sumDicController/saveDic',
             data: dic
         }).then((r) => {
-            return r.data.dic
+            return r.data
         }).then((d) => {
             dispatch(add_modal_sure(d))
         })
@@ -175,14 +177,14 @@ export const deleteDicByIds = (selectRows) => {
         if(selectRows.length == 0){
             message.error('请选择行')
         }else{
-            let codes = []
-            selectRows.map(row => codes.push(row.dic_code))
+            let ids = []
+            selectRows.map(row => ids.push(row.id))
             axios({
                 method: 'post',
-                url: 'sumDicController/deleteDicByIds',
-                data: codes
+                url: '/api/sumDicController/deleteDicByIds',
+                data: ids
             }).then((response) => {
-                return response.data.list
+                return response.data
             }).then((list) => {
                 dispatch(show_list(list))
             })
@@ -193,9 +195,9 @@ export const deleteDicByIds = (selectRows) => {
 
 export const findDicTypes = () => {
     return (dispatch) => {
-        axios.post('sumDic/findDicTypes')
+        axios.post('/api/sumDicController/findDicTypes')
                 .then((r) => {
-                    return r.data.list
+                    return r.data
                 }).then((list) => {
                     dispatch(find_dic_types(list))
                 })
@@ -233,9 +235,9 @@ export const updateModalShow = (selectRows) => {
         }else if(selectRows.length > 1){
             message.error('选中纪录超过一行')
         }else{
-            axios.post('sumDicController/findDicById/'+selectRows[0].dic_id)
+            axios.post('/api/sumDicController/findDicById/'+selectRows[0].id)
                 .then((response) => {
-                    return response.data.dic
+                    return response.data
                 }).then((data) => {
                     dispatch(update_modal_show(data))
                 })
@@ -247,14 +249,13 @@ export const updateModalSure = (dic) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: 'sumDicController/updateDic',
+            url: '/api/sumDicController/updateDic',
             data: dic
         }).then((res) => {
-            return res.data.dic
+            return res.data
         }).then((dic) => {
             dispatch(update_modal_sure(dic))
         })
-        // dispatch(update_modal_sure())
     }
 }
 

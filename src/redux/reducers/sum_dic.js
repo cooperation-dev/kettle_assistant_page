@@ -7,14 +7,14 @@ import {SHOW_LIST, CHANGE_DISABLED,
 
 const initState = {
     list: [],
-    add_visible: false,
-    update_visible: false,
-    dic_types: [],
-    modal_dic_id: '',
-    modal_dic_name: '',
-    modal_dic_code: '',
-    modal_dic_type: '',
-    modal_belongs: '',
+    addVisible: false,
+    updateVisible: false,
+    dicTypes: [],
+    modalDicId: '',
+    modalDicName: '',
+    modalDicCode: '',
+    modalDicType: '',
+    modalBelongs: '',
 }
 
 export default function reducers(state=initState, action){
@@ -41,20 +41,20 @@ export default function reducers(state=initState, action){
         case ADD_MODAL_SHOW: {
             return {
                 ...state,
-                add_visible: true
+                addVisible: true
             }
         }
         case ADD_MODAL_SURE: {
             state.list.push(action.dic)
             return {
                 ...state,
-                add_visible: false
+                addVisible: false
             }
         }
         case ADD_MODAL_CANCEL: {
             return {
                 ...state,
-                add_visible: false
+                addVisible: false
             }
         }
         case DELETE_DIC: {
@@ -66,61 +66,61 @@ export default function reducers(state=initState, action){
         case FIND_DIC_TYPES: {
             return {
                 ...state,
-                dic_types: action.list
+                dicTypes: action.list
             }
         }
         case CHANGE_MODAL_NAME: {
             return {
                 ...state,
-                modal_dic_name: action.dic_name
+                modalDicName: action.name
             }
         }
         case CHANGE_MODAL_CODE: {
             return {
                 ...state,
-                modal_dic_code: action.dic_code
+                modalDicCode: action.code
             }
         }
         case CHANGE_MODAL_TYPE: {
             return {
                 ...state,
-                modal_dic_type: action.dic_type
+                modalDicType: action.dicType
             }
         }
         case CHANGE_MODAL_BELONGS: {
             return {
                 ...state,
-                modal_belongs: action.belongs
+                modalBelongs: action.belongs
             }
         }
         case UPDATE_MODAL_SHOW: {
             return {
                 ...state,
-                update_visible: true,
-                modal_dic_id: action.dic.dic_id,
-                modal_dic_name: action.dic.dic_name,
-                modal_dic_code: action.dic.dic_code,
-                modal_dic_type: action.dic.dic_type,
-                modal_belongs: action.dic.belongs,
+                updateVisible: true,
+                modalDicId: action.dic.id,
+                modalDicName: action.dic.name,
+                modalDicCode: action.dic.code,
+                modalDicType: action.dic.dicType,
+                modalBelongs: action.dic.belongs,
             }
         }
         case UPDATE_MODAL_SURE: {
             let newlist = state.list.map(ele => {
-                if(ele.dic_id == action.dic.dic_id)
+                if(ele.id == action.dic.id)
                     return action.dic
                 else
                     return ele
             })
             return {
                 ...state,
-                update_visible: false,
+                updateVisible: false,
                 list: newlist
             }
         }
         case UPDATE_MODAL_CANCEL: {
             return {
                 ...state,
-                update_visible: false
+                updateVisible: false
             }
         }
         default: 

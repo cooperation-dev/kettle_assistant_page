@@ -1,4 +1,4 @@
-import '../../../mock/api';
+// import '../../../mock/api';
 import axios from 'axios';
 
 export const LOAD_DATA = "jobMonitor/loadData";
@@ -28,19 +28,18 @@ export const show_range = (rangeData) => {
 
 export const loadData = () => {
     return (dispatch) => {
-        axios.post('jobMonitor/loadData')
+        axios.post('/api/jobMonitorController/loadData')
                 .then((response) => {
-                    let cards = response.data.list
+                    let cards = response.data
                     return cards.map(card => {
                         return {
                             ...card,
-                            w_yoy: parseFloat(card.w_yoy*100).toFixed(2) + '%',
-                            d_yoy: parseFloat(card.d_yoy*100).toFixed(2) + '%',
+                            wYoy: parseFloat(card.wYoy*100).toFixed(2) + '%',
+                            dYoy: parseFloat(card.dYoy*100).toFixed(2) + '%',
                             quantity: card.key=="4"?parseFloat(card.quantity*100).toFixed(2)+'%':card.quantity,
-                            d_quantity: card.key=="4"?parseFloat(card.d_quantity*100).toFixed(2)+'%':card.d_quantity,
+                            dQuantity: card.key=="4"?parseFloat(card.dQuantity*100).toFixed(2)+'%':card.dQuantity,
                         }
                     })
-                    // return response.data.list
                 }).then((data) => {
                     dispatch(load_data(data))
                 })
@@ -49,23 +48,15 @@ export const loadData = () => {
 
 export const loadEcharts = (type, datet) => {
     return (dispatch) => {
-        /* axios.post('jobMonitor/loadEcharts', {
-            type: type,
-            datet: datet
-        }).then((response) => {
-            return response.data.list
-        }).then((data) => {
-            dispatch(load_echarts(data))
-        }) */
         axios({
             method: 'post',
-            url: 'jobMonitorController/loadEcharts',
+            url: '/api/jobMonitorController/loadEcharts',
             data: {
                 type: type,
                 datet: datet
             }
         }).then((response) => {
-            return response.data.list
+            return response.data
         }).then((data) => {
             dispatch(load_echarts(data))
         })
@@ -74,23 +65,15 @@ export const loadEcharts = (type, datet) => {
 
 export const showRange = (type, datet) => {
     return (dispatch) => {
-        /* axios.post('jobMonitor/showRange', {
-            type: type,
-            datet: datet
-        }).then((response) => {
-            return response.data.rangeData
-        }).then((data) => {
-            dispatch(show_range(data))
-        }) */
         axios({
             method: 'post',
-            url: 'jobMonitorController/showRange',
+            url: '/api/jobMonitorController/showRange',
             data: {
                 type: type,
                 datet: datet
             }
         }).then((response) => {
-            return response.data.rangeData
+            return response.data
         }).then((data) => {
             dispatch(show_range(data))
         })

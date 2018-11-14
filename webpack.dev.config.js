@@ -25,6 +25,14 @@ const devConfig = {
         contentBase: path.join(__dirname, './dist'),
         historyApiFallback: true,
         host: '0.0.0.0',
+        proxy: {
+            '/api/**': {
+                target: 'http://localhost:8081',
+                pathRewrite: {'^/api': ''},
+                secure: false, // 接受 运行在 https 上的服务
+                changeOrigin: true
+            }
+        }
     }
 };
 

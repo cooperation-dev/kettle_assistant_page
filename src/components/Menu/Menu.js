@@ -34,14 +34,14 @@ class LeftMenu extends Component{
                         this.props.menu_list.map(menu => {
                             return (
                                 <SubMenu 
-                                    key={menu.key}
-                                    title={<span><Icon type={menu.icon}/><span>{menu.title}</span></span>}
+                                    key={menu.code}
+                                    title={<span><Icon type={menu.icon}/><span>{menu.name}</span></span>}
                                 >
                                     {
                                         menu.children.map(child => {
                                             return (
-                                                <Menu.Item key={child.key}>
-                                                    <Link to={child.to}>{child.title}</Link>
+                                                <Menu.Item key={child.code}>
+                                                    <Link to={child.direction}>{child.name}</Link>
                                                 </Menu.Item>
                                             )
                                         })

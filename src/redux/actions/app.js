@@ -1,4 +1,3 @@
-import '../../../mock/api';
 import axios from 'axios';
 
 export const TOGGLE_MENU = "toggle/menu";
@@ -38,11 +37,13 @@ export function selectMenu(e){
 
 export function loadMenu(){
     return (dispatch) => {
-        axios.post('homeController/loadMenu')
-            .then((reponse) => {
-                return reponse.data.list
-            }).then((list) => {
-                dispatch(load_menu(list))
-            })
+        axios({
+            method: 'post', 
+            url: '/api/homeController/loadMenu'
+        }).then((reponse) => {
+            return reponse.data
+        }).then((list) => {
+            dispatch(load_menu(list))
+        })
     }
 }

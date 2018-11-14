@@ -1,15 +1,15 @@
 import {FIND_ROLES, 
         ADD_ROLE_MODAL_SHOW, ADD_ROLE_MODAL_CANCEL, ADD_ROLE_MODAL_SURE, 
-        UPDATE_ROLE_MODAL_SHOW, UPDATE_ROLE_MODAL_CANCEL, UPDATE_ROLE_MODAL_SURE} from '../actions/role_manager'
+        UPDATE_ROLE_MODAL_SHOW, UPDATE_ROLE_MODAL_CANCEL, UPDATE_ROLE_MODAL_SURE, 
+        CHANGE_MODAL_NAME, CHANGE_MODAL_DESCRIPTION} from '../actions/role_manager'
 
 const initState = {
     list:[],
-    add_visible: false,
-    update_visible: false,
-    role:{
-        role_name: '',
-        role_description: ''
-    }
+    addVisible: false,
+    updateVisible: false,
+    modalRoleId: '',
+    modalRoleName: '',
+    modalRoleDescription: ''
 }
 
 export default function reducers(state = initState, action){
@@ -23,38 +23,60 @@ export default function reducers(state = initState, action){
         case ADD_ROLE_MODAL_SHOW:{
             return {
                 ...state,
-                add_visible: true
+                addVisible: true
             }
         }
         case ADD_ROLE_MODAL_CANCEL:{
             return {
                 ...state,
-                add_visible: false
+                addVisible: false
             }
         }
         case ADD_ROLE_MODAL_SURE:{
+            state.list.push(action.role)
             return {
                 ...state,
-                add_visible: false
+                addVisible: false
             }
         }
         case UPDATE_ROLE_MODAL_SHOW:{
             return {
                 ...state,
-                update_visible: true,
-                role: action.role
+                updateVisible: true,
+                modalRoleId: action.role.id,
+                modalRoleName: action.role.role_name,
+                modalRoleDescription: action.role.role_description,
             }
         }
         case UPDATE_ROLE_MODAL_CANCEL:{
             return {
                 ...state,
-                update_visible: false
+                updateVisible: false
             }
         }
         case UPDATE_ROLE_MODAL_SURE:{
+            let newlist = state.list.map(ele => {
+                if(ele.id == action.role.id)
+                    return action.role
+                else
+                    return ele
+            })
             return {
                 ...state,
-                update_visible: false
+                updateVisible: false,
+                list: newlist
+            }
+        }
+        case CHANGE_MODAL_NAME:{
+            return {
+                ...state,
+                modalRoleName: action.roleName
+            }
+        }
+        case CHANGE_MODAL_DESCRIPTION:{
+            return {
+                ...state,
+                modalRoleDescription: action.roleDescription
             }
         }
         default:{

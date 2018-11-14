@@ -1,15 +1,16 @@
 import {FIND_USERS, 
         ADD_USER_MODAL_SHOW, ADD_USER_MODAL_CANCEL, ADD_USER_MODAL_SURE, 
-        UPDATE_USER_MODAL_SHOW, UPDATE_USER_MODAL_CANCEL, UPDATE_USER_MODAL_SURE} from '../actions/user_manager'
+        UPDATE_USER_MODAL_SHOW, UPDATE_USER_MODAL_CANCEL, UPDATE_USER_MODAL_SURE, 
+        CHANGE_MODAL_NICKNAME, CHANGE_MODAL_ROLE} from '../actions/user_manager'
 
 const initState = {
     list: [],
-    add_visible: false,
-    update_visible: false,
-    user:{
-        nick_name: '',
-        role: ''
-    }
+    addVisible: false,
+    updateVisible: false,
+    id: '',
+    nickName: '',
+    loginAccount: '',
+    role: ''
 }
 
 export default function reducers(state = initState, action){
@@ -23,38 +24,61 @@ export default function reducers(state = initState, action){
         case ADD_USER_MODAL_SHOW:{
             return {
                 ...state,
-                add_visible: true
+                addVisible: true
             }
         }
         case ADD_USER_MODAL_CANCEL:{
             return {
                 ...state,
-                add_visible: false
+                addVisible: false
             }
         }
         case ADD_USER_MODAL_SURE:{
+            state.list.push(action.user)
             return {
                 ...state,
-                add_visible: false
+                addVisible: false
             }
         }
         case UPDATE_USER_MODAL_SHOW:{
             return {
                 ...state,
-                update_visible: true,
-                user: action.user
+                updateVisible: true,
+                id: action.user.id,
+                nickName: action.user.nick_name,
+                role: action.user.role
             }
         }
         case UPDATE_USER_MODAL_CANCEL:{
             return {
                 ...state,
-                update_visible: false
+                updateVisible: false
             }
         }
         case UPDATE_USER_MODAL_SURE:{
+            let newList = state.list.map((ele) => {
+                if(ele.id == action.user.id){
+                    return action.user
+                }else {
+                    return ele
+                }
+            })
             return {
                 ...state,
-                update_visible: false
+                updateVisible: false,
+                list: newList
+            }
+        }
+        case CHANGE_MODAL_NICKNAME:{
+            return {
+                ...state,
+                nickName: action.nickName
+            }
+        }
+        case CHANGE_MODAL_ROLE:{
+            return {
+                ...state,
+                role: action.role
             }
         }
         default:{

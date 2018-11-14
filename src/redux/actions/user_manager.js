@@ -16,6 +16,10 @@ export const UPDATE_USER_MODAL_SHOW = "userManager/updateUserShow"
 export const UPDATE_USER_MODAL_CANCEL = "userManager/updateUserCancel"
 //修改确认
 export const UPDATE_USER_MODAL_SURE = "userManager/updateUserSure"
+//修改Modal昵称
+export const CHANGE_MODAL_NICKNAME = "userManager/changeModalNickName"
+//修改Modal角色
+export const CHANGE_MODAL_ROLE = "userManager/changeModalRole"
 
 export const find_users = (list) => {
     return {
@@ -56,9 +60,24 @@ export const update_user_modal_cancel = () => {
     }
 }
 
-export const update_user_modal_sure = () => {
+export const update_user_modal_sure = (user) => {
     return {
-        type: UPDATE_USER_MODAL_SURE
+        type: UPDATE_USER_MODAL_SURE,
+        user:user
+    }
+}
+
+export const change_modal_nickname = (nickName) => {
+    return {
+        type: CHANGE_MODAL_NICKNAME,
+        nickName: nickName
+    }
+}
+
+export const change_modal_role = (role) => {
+    return {
+        type: CHANGE_MODAL_ROLE,
+        role: role
     }
 }
 
@@ -86,9 +105,33 @@ export const addUserCancel = () => {
     }
 }
 
-export const addUserSure = () => {
+export const addUserSure = (user) => {
     return (dispatch) => {
-        dispatch(add_user_modal_sure());
+        axios({
+            method: 'post',
+            url: ADD_USER_MODAL_SURE,
+            data: user
+        }).then((res) => {
+            return res.data.user
+        }).then((user) => {
+            dispatch(add_user_modal_sure(user));
+        })
+    }
+}
+
+export const deleteUser = (selectRows) => {
+    return (dispatch) => {
+        let ids = [];
+        selectRows.map((row) => ids.push(row.id))
+        axios({
+            method: 'post',
+            url: 'userManager/deleteUserByIds',
+            data: ids
+        }).then((res) => {
+            return res.data.list
+        }).then((list) => {
+            dispatch(find_users(list))
+        })
     }
 }
 
@@ -110,8 +153,28 @@ export const updateUserCancel = () => {
     }
 }
 
-export const updateUserSure = () => {
+export const updateUserSure = (user) => {
     return (dispatch) => {
-        dispatch(update_user_modal_sure());
+        axios({
+            method: 'post',
+            url: UPDATE_USER_MODAL_SURE,
+            data: user
+        }).then((res) => {
+            return res.data.user
+        }).then((user) => {
+            dispatch(update_user_modal_sure(user));
+        })
+    }
+}
+
+export const changeModalNickName = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_nickname(event.target.value));
+    }
+}
+
+export const changeModalRole = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_role(event.target.value))
     }
 }

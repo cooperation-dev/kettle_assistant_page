@@ -4,17 +4,15 @@ import {FIND_MENUS,
 
 const initState = {
     list:[],
-    add_visible: false,
-    update_visible: false,
-    menu:{
-        title: '',
-        type: '',
-        key: '',
-        level: '',
-        parent_key: '',
-        filter_condition: '',
-        custom_func: '',
-    }
+    addVisible: false,
+    updateVisible: false,
+    key: '',
+    title: '',
+    type: '',
+    level: '',
+    parentKey: '',
+    filterCondition: '',
+    customFunc: ''
 }
 
 export default function reducers(state = initState, action){
@@ -28,38 +26,44 @@ export default function reducers(state = initState, action){
         case ADD_MENU_MODAL_SHOW:{
             return {
                 ...state,
-                add_visible: true
+                addVisible: true
             }
         }
         case ADD_MENU_MODAL_CANCEL:{
             return {
                 ...state,
-                add_visible: false
+                addVisible: false
             }
         }
         case ADD_MENU_MODAL_SURE:{
             return {
                 ...state,
-                add_visible: false
+                addVisible: false
             }
         }
         case UPDATE_MENU_MODAL_SHOW:{
             return {
                 ...state,
-                update_visible: true,
-                menu: action.menu
+                updateVisible: true,
+                key: action.menu.key,
+                title: action.menu.title,
+                type: action.menu.type,
+                level: action.menu.level,
+                parentKey: action.menu.parent_key,
+                filterCondition: action.menu.filter_condition,
+                customFunc: action.menu.custom_func
             }
         }
         case UPDATE_MENU_MODAL_CANCEL:{
             return {
                 ...state,
-                update_visible: false
+                updateVisible: false
             }
         }
         case UPDATE_MENU_MODAL_SURE:{
             return {
                 ...state,
-                update_visible: false
+                updateVisible: false
             }
         }
         default : {

@@ -16,6 +16,20 @@ export const UPDATE_MENU_MODAL_SHOW = "menuManager/updateMenuShow"
 export const UPDATE_MENU_MODAL_CANCEL = "menuManager/updateMenuCancel"
 //修改确认
 export const UPDATE_MENU_MODAL_SURE = "menuManager/updateMenuSure"
+//修改Modal名称
+export const CHANGE_MODAL_TITLE = "menuManager/changeModalTitle"
+//修改Modal类型
+export const CHANGE_MODAL_TYPE = "menuManager/changeModalType"
+//修改Modal编码
+export const CHANGE_MODAL_KEY = "menuManager/changeModalKey"
+//修改Modal序号
+export const CHANGE_MODAL_LEVEL = "menuManager/changeModalLevel"
+//修改Modal父节点
+export const CHANGE_MODAL_PARENT_KEY = "menuManager/changeModalParentKey"
+//修改过滤条件
+export const CHANGE_MODAL_FILTER_CONDITION = "menuManager/changeModalFilterCondition"
+//修改Modal自定义功能
+export const CHANGE_MODAL_CUSTOM_FUNC = "menuManager/changeModalCustomFunc"
 
 export const find_menus = (list) => {
     return {
@@ -62,6 +76,55 @@ export const update_menu_modal_sure = () => {
     }
 }
 
+export const change_modal_title = (title) => {
+    return {
+        type: CHANGE_MODAL_TITLE,
+        title: title
+    }
+}
+
+export const change_modal_type = (type) => {
+    return {
+        type: CHANGE_MODAL_TYPE,
+        menuType: type
+    }
+}
+
+export const change_modal_key = (key) => {
+    return {
+        type: CHANGE_MODAL_KEY,
+        key: key
+    }
+}
+
+export const change_modal_level = (level) => {
+    return {
+        type: CHANGE_MODAL_LEVEL,
+        level: level
+    }
+}
+
+export const change_modal_parent_key = (parentKey) => {
+    return {
+        type: CHANGE_MODAL_PARENT_KEY,
+        parentKey: parentKey
+    }
+}
+
+export const change_modal_filter_condition = (filterCondition) => {
+    return {
+        type: CHANGE_MODAL_FILTER_CONDITION,
+        filterCondition: filterCondition
+    }
+}
+
+export const change_modal_custom_func = (customFunc) => {
+    return {
+        type: CHANGE_MODAL_CUSTOM_FUNC,
+        customFunc: customFunc
+    }
+}
+
 export const findMenus = () => {
     return (dispatch) => {
         axios.post(FIND_MENUS)
@@ -92,6 +155,22 @@ export const addMenuSure = () => {
     }
 }
 
+export const deleteMenu = (selectRows) => {
+    return (dispatch) => {
+        let ids = [];
+        selectRows.map((row) => ids.push(row.id))
+        axios({
+            method: 'post',
+            url: '',
+            data: ids
+        }).then((res) => {
+            return res.data.list
+        }).then((list) => {
+            dispatch(find_menus(list))
+        })
+    }
+}
+
 export const updateMenuShow = (selectRows) => {
     return (dispatch) => {
         if(selectRows.length == 0){
@@ -113,5 +192,47 @@ export const updateMenuCancel = () => {
 export const updateMenuSure = () => {
     return (dispatch) => {
         dispatch(update_menu_modal_sure());
+    }
+}
+
+export const changeModalTitle = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_title(event.target.value))
+    }
+}
+
+export const changeModalType = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_type(event.target.value))
+    }
+}
+
+export const changeModalKey = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_key(event.target.value))
+    }
+}
+
+export const changeModalLevel = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_level(event.target.value))
+    }
+}
+
+export const changeModalParentKey = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_parent_key(event.target.value))
+    }
+}
+
+export const changeModalFilterCondition = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_filter_condition(event.target.value))
+    }
+}
+
+export const changeModalCustomFunc = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_custom_func(event.target.value))
     }
 }

@@ -1,7 +1,7 @@
 import {SHOW_LIST, CHANGE_DISABLED, 
         ADD_MODAL_SHOW, ADD_MODAL_SURE, ADD_MODAL_CANCEL,
         DELETE_DIC,
-        FIND_DIC_TYPES,
+        FIND_DIC_TYPES, FIND_ROOT_DIC_TYPES,
         CHANGE_MODAL_NAME, CHANGE_MODAL_CODE, CHANGE_MODAL_TYPE, CHANGE_MODAL_BELONGS,
         UPDATE_MODAL_SHOW, UPDATE_MODAL_SURE, UPDATE_MODAL_CANCEL} from '../actions/sum_dic';
 
@@ -10,6 +10,7 @@ const initState = {
     addVisible: false,
     updateVisible: false,
     dicTypes: [],
+    rootDicTypes: [],
     modalDicId: '',
     modalDicName: '',
     modalDicCode: '',
@@ -67,6 +68,12 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 dicTypes: action.list
+            }
+        }
+        case FIND_ROOT_DIC_TYPES: {
+            return {
+                ...state,
+                rootDicTypes: action.list
             }
         }
         case CHANGE_MODAL_NAME: {

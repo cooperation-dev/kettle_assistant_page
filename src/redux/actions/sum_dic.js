@@ -1,4 +1,4 @@
-// import '../../../mock/api';
+import '../../../mock/api';
 import axios from 'axios';
 import {message} from 'antd';
 
@@ -14,6 +14,8 @@ export const ADD_MODAL_SURE = 'sumDic/addModalSure'
 export const ADD_MODAL_CANCEL = 'sumDic/addMoalCancel'
 //字典类型
 export const FIND_DIC_TYPES = 'sumDic/findDicTypes'
+//根字典类型
+export const FIND_ROOT_DIC_TYPES = "sumDic/findRootDicTypes";
 export const CHANGE_MODAL_NAME = "sumDic/changeModalName"
 export const CHANGE_MODAL_CODE = "sumDic/changeModalCode"
 export const CHANGE_MODAL_TYPE = "sumDic/changeModalType"
@@ -58,6 +60,13 @@ export const add_modal_cancel = () => {
 export const find_dic_types = (list) => {
     return {
         type: FIND_DIC_TYPES,
+        list: list
+    }
+}
+
+export const find_root_dic_types = (list) => {
+    return {
+        type: FIND_ROOT_DIC_TYPES,
         list: list
     }
 }
@@ -149,6 +158,13 @@ export const addModalShow = () => {
             dispatch(find_dic_types(list))
         })
 
+        axios.post('/api/sumDicController/findRootDicTypes')
+        .then((response) => {
+            return response.data
+        }).then((list) => {
+            dispatch(find_root_dic_types(list))
+        })
+
     }
 }
 
@@ -196,6 +212,17 @@ export const deleteDicByIds = (selectRows) => {
 export const findDicTypes = () => {
     return (dispatch) => {
         axios.post('/api/sumDicController/findDicTypes')
+                .then((r) => {
+                    return r.data
+                }).then((list) => {
+                    dispatch(find_dic_types(list))
+                })
+    }
+}
+
+export const findRootDicTypes = () => {
+    return (dispatch) => {
+        axios.post('/api/sumDicController/findRootDicTypes')
                 .then((r) => {
                     return r.data
                 }).then((list) => {

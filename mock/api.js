@@ -179,17 +179,215 @@ mock.onPost('/api/systemLogController/findLogs')
         })
     })
 
+mock.onPost('roleManager/addRoleSure')
+.reply(config => {
+    let {roleName, roleDescription} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let max_key = role_manager[role_manager.length-1].key+1
+        let newRole = Mock.mock({
+            key: "" + (max_key),
+            id: ""+(max_key),
+            role_name: roleName,
+            role_description: roleDescription
+        })
+        setTimeout(() => {
+            resolve([200, {
+                role: newRole
+            }]);
+        }, 500);
+    })
+})
+
+mock.onPost('roleManager/deleteRoleByIds')
+.reply(config => {
+    let ids = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newRole = []
+        for(let i=0; i<role_manager.length; i++){
+            let flag = true
+            for(let j=0; j<ids.length; j++){
+                if(ids[j] == role_manager[i].id){
+                    flag = false
+                    break;
+                }
+            }
+            if(flag){
+                newRole.push(role_manager[i])
+            }
+        }
+        setTimeout(() => {
+            resolve([200, {
+                list: newRole
+            }]);
+        }, 500);
+    })
+})
+
+mock.onPost('roleManager/updateRoleSure')
+.reply(config => {
+    let {roleId, roleName, roleDescription} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newRole = role_manager.filter(role => role.id==roleId)[0]
+        if(roleName!=undefined && roleName!=''){
+            newRole.role_name = roleName
+        }
+        if(roleDescription!=undefined && roleDescription!=''){
+            newRole.role_description = roleDescription
+        }
+        setTimeout(() => {
+            resolve([200, {
+                role: newRole
+            }]);
+        }, 500);
+    })
+})
+
 mock.onPost('roleManager/findRoles').reply(
     '200',{
         list: role_manager
     }
 )
 
+mock.onPost('userManager/addUserSure')
+.reply(config => {
+    let {nickName, loginAccount, role} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let max_key = user_manager[user_manager.length-1].key+1
+        let newUser = Mock.mock({
+            key: "" + (max_key),
+            id: ""+(max_key),
+            nick_name: nickName,
+            login_account: loginAccount,
+            role: role
+        })
+        setTimeout(() => {
+            resolve([200, {
+                user: newUser
+            }]);
+        }, 500);
+    })
+})
+
+mock.onPost('userManager/deleteUserByIds')
+.reply(config => {
+    let ids = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newUser = []
+        for(let i=0; i<user_manager.length; i++){
+            let flag = true
+            for(let j=0; j<ids.length; j++){
+                if(ids[j] == user_manager[i].id){
+                    flag = false
+                    break;
+                }
+            }
+            if(flag){
+                newUser.push(user_manager[i])
+            }
+        }
+        setTimeout(() => {
+            resolve([200, {
+                list: newUser
+            }]);
+        }, 500);
+    })
+})
+
+mock.onPost('userManager/updateUserSure')
+.reply(config => {
+    let {id, nickName, role} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newUser = user_manager.filter(user => user.id==id)[0]
+        if(nickName!=undefined && nickName!=''){
+            newUser.nick_name = nickName
+        }
+        if(role!=undefined && role!=''){
+            newUser.role = role
+        }
+        setTimeout(() => {
+            resolve([200, {
+                user: newUser
+            }]);
+        }, 500);
+    })
+})
+
 mock.onPost('userManager/findUsers').reply(
     '200',{
         list: user_manager
     }
 )
+
+mock.onPost('projectManager/addProjectSure')
+.reply(config => {
+    let {name, projectUrl, sort, whetherToDisable} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let max_key = project_manager[project_manager.length-1].key+1
+        let newProject = Mock.mock({
+            key: "" + (max_key),
+            obj_code: ""+(max_key),
+            obj_name: name,
+            create_time: '2018-11-14 00:00:00',
+            create_name: 'Dawn',
+            project_url: projectUrl,
+            obj_sort: sort,
+            whether_to_disable: whetherToDisable,
+            status: Mock.Random.integer(0,1)==0?'成功':'失败'
+        })
+        setTimeout(() => {
+            resolve([200, {
+                project: newProject
+            }]);
+        }, 500);
+    })
+})
+
+mock.onPost('projectManager/deleteProjectByIds')
+.reply(config => {
+    let ids = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newProject = []
+        for(let i=0; i<project_manager.length; i++){
+            let flag = true
+            for(let j=0; j<ids.length; j++){
+                if(ids[j] == project_manager[i].obj_code){
+                    flag = false
+                    break;
+                }
+            }
+            if(flag){
+                newProject.push(project_manager[i])
+            }
+        }
+        setTimeout(() => {
+            resolve([200, {
+                list: newProject
+            }]);
+        }, 500);
+    })
+})
+
+mock.onPost('projectManager/updateProjectSure')
+.reply(config => {
+    let {id, name, projectUrl, sort} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newProject = project_manager.filter(project => project.obj_code==id)[0]
+        if(name!=undefined && name!=''){
+            newProject.obj_name = name
+        }
+        if(projectUrl!=undefined && projectUrl!=''){
+            newProject.project_url = projectUrl
+        }
+        if(sort!=undefined && sort!=''){
+            newProject.obj_sort = sort
+        }
+        setTimeout(() => {
+            resolve([200, {
+                project: newProject
+            }]);
+        }, 500);
+    })
+})
 
 mock.onPost('projectManager/findProjects').reply(
     '200',{

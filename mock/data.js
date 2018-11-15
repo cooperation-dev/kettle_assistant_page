@@ -257,67 +257,66 @@ const output_range_year = {
 const sum_dic_list = []
 const org_sum_dic_oracle = Mock.mock({
     id: 1,
-    code: 'oracle',
-    name: 'oracle',
-    sort: 10,
+    code: 'dic_type',
+    name: '字典类型',
+    sort: 1,
     createTime: "2018-09-09 12:34:44",
     modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
     valid: 'Y',
-    dicType: '数据库类型',
     belongs: '',
     parentId: ''
 })
 const org_sum_dic_mysql = Mock.mock({
     id: 2,
-    code: 'mysql',
-    name: 'mysql',
-    sort: 11,
+    code: 'database_type',
+    name: '数据库类型',
+    sort: 2,
     createTime: "2018-09-09 12:34:44",
     modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    valid: 'N',
-    dicType: '数据库类型',
+    valid: 'Y',
     belongs: '',
     parentId: ''
 })
 const org_sum_dic_sqlserver = Mock.mock({
     id: 3,
-    code: 'sqlserver',
-    name: 'sqlserver',
-    sort: 12,
-    createTime: "2018-09-09 12:34:44",
-    modifyTime: '2018-09-18 01:23:46',
-    creator: 'adan',
-    valid: 'N',
-    dicType: '数据库类型',
-    belongs: ''
-})
-const org_sum_dic_success_failed = Mock.mock({
-    id: 4,
-    code: 'SUCCESS_FAILED',
-    name: '成功失败',
-    sort: 20,
+    code: 'valid',
+    name: '有效性',
+    sort: 11,
     createTime: "2018-09-09 12:34:44",
     modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
     valid: 'Y',
     dicType: '字典类型',
-    belongs: '',
-    parentId: ''
+    belongs: '字典类型',
+    parentId: 1
 })
-const org_sum_dic_encoding = Mock.mock({
-    id: 5,
-    code: 'ENCODING',
-    name: '编码',
-    sort: 21,
+const org_sum_dic_success_failed = Mock.mock({
+    id: 4,
+    code: 'Y',
+    name: '有效',
+    sort: 111,
     createTime: "2018-09-09 12:34:44",
     modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
-    valid: 'N',
+    valid: 'Y',
     dicType: '字典类型',
-    belongs: '',
-    parentId: ''
+    belongs: '有效性',
+    parentId: 3
+})
+const org_sum_dic_encoding = Mock.mock({
+    id: 5,
+    code: 'N',
+    name: '无效',
+    sort: 112,
+    createTime: "2018-09-09 12:34:44",
+    modifyTime: '2018-09-18 01:23:46',
+    creator: 'adan',
+    valid: 'Y',
+    dicType: '字典类型',
+    belongs: '有效性',
+    parentId: 3
 })
 sum_dic_list.push(org_sum_dic_oracle)
 sum_dic_list.push(org_sum_dic_mysql)
@@ -628,14 +627,17 @@ const menu = []
 //作业类型
 const jobTypes = []
 jobTypes.push(Mock.mock({
+    id: 1,
     name: '脚本作业',
     code: 'script'
 }))
 jobTypes.push(Mock.mock({
+    id: 2,
     name: '配置作业',
     code: 'config'
 }))
 jobTypes.push(Mock.mock({
+    id: 3,
     name: 'Shell作业',
     code: 'shell'
 }))

@@ -196,6 +196,7 @@ class AddModal extends Component{
         super(props)
 
         this.state = {
+            id: '',
             name: '',
             code: '',
             rootDicTypes: [],
@@ -203,12 +204,20 @@ class AddModal extends Component{
             visible: false,
             dicTypeSwitch: false,
             belongsSwitch: false,
+            //输入框字典类别
+            dicType_input: '',
+            //下拉框字典类别
+            dicType_select: '',
+            //所属对象
+            belongs: '',
+            //所属对象的开关是否有效
+            belongsSwitchValid: true,
         }
     }
 
     componentDidMount = () => {
         this.findRootDicTypes()
-        this.findDicTypes()
+        this.findDicTypes(this.state.dicType_select)
     }
 
     findRootDicTypes = () => {
@@ -224,10 +233,11 @@ class AddModal extends Component{
         })
     }
 
-    findDicTypes = () => {
+    findDicTypes = (code) => {
         axios({
             method: 'post',
-            url: '/api/sumDicController/findDicTypes'
+            url: '/api/sumDicController/findDicTypes',
+            data: code
         }).then((r) => {
             return r.data
         }).then((list) => {
@@ -237,17 +247,44 @@ class AddModal extends Component{
         })
     }
 
-    changeDicTypeSwitch = () => {
+    changeDicTypeSwitch = (e) => {
         this.setState({
-            dicTypeSwitch: !this.state.dicTypeSwitch
+            dicTypeSwitch: !this.state.dicTypeSwitch,
+            belongsSwitchValid: e?true:false,
+            belongsSwitch: e?true:false,
+            belongs: e?this.state.belongs:'',
+            dicType_input: e?'':this.state.dicType_input,
+            dicType_select: e?this.state.dicType_select:'',
         })
     }
 
-    changeBelongsSwitch = () => {
+    changeBelongsSwitch = (e) => {
         this.setState({
-            belongsSwitch: !this.state.belongsSwitch
+            belongsSwitch: !this.state.belongsSwitch,
+            dicTypeSwitch: e?true:false,
+            belongs: e?this.state.belongs:'',
         })
     }
+
+    changeDicTypeInput = (e) => {
+        this.setState({
+            dicType_input: e.target.value
+        })
+    }
+
+    changeDicTypeSelect = (e) => {
+        this.setState({
+            dicType_select: e,
+        })
+        this.findDicTypes(e)
+    }
+
+    changeBelongs = (e) => {
+        this.setState({
+            belongs: e
+        })
+    }
+
 
     render(){
 
@@ -272,8 +309,8 @@ class AddModal extends Component{
                         <Switch checked={this.state.dicTypeSwitch} onChange={this.changeDicTypeSwitch}></Switch>    
                     </Col>
                     <Col span={20}>
-                        <Input style={{width: 120, display: `${this.state.dicTypeSwitch?'none':'block'}`}}></Input>
-                        <Select style={{width: 120, display: `${this.state.dicTypeSwitch?'block':'none'}`}}>
+                        <Input style={{width: 120, display: `${this.state.dicTypeSwitch?'none':'block'}`}} value={this.state.dicType_input} onChange={this.changeDicTypeInput}></Input>
+                        <Select style={{width: 120, display: `${this.state.dicTypeSwitch?'block':'none'}`}} value={this.state.dicType_select} onChange={this.changeDicTypeSelect}>
                             {this.state.rootDicTypes.map(type => {
                                 return (
                                     <Option key={type.code} value={type.code}>{type.name}</Option>
@@ -284,13 +321,13 @@ class AddModal extends Component{
                 </Form.Item>
                 <Form.Item label="所属对象">
                     <Col span={4}>
-                        <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>
+                        <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch} disabled={!this.state.belongsSwitchValid}></Switch>
                     </Col>
                     <Col span={20}>
-                        <Select style={{width: 120}} disabled={!this.state.belongsSwitch}>
+                        <Select style={{width: 120}} disabled={!this.state.belongsSwitch} value={this.state.belongs} onChange={this.changeBelongs}>
                             {this.state.dicTypes.map(type => {
                                 return (
-                                    <Option key={type.code} value={type.code}>{type.name}</Option>
+                                    <Option key={type.id} value={type.code}>{type.name}</Option>
                                 )
                             })}
                         </Select>

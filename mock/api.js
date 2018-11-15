@@ -501,7 +501,22 @@ mock.onPost('/api/sumDicController/deleteDicByIds')
     })
 
 mock.onPost('/api/sumDicController/findDicTypes')
-    .reply('200', sum_dic_list)
+    .reply(config => {
+        let code = config.data
+        return new Promise((resolve, reject) => {
+            let newdic = sum_dic_list
+            if(code!=undefined && code!=""){
+                let newdicone = sum_dic_list.filter(dic => dic.code==code)[0]
+                newdic = newdic.filter(dic => {
+                    return dic.sort.toString().charAt(0)==newdicone.id
+                })
+            }
+            
+            setTimeout(() => {
+                resolve([200, newdic]);
+            }, 500);
+        })
+    })
 
 mock.onPost('/api/sumDicController/findRootDicTypes')
     .reply(() => {

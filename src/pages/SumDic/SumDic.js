@@ -207,7 +207,21 @@ class AddModal extends Component{
     }
 
     componentDidMount = () => {
+        this.findRootDicTypes()
         this.findDicTypes()
+    }
+
+    findRootDicTypes = () => {
+        axios({
+            method: 'post',
+            url: '/api/sumDicController/findRootDicTypes'
+        }).then((r) => {
+            return r.data
+        }).then((list) => {
+            this.setState({
+                rootDicTypes: list
+            })
+        })
     }
 
     findDicTypes = () => {

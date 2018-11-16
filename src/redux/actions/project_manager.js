@@ -90,15 +90,17 @@ export const change_modal_sort = (sort) => {
     }
 }
 
-export const findProjects = () => {
+export const findProjects = (project) => {
     return (dispatch) => {
-        axios.post(FIND_PROJECTS)
-            .then((response) => {
-                return response.data.list
-            })
-            .then((list) => {
-                dispatch(find_projects(list))
-            })
+        axios({
+            method: 'post',
+            url: FIND_PROJECTS,
+            data: project,
+        }).then((res) => {
+            return res.data
+        }).then((list) => {
+            dispatch(find_projects(list))
+        })
     }
 }
 
@@ -131,7 +133,7 @@ export const addProjectSure = (project) => {
 export const deleteProject = (selectRows) => {
     return (dispatch) => {
         let ids = [];
-        selectRows.map((row) => ids.push(row.obj_code))
+        selectRows.map((row) => ids.push(row.id))
         axios({
             method: 'post',
             url: 'projectManager/deleteProjectByIds',

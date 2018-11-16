@@ -133,11 +133,233 @@ mock.onPost('/api/sumDicController/changeDisabled')
         })
     })
 
-mock.onPost('databaseManager/findList').reply(
-    '200', {
-        list: database_manager
-    }
+    mock.onPost('databaseManager/addDatabasetSure')
+    .reply(config => {
+        let {name, sort, agencyName, valid, agencyCode, dbType, interviewMethod, jndiName, connectionString} = JSON.parse(config.data)
+        return new Promise((resolve, reject) => {
+            let max_key = database_manager[database_manager.length-1].key+1
+            let newDatabase = Mock.mock({
+                key: "" + (max_key),
+                id: ""+(max_key),
+                name: name,
+                sort: sort,
+                createTime: '2018-11-16 00:00:00',
+                createName: 'Dawn',
+                valid: valid,
+                agencyName: agencyName,
+                agencyCode: agencyCode,
+                dbType: dbType,
+                interviewMethod: interviewMethod,
+                jndiName: jndiName,
+                connectionString: connectionString,
+            })
+            setTimeout(() => {
+                resolve([200, {
+                    database: newDatabase
+                }]);
+            }, 500);
+        })
+    })
+    
+    mock.onPost('databaseManager/deleteDatabaseByIds')
+    .reply(config => {
+        let ids = JSON.parse(config.data)
+        return new Promise((resolve, reject) => {
+            let newDatabase = []
+            for(let i=0; i<database_manager.length; i++){
+                let flag = true
+                for(let j=0; j<ids.length; j++){
+                    if(ids[j] == database_manager[i].id){
+                        flag = false
+                        break;
+                    }
+                }
+                if(flag){
+                    newDatabase.push(database_manager[i])
+                }
+            }
+            setTimeout(() => {
+                resolve([200, {
+                    list: newDatabase
+                }]);
+            }, 500);
+        })
+    })
+    
+    mock.onPost('databaseManager/updateDatabasetSure')
+    .reply(config => {
+        let {id, name, sort, agencyName, agencyCode, dbType, interviewMethod, jndiName, connectionString} = JSON.parse(config.data)
+        return new Promise((resolve, reject) => {
+            let newDatabase = database_manager.filter(database => database.id==id)[0]
+            if(name!=undefined && name!=''){
+                newDatabase.name = name
+            }
+            if(sort!=undefined && sort!=''){
+                newDatabase.sort = sort
+            }
+            if(agencyName!=undefined && agencyName!=''){
+                newDatabase.agencyName = agencyName
+            }
+            if(agencyCode!=undefined && agencyCode!=''){
+                newDatabase.agencyCode = agencyCode
+            }
+            if(dbType!=undefined && dbType!=''){
+                newDatabase.dbType = dbType
+            }
+            if(interviewMethod!=undefined && interviewMethod!=''){
+                newDatabase.interviewMethod = interviewMethod
+            }
+            if(jndiName!=undefined && jndiName!=''){
+                newDatabase.jndiName = jndiName
+            }
+            if(connectionString!=undefined && connectionString!=''){
+                newDatabase.connectionString = connectionString
+            }
+            setTimeout(() => {
+                resolve([200, {
+                    database: newDatabase
+                }]);
+            }, 500);
+        })
+    })
+
+mock.onPost('databaseManager/findList')
+.reply(config => {
+    let {id, name, agencyName, agencyCode, connectionString, createName, valid} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newDatabase = database_manager;
+        if(id != undefined && id != ''){
+            newDatabase = newDatabase.filter(database => database.id == id);
+        }
+        if(name != undefined && name != ''){
+            newDatabase = newDatabase.filter(database => database.name == name);
+        }
+        if(agencyName != undefined && agencyName != ''){
+            newDatabase = newDatabase.filter(database => database.agencyName == agencyName);
+        }
+        if(agencyCode != undefined && agencyCode != ''){
+            newDatabase = newDatabase.filter(database => database.agencyCode == agencyCode);
+        }
+        if(connectionString != undefined && connectionString != ''){
+            newDatabase = newDatabase.filter(database => database.connectionString == connectionString);
+        }
+        if(createName != undefined && createName != ''){
+            newDatabase = newDatabase.filter(database => database.createName == createName);
+        }
+        if(valid != undefined && valid != ''){
+            newDatabase = newDatabase.filter(database => database.valid == valid);
+        }
+        setTimeout(() => {
+            resolve(['200',newDatabase])
+        }, 500);
+    })
+}
+    
 )
+
+mock.onPost('menuManager/addMenuSure')
+.reply(config => {
+    let {name, type, code, level, parentId, icon, direction, component, filterCondition, customFunc, valid} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let max_key = menu[menu.length-1].key+1
+        let newMenu = Mock.mock({
+            key: "" + (max_key),
+            id: ""+(max_key),
+            name: name,
+            type: type,
+            code: code,
+            level: level,
+            parentId: parentId,
+            icon: icon,
+            direction: direction,
+            component: component,
+            filterCondition: filterCondition,
+            customFunc: customFunc,
+            valid: valid,
+        })
+        let newMenuChildren;
+        if(parentId != null && parentId != ''){
+            newMenuChildren = menu.filter(m => m.code==parentId)[0];
+            newMenu.id=newMenuChildren.id + newMenu.id
+            newMenuChildren.children.push(newMenu)
+        }else {
+            newMenuChildren = newMenu;
+        }
+        setTimeout(() => {
+            resolve([200, {
+                menu: newMenuChildren
+            }]);
+        }, 500);
+    })
+})
+
+mock.onPost('menuManager/deleteMenuByIds')
+.reply(config => {
+    let ids = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newMenu = []
+        for(let i=0; i<menu.length; i++){
+            let flag = true
+            for(let j=0; j<ids.length; j++){
+                if(ids[j] == menu[i].id){
+                    flag = false
+                    break;
+                }
+            }
+            if(flag){
+                newMenu.push(menu[i])
+            }
+        }
+        setTimeout(() => {
+            resolve([200, {
+                list: newMenu
+            }]);
+        }, 500);
+    })
+})
+
+mock.onPost('menuManager/updateMenuSure')
+.reply(config => {
+    let {id, name, type, code, level, parentId, icon, direction, component, filterCondition, customFunc} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newMenu = menu.filter(m => m.id==id)[0]
+        if(name!=undefined && name!=''){
+            newMenu.name = name
+        }
+        if(type!=undefined && type!=''){
+            newMenu.type = type
+        }
+        if(code!=undefined && code!=''){
+            newMenu.code = code
+        }
+        if(level!=undefined && level!=''){
+            newMenu.level = level
+        }
+        if(parentId!=undefined && parentId!=''){
+            newMenu.parentId = parentId
+        }
+        if(icon!=undefined && icon!=''){
+            newMenu.icon = icon
+        }
+        if(direction!=undefined && direction!=''){
+            newMenu.direction = direction
+        }
+        if(component!=undefined && component!=''){
+            newMenu.component = component
+        }
+        if(filterCondition!=undefined && filterCondition!=''){
+            newMenu.filterCondition = filterCondition
+        }
+        if(customFunc!=undefined && customFunc!=''){
+            newMenu.customFunc = customFunc
+        }
+        setTimeout(() => {
+            resolve([200, {
+                menu: newMenu
+            }]);
+        }, 500);
+    })
+})
 
 mock.onPost('menuManager/findList').reply(
     '200', {
@@ -187,8 +409,8 @@ mock.onPost('roleManager/addRoleSure')
         let newRole = Mock.mock({
             key: "" + (max_key),
             id: ""+(max_key),
-            role_name: roleName,
-            role_description: roleDescription
+            roleName: roleName,
+            roleDescription: roleDescription
         })
         setTimeout(() => {
             resolve([200, {
@@ -229,10 +451,10 @@ mock.onPost('roleManager/updateRoleSure')
     return new Promise((resolve, reject) => {
         let newRole = role_manager.filter(role => role.id==roleId)[0]
         if(roleName!=undefined && roleName!=''){
-            newRole.role_name = roleName
+            newRole.roleName = roleName
         }
         if(roleDescription!=undefined && roleDescription!=''){
-            newRole.role_description = roleDescription
+            newRole.roleDescription = roleDescription
         }
         setTimeout(() => {
             resolve([200, {
@@ -242,11 +464,19 @@ mock.onPost('roleManager/updateRoleSure')
     })
 })
 
-mock.onPost('roleManager/findRoles').reply(
-    '200',{
-        list: role_manager
-    }
-)
+mock.onPost('roleManager/findRoles')
+.reply(config => {
+    let {roleName} = JSON.parse(config.data);
+    return new Promise((resolve, reject) => {
+        let newRole = role_manager;
+        if(roleName != undefined && roleName != ''){
+            newRole = newRole.filter(role => role.roleName == roleName)
+        }
+        setTimeout(() => {
+            resolve(['200', newRole])
+        }, 500);
+    })
+})
 
 mock.onPost('userManager/addUserSure')
 .reply(config => {
@@ -256,8 +486,8 @@ mock.onPost('userManager/addUserSure')
         let newUser = Mock.mock({
             key: "" + (max_key),
             id: ""+(max_key),
-            nick_name: nickName,
-            login_account: loginAccount,
+            nickName: nickName,
+            loginAccount: loginAccount,
             role: role
         })
         setTimeout(() => {
@@ -299,7 +529,7 @@ mock.onPost('userManager/updateUserSure')
     return new Promise((resolve, reject) => {
         let newUser = user_manager.filter(user => user.id==id)[0]
         if(nickName!=undefined && nickName!=''){
-            newUser.nick_name = nickName
+            newUser.nickName = nickName
         }
         if(role!=undefined && role!=''){
             newUser.role = role
@@ -312,26 +542,40 @@ mock.onPost('userManager/updateUserSure')
     })
 })
 
-mock.onPost('userManager/findUsers').reply(
-    '200',{
-        list: user_manager
-    }
-)
+mock.onPost('userManager/findUsers')
+.reply(config => {
+    let {nickName, loginAccount, role} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newUser = user_manager;
+        if(nickName != undefined && nickName != ''){
+            newUser = newUser.filter(user => user.name == name)
+        }
+        if(loginAccount != undefined && loginAccount != ''){
+            newUser = newUser.filter(user => user.loginAccount == loginAccount)
+        }
+        if(role != undefined && role != ''){
+            newUser = newUser.filter(user => user.role == role)
+        }
+        setTimeout(() => {
+            resolve(['200',newUser])
+        }, 500);
+    })
+})
 
 mock.onPost('projectManager/addProjectSure')
 .reply(config => {
-    let {name, projectUrl, sort, whetherToDisable} = JSON.parse(config.data)
+    let {name, projectUrl, sort, valid} = JSON.parse(config.data)
     return new Promise((resolve, reject) => {
         let max_key = project_manager[project_manager.length-1].key+1
         let newProject = Mock.mock({
             key: "" + (max_key),
-            obj_code: ""+(max_key),
-            obj_name: name,
-            create_time: '2018-11-14 00:00:00',
-            create_name: 'Dawn',
-            project_url: projectUrl,
-            obj_sort: sort,
-            whether_to_disable: whetherToDisable,
+            id: ""+(max_key),
+            name: name,
+            sort: sort,
+            createTime: '2018-11-14 00:00:00',
+            createName: 'Dawn',
+            projectUrl: projectUrl,
+            valid: valid,
             status: Mock.Random.integer(0,1)==0?'成功':'失败'
         })
         setTimeout(() => {
@@ -350,7 +594,7 @@ mock.onPost('projectManager/deleteProjectByIds')
         for(let i=0; i<project_manager.length; i++){
             let flag = true
             for(let j=0; j<ids.length; j++){
-                if(ids[j] == project_manager[i].obj_code){
+                if(ids[j] == project_manager[i].id){
                     flag = false
                     break;
                 }
@@ -371,15 +615,15 @@ mock.onPost('projectManager/updateProjectSure')
 .reply(config => {
     let {id, name, projectUrl, sort} = JSON.parse(config.data)
     return new Promise((resolve, reject) => {
-        let newProject = project_manager.filter(project => project.obj_code==id)[0]
+        let newProject = project_manager.filter(project => project.id==id)[0]
         if(name!=undefined && name!=''){
-            newProject.obj_name = name
+            newProject.name = name
         }
         if(projectUrl!=undefined && projectUrl!=''){
-            newProject.project_url = projectUrl
+            newProject.projectUrl = projectUrl
         }
         if(sort!=undefined && sort!=''){
-            newProject.obj_sort = sort
+            newProject.sort = sort
         }
         setTimeout(() => {
             resolve([200, {
@@ -389,11 +633,28 @@ mock.onPost('projectManager/updateProjectSure')
     })
 })
 
-mock.onPost('projectManager/findProjects').reply(
-    '200',{
-        list: project_manager
-    }
-)
+mock.onPost('projectManager/findProjects')
+.reply(config => {
+    let {id, name, status, valid} = JSON.parse(config.data);
+    return new Promise((resolve, reject) => {
+        let newProject = project_manager;
+        if(id != undefined && id != ''){
+            newProject = newProject.filter(project => project.id == id)
+        }
+        if(name != undefined && name != ''){
+            newProject = newProject.filter(project => project.name == name)
+        }
+        if(status != undefined && status != ''){
+            newProject = newProject.filter(project => project.status == status)
+        }
+        if(valid != undefined && valid != ''){
+            newProject = newProject.filter(project => project.valid == valid)
+        }
+        setTimeout(() => {
+            resolve(['200', newProject])
+        }, 500);
+    })
+})
 
 mock.onGet('/api/homeController/loadMenu')
     .reply('200', menu)

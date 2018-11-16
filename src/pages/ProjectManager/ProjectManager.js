@@ -15,52 +15,97 @@ class ProjectManager extends Component{
         super(props)
 
         this.state = {
-            selectRows:[]
+            selectRows:[],
+            id: '',
+            name: '',
+            status: '',
+            valid: '',
         }
     }
     componentDidMount = () => {
-        this.props.findProjects()
+        let project = {
+            id: this.state.id,
+            name: this.state.name,
+            status: this.state.status,
+            valid: this.state.valid,
+        }
+        this.props.findProjects(project)
+    }
+    search = () => {
+        let project = {
+            id: this.state.id,
+            name: this.state.name,
+            status: this.state.status,
+            valid: this.state.valid,
+        }
+        this.props.findProjects(project)
+    }
+    reset = () => {
+        this.setState({
+            selectRows:[],
+            id: '',
+            name: '',
+            status: '',
+            valid: '',
+        })
+        let project = {
+            id: '',
+            name: '',
+            status: '',
+            valid: '',
+        }
+        this.props.findProjects(project)
+    }
+    change = (event, attributes) => {
+        let newState = {};
+        newState[attributes] = event.target.value;
+        this.setState(newState);
+    }
+    changeValid = (event) => {
+        this.setState({
+            valid: event.target.checked?'Y':'N'
+        })
     }
     render(){
         const columns = [
             {
-                title: '对象代码',
-                dataIndex: 'obj_code',
-                key: 'obj_code'
+                title: 'ID',
+                dataIndex: 'id',
+                key: 'id'
             },
             {
-                title: '对象名称',
-                dataIndex: 'obj_name',
-                key: 'obj_name'
+                title: '名称',
+                dataIndex: 'name',
+                key: 'name'
             },
             {
-                title: '对象排序',
-                dataIndex: 'obj_sort',
-                key: 'obj_sort',
-                sorter: (a, b) => a.obj_sort - b.obj_sort
+                title: '排序',
+                dataIndex: 'sort',
+                key: 'sort',
+                sorter: (a, b) => a.sort - b.sort
             },
             {
                 title: '创建时间',
-                dataIndex: 'create_time',
-                key: 'create_time'
+                dataIndex: 'createTime',
+                key: 'createTime'
             },
             {
                 title: '创建人',
-                dataIndex: 'create_name',
-                key: 'create_name'
+                dataIndex: 'createName',
+                key: 'createName'
             },
             {
                 title: '是否禁用',
-                dataIndex: 'whether_to_disable',
-                key: 'whether_to_disable',
+                dataIndex: 'valid',
+                key: 'valid',
                 render: (text, record) => (
-                    record.whether_to_disable?<Checkbox defaultChecked></Checkbox>:<Checkbox></Checkbox>
+                    <Checkbox checked={record.valid=='Y'}></Checkbox>
                 )
             },
             {
                 title: '项目URL',
-                dataIndex: 'project_url',
-                key: 'project_url'
+                dataIndex: 'projectUrl',
+                key: 'projectUrl'
             },
             {
                 title: '状态',
@@ -85,31 +130,33 @@ class ProjectManager extends Component{
                     <Form className="ant-advanced-search-form">
                         <Row gutter={24}>
                             <Col span={6} key={1}>
-                                <Form.Item label="对象代码:">
-                                    <Input placeholder="对象代码"/>
+                                <Form.Item label="ID:">
+                                    <Input placeholder="ID" onChange={(event) => this.change(event, 'id')} value={this.state.id}/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={2}>
-                                <Form.Item label="对象名称:">
-                                    <Input placeholder="对象名称"/>
+                                <Form.Item label="名称:">
+                                    <Input placeholder="名称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={3}>
-                                <Form.Item label="是否禁用:">
-                                    {/* <Input placeholder="是否禁用"/> */}
-                                    <Checkbox></Checkbox>
+                                <Form.Item label="状态:">
+                                    <Input placeholder="状态" onChange={(event) => this.change(event, 'status')} value={this.state.status}/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={4}>
-                                <Form.Item label="状态:">
-                                    <Input placeholder="状态"/>
+                                <Form.Item label="是否禁用:">
+                                    <Checkbox
+                                        onChange={(event) => this.changeValid(event)}
+                                        checked={this.state.valid=='Y'}
+                                    ></Checkbox>
                                 </Form.Item>
                             </Col>
                         </Row>
                         <Row>
                             <Col span={24} style={{textAlign:"center"}}>
-                                <Button type="primary" htmlType="submit" style={{marginRight:8}}>查询</Button>
-                                <Button style={{ marginLeft: 8 }}>重置</Button>
+                                <Button type="primary" htmlType="submit" style={{marginRight:8}} onClick={this.search}>查询</Button>
+                                <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
                     </Form>
@@ -119,16 +166,16 @@ class ProjectManager extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => this.props.addProjectShow()}>新增</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateProjectShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteProject, this.state.selectRows)}>删除</Button>
-                        <Button type="default" size="default" className="btn">查看</Button>
+                        {/* <Button type="default" size="default" className="btn">查看</Button> */}
                         <Table rowSelection={rowSelection} dataSource={this.props.projectManager.list} columns={columns} />
                     </Form>
                 </Row>
                 <AddModal 
-                visible={this.props.projectManager.add_visible} 
+                visible={this.props.projectManager.addVisible} 
                 onOk={(project) => this.props.addProjectSure(project)} 
                 onCancel={() => this.props.addProjectCancel()}></AddModal>
                 <UpdateModal 
-                visible={this.props.projectManager.update_visible} 
+                visible={this.props.projectManager.updateVisible} 
                 onOk={(project) => this.props.updateProjectSure(project)} 
                 onCancel={() => this.props.updateProjectCancel()} 
                 id={this.props.projectManager.id} 
@@ -156,27 +203,17 @@ class AddModal extends Component{
             name: '',
             projectUrl: '',
             sort: '',
-            whetherToDisable: false
+            valid: '',
         }
     }
-    changeName = (event) => {
-        this.setState({
-            name: event.target.value
-        })
+    change = (event, attributes) => {
+        let newState = {};
+        newState[attributes] = event.target.value;
+        this.setState(newState);
     }
-    changeProjectUrl = (event) => {
+    changeValid = (event) => {
         this.setState({
-            projectUrl: event.target.value
-        })
-    }
-    changeSort = (event) => {
-        this.setState({
-            sort: event.target.value
-        })
-    }
-    changeWhetherToDisable = (event) => {
-        this.setState({
-            whetherToDisable: event.target.checked
+            valid: event.target.checked?'Y':'N'
         })
     }
     render(){
@@ -184,7 +221,7 @@ class AddModal extends Component{
             name: this.state.name,
             projectUrl: this.state.projectUrl,
             sort: this.state.sort,
-            whetherToDisable: this.state.whetherToDisable
+            valid: this.state.valid,
         }
         return (
             <Modal title="新增项目"
@@ -193,18 +230,18 @@ class AddModal extends Component{
                 onCancel={() => this.props.onCancel()}
                 >
                 <Form.Item label="对象名称">
-                    <Input placeholder="对象名称" onChange={(event) => this.changeName(event)} value={this.state.name}/>
+                    <Input placeholder="对象名称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="项目URL">
-                    <Input placeholder="项目URL" onChange={(event) => this.changeProjectUrl(event)} value={this.state.projectUrl}/>
+                    <Input placeholder="项目URL" onChange={(event) => this.change(event, 'projectUrl')} value={this.state.projectUrl}/>
                 </Form.Item>
                 <Form.Item label="排序">
-                    <Input placeholder="排序" onChange={(event) => this.changeSort(event)} value={this.state.sort}/>
+                    <Input placeholder="排序" onChange={(event) => this.change(event, 'sort')} value={this.state.sort}/>
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="是否禁用">
                     <Checkbox
-                        onChange={(event) => this.changeWhetherToDisable(event)}
-                        checked={this.state.whetherToDisable}
+                        onChange={(event) => this.changeValid(event)}
+                        checked={this.state.valid=='Y'}
                     ></Checkbox>
                 </Form.Item>
             </Modal>

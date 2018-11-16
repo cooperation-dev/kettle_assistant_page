@@ -15,11 +15,46 @@ class UserManager extends Component{
         super(props);
 
         this.state = {
-            selectRows:[]
+            selectRows:[],
+            nickName: '',
+            loginAccount: '',
+            role: '',
         }
     }
     componentDidMount = () => {
-        this.props.findUsers()
+        let user = {
+            nickName: this.state.nickName,
+            loginAccount: this.state.loginAccount,
+            role: this.state.role,
+        }
+        this.props.findUsers(user)
+    }
+    search = () => {
+        let user = {
+            nickName: this.state.nickName,
+            loginAccount: this.state.loginAccount,
+            role: this.state.role,
+        }
+        this.props.findUsers(user)
+    }
+    reset = () => {
+        this.setState({
+            selectRows:[],
+            nickName: '',
+            loginAccount: '',
+            role: '',
+        })
+        let user = {
+            nickName: '',
+            loginAccount: '',
+            role: '',
+        }
+        this.props.findUsers(user)
+    }
+    change = (event, attributes) => {
+        let newState = {};
+        newState[attributes] = event.target.value;
+        this.setState(newState);
     }
     render(){
         const columns = [
@@ -30,13 +65,13 @@ class UserManager extends Component{
             },
             {
                 title: '昵称',
-                dataIndex: 'nick_name',
-                key: 'nick_name'
+                dataIndex: 'nickName',
+                key: 'nickName'
             },
             {
                 title: '登陆账号',
-                dataIndex: 'login_account',
-                key: 'login_account',
+                dataIndex: 'loginAccount',
+                key: 'loginAccount',
             },
             {
                 title: '角色',
@@ -62,24 +97,24 @@ class UserManager extends Component{
                         <Row gutter={24}>
                             <Col span={6} key={1}>
                                 <Form.Item label="昵称:">
-                                    <Input placeholder="昵称"/>
+                                    <Input placeholder="昵称" onChange={(event) => this.change(event, 'nickName')} value={this.state.nickName}/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={2}>
                                 <Form.Item label="登陆账号:">
-                                    <Input placeholder="登陆账号"/>
+                                    <Input placeholder="登陆账号" onChange={(event) => this.change(event, 'loginAccount')} value={this.state.loginAccount}/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={3}>
                                 <Form.Item label="角色:">
-                                    <Input placeholder="角色"/>
+                                    <Input placeholder="角色" onChange={(event) => this.change(event, 'role')} value={this.state.role}/>
                                 </Form.Item>
                             </Col>
                         </Row>
                         <Row>
                             <Col span={24} style={{textAlign:"center"}}>
-                                <Button type="primary" htmlType="submit" style={{marginRight:8}}>查询</Button>
-                                <Button style={{ marginLeft: 8 }}>重置</Button>
+                                <Button type="primary" htmlType="submit" style={{marginRight:8}} onClick={this.search}>查询</Button>
+                                <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
                     </Form>
@@ -89,7 +124,6 @@ class UserManager extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => this.props.addUserShow()}>新增</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateUserShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteUser, this.state.selectRows)}>删除</Button>
-                        <Button type="default" size="default" className="btn">查看</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Table rowSelection={rowSelection} dataSource={this.props.userManager.list} columns={columns} />
                     </Form>
@@ -121,20 +155,10 @@ class AddModal extends Component{
             role: ''
         }
     }
-    changeNickName = (event) => {
-        this.setState({
-            nickName: event.target.value
-        })
-    }
-    changeLoginAccount = (event) => {
-        this.setState({
-            loginAccount: event.target.value
-        })
-    }
-    changeRole = (event) => {
-        this.setState({
-            role: event.target.value
-        })
+    change = (event, attributes) => {
+        let newState = {};
+        newState[attributes] = event.target.value;
+        this.setState(newState);
     }
     render(){
         let user = {
@@ -149,13 +173,13 @@ class AddModal extends Component{
                 onCancel={() => this.props.onCancel()}
                 >
                 <Form.Item label="昵称">
-                    <Input placeholder="昵称" onChange={(event) => this.changeNickName(event)} value={this.state.nickName}/>
+                    <Input placeholder="昵称" onChange={(event) => this.change(event, 'nickName')} value={this.state.nickName}/>
                 </Form.Item>
                 <Form.Item label="登陆账号">
-                    <Input placeholder="登陆账号" onChange={(event) => this.changeLoginAccount(event)} value={this.state.loginAccount}/>
+                    <Input placeholder="登陆账号" onChange={(event) => this.change(event, 'loginAccount')} value={this.state.loginAccount}/>
                 </Form.Item>
                 <Form.Item label="角色">
-                    <Input placeholder="角色" onChange={(event) => this.changeRole(event)} value={this.state.role}/>
+                    <Input placeholder="角色" onChange={(event) => this.change(event, 'role')} value={this.state.role}/>
                 </Form.Item>
             </Modal>
         )

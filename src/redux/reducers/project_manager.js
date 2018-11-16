@@ -5,8 +5,8 @@ import {FIND_PROJECTS,
 
 const initState = {
     list: [],
-    add_visible: false,
-    update_visible: false,
+    addVisible: false,
+    updateVisible: false,
     id: '',
     name: '',
     sort: '',
@@ -24,41 +24,41 @@ export default function reducers(state = initState, action){
         case ADD_PROJECT_MODAL_SHOW:{
             return {
                 ...state,
-                add_visible: true
+                addVisible: true
             }
         }
         case ADD_PROJECT_MODAL_CANCEL:{
             return {
                 ...state,
-                add_visible: false
+                addVisible: false
             }
         }
         case ADD_PROJECT_MODAL_SURE:{
             state.list.push(action.project)
             return {
                 ...state,
-                add_visible: false
+                addVisible: false
             }
         }
         case UPDATE_PROJECT_MODAL_SHOW:{
             return {
                 ...state,
-                update_visible: true,
-                id: action.project.obj_code,
-                name: action.project.obj_name,
-                sort: action.project.obj_sort,
-                projectUrl: action.project.project_url
+                updateVisible: true,
+                id: action.project.id,
+                name: action.project.name,
+                sort: action.project.sort,
+                projectUrl: action.project.projectUrl
             }
         }
         case UPDATE_PROJECT_MODAL_CANCEL:{
             return {
                 ...state,
-                update_visible: false
+                updateVisible: false
             }
         }
         case UPDATE_PROJECT_MODAL_SURE:{
             let newList = state.list.map((project) => {
-                if(project.obj_code == action.project.obj_code){
+                if(project.id == action.project.id){
                     return action.project
                 }else {
                     return project
@@ -66,7 +66,7 @@ export default function reducers(state = initState, action){
             })
             return {
                 ...state,
-                update_visible: false,
+                updateVisible: false,
                 list: newList
             }
         }

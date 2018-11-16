@@ -81,15 +81,17 @@ export const change_modal_description = (roleDescription) => {
     }
 }
 
-export const findRoles = () => {
+export const findRoles = (role) => {
     return(dispatch) => {
-        axios.post(FIND_ROLES)
-            .then((response) => {
-                return response.data.list
-            })
-            .then((list) => {
-                dispatch(find_roles(list))
-            })
+        axios({
+            method: 'post',
+            url: FIND_ROLES,
+            data: role,
+        }).then((res) => {
+            return res.data
+        }).then((list) => {
+            dispatch(find_roles(list))
+        })
     }
 }
 

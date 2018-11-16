@@ -45,7 +45,7 @@ export default function reducers(state = initState, action){
                 ...state,
                 updateVisible: true,
                 id: action.user.id,
-                nickName: action.user.nick_name,
+                nickName: action.user.nickName,
                 role: action.user.role
             }
         }

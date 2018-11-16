@@ -81,13 +81,15 @@ export const change_modal_role = (role) => {
     }
 }
 
-export const findUsers = () => {
+export const findUsers = (user) => {
     return (dispatch) => {
-        axios.post(FIND_USERS)
-        .then((response) => {
-            return response.data.list
-        })
-        .then((list) => {
+        axios({
+            method: 'post',
+            url: FIND_USERS,
+            data: user,
+        }).then((res) => {
+            return res.data
+        }).then((list) => {
             dispatch(find_users(list))
         })
     }

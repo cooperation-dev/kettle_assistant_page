@@ -17,15 +17,21 @@ export const UPDATE_MENU_MODAL_CANCEL = "menuManager/updateMenuCancel"
 //修改确认
 export const UPDATE_MENU_MODAL_SURE = "menuManager/updateMenuSure"
 //修改Modal名称
-export const CHANGE_MODAL_TITLE = "menuManager/changeModalTitle"
+export const CHANGE_MODAL_NAME = "menuManager/changeModalName"
 //修改Modal类型
 export const CHANGE_MODAL_TYPE = "menuManager/changeModalType"
 //修改Modal编码
-export const CHANGE_MODAL_KEY = "menuManager/changeModalKey"
+export const CHANGE_MODAL_CODE = "menuManager/changeModalCode"
 //修改Modal序号
 export const CHANGE_MODAL_LEVEL = "menuManager/changeModalLevel"
 //修改Modal父节点
-export const CHANGE_MODAL_PARENT_KEY = "menuManager/changeModalParentKey"
+export const CHANGE_MODAL_PARENT_ID = "menuManager/changeModalParentId"
+//修改Modal图标
+export const CHANGE_MODAL_ICON = "menuManager/changeModalIcon"
+//修改ModalURL
+export const CHANGE_MODAL_DIRECTION ="menuManager/changeModalDirection"
+//修改Modal组件
+export const CHANGE_MODAL_COMPONENT = "menuManager/changeModalComponent"
 //修改过滤条件
 export const CHANGE_MODAL_FILTER_CONDITION = "menuManager/changeModalFilterCondition"
 //修改Modal自定义功能
@@ -70,30 +76,31 @@ export const update_menu_modal_cancel = () => {
     }
 }
 
-export const update_menu_modal_sure = () => {
+export const update_menu_modal_sure = (menu) => {
     return {
-        type: UPDATE_MENU_MODAL_SURE
+        type: UPDATE_MENU_MODAL_SURE,
+        menu: menu,
     }
 }
 
-export const change_modal_title = (title) => {
+export const change_modal_name = (name) => {
     return {
-        type: CHANGE_MODAL_TITLE,
-        title: title
+        type: CHANGE_MODAL_NAME,
+        name: name
     }
 }
 
-export const change_modal_type = (type) => {
+export const change_modal_type = (menuType) => {
     return {
         type: CHANGE_MODAL_TYPE,
-        menuType: type
+        menuType: menuType
     }
 }
 
-export const change_modal_key = (key) => {
+export const change_modal_code = (code) => {
     return {
-        type: CHANGE_MODAL_KEY,
-        key: key
+        type: CHANGE_MODAL_CODE,
+        code: code
     }
 }
 
@@ -104,10 +111,31 @@ export const change_modal_level = (level) => {
     }
 }
 
-export const change_modal_parent_key = (parentKey) => {
+export const change_modal_parent_id = (parentId) => {
     return {
-        type: CHANGE_MODAL_PARENT_KEY,
-        parentKey: parentKey
+        type: CHANGE_MODAL_PARENT_ID,
+        parentId: parentId
+    }
+}
+
+export const change_modal_icon = (icon) => {
+    return {
+        type: CHANGE_MODAL_ICON,
+        icon: icon
+    }
+}
+
+export const change_modal_direction = (direction) => {
+    return {
+        type: CHANGE_MODAL_DIRECTION,
+        direction: direction
+    }
+}
+
+export const change_modal_component = (component) => {
+    return {
+        type: CHANGE_MODAL_COMPONENT,
+        component: component
     }
 }
 
@@ -149,9 +177,17 @@ export const addMenuCancel = () => {
     }
 }
 
-export const addMenuSure = () => {
+export const addMenuSure = (menu) => {
     return (dispatch) => {
-        dispatch(add_menu_modal_sure());
+        axios({
+            method: 'post',
+            url: ADD_MENU_MODAL_SURE,
+            data: menu
+        }).then((res) => {
+            return res.data.menu
+        }).then((menu) => {
+            dispatch(add_menu_modal_sure(menu));
+        })
     }
 }
 
@@ -161,7 +197,7 @@ export const deleteMenu = (selectRows) => {
         selectRows.map((row) => ids.push(row.id))
         axios({
             method: 'post',
-            url: '',
+            url: 'menuManager/deleteMenuByIds',
             data: ids
         }).then((res) => {
             return res.data.list
@@ -189,15 +225,23 @@ export const updateMenuCancel = () => {
     }
 }
 
-export const updateMenuSure = () => {
+export const updateMenuSure = (menu) => {
     return (dispatch) => {
-        dispatch(update_menu_modal_sure());
+        axios({
+            method: 'post',
+            url: UPDATE_MENU_MODAL_SURE,
+            data: menu,
+        }).then((res) => {
+            return res.data.menu
+        }).then((menu) => {
+            dispatch(update_menu_modal_sure(menu));  
+        })
     }
 }
 
-export const changeModalTitle = (event) => {
+export const changeModalName = (event) => {
     return (dispatch) => {
-        dispatch(change_modal_title(event.target.value))
+        dispatch(change_modal_name(event.target.value))
     }
 }
 
@@ -207,9 +251,9 @@ export const changeModalType = (event) => {
     }
 }
 
-export const changeModalKey = (event) => {
+export const changeModalCode = (event) => {
     return (dispatch) => {
-        dispatch(change_modal_key(event.target.value))
+        dispatch(change_modal_code(event.target.value))
     }
 }
 
@@ -219,9 +263,27 @@ export const changeModalLevel = (event) => {
     }
 }
 
-export const changeModalParentKey = (event) => {
+export const changeModalParentId = (event) => {
     return (dispatch) => {
-        dispatch(change_modal_parent_key(event.target.value))
+        dispatch(change_modal_parent_id(event.target.value))
+    }
+}
+
+export const changeModalIcon = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_icon(event.target.value))
+    }
+}
+
+export const changeModalDirection = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_direction(event.target.value))
+    }
+}
+
+export const changeModalComponent = (event) => {
+    return (dispatch) => {
+        dispatch(change_modal_component(event.target.value))
     }
 }
 

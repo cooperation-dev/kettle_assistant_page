@@ -1,16 +1,22 @@
 import {FIND_MENUS, 
         ADD_MENU_MODAL_SHOW, ADD_MENU_MODAL_CANCEL, ADD_MENU_MODAL_SURE, 
-        UPDATE_MENU_MODAL_SHOW, UPDATE_MENU_MODAL_CANCEL, UPDATE_MENU_MODAL_SURE} from '../actions/menu_manager'
+        UPDATE_MENU_MODAL_SHOW, UPDATE_MENU_MODAL_CANCEL, UPDATE_MENU_MODAL_SURE, 
+        CHANGE_MODAL_NAME, CHANGE_MODAL_TYPE, CHANGE_MODAL_CODE, CHANGE_MODAL_LEVEL, CHANGE_MODAL_PARENT_ID, 
+        CHANGE_MODAL_ICON, CHANGE_MODAL_DIRECTION, CHANGE_MODAL_COMPONENT, CHANGE_MODAL_FILTER_CONDITION, CHANGE_MODAL_CUSTOM_FUNC, } from '../actions/menu_manager'
 
 const initState = {
     list:[],
     addVisible: false,
     updateVisible: false,
-    key: '',
-    title: '',
+    id: '',
+    name: '',
     type: '',
+    code: '',
     level: '',
-    parentKey: '',
+    parentId: '',
+    icon: '',
+    direction: '',
+    component: '',
     filterCondition: '',
     customFunc: ''
 }
@@ -36,6 +42,19 @@ export default function reducers(state = initState, action){
             }
         }
         case ADD_MENU_MODAL_SURE:{
+            let flag;
+            state.list.map((menu) => {
+                if(menu.id == action.menu.id){
+                    flag = true;
+                    return action.menu
+                }else {
+                    flag = false;
+                }
+            })
+            if(!flag){
+                state.list.push(action.menu)
+            }
+            
             return {
                 ...state,
                 addVisible: false
@@ -45,13 +64,17 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 updateVisible: true,
-                key: action.menu.key,
-                title: action.menu.title,
+                id: action.menu.id,
+                name: action.menu.name,
                 type: action.menu.type,
+                code: action.menu.code,
                 level: action.menu.level,
-                parentKey: action.menu.parent_key,
-                filterCondition: action.menu.filter_condition,
-                customFunc: action.menu.custom_func
+                parentId: action.menu.parentId,
+                icon: action.menu.icon,
+                direction: action.menu.direction,
+                component: action.menu.component,
+                filterCondition: action.menu.filterCondition,
+                customFunc: action.menu.customFunc
             }
         }
         case UPDATE_MENU_MODAL_CANCEL:{
@@ -61,9 +84,77 @@ export default function reducers(state = initState, action){
             }
         }
         case UPDATE_MENU_MODAL_SURE:{
+            let newList = state.list.map(menu => {
+                if(menu.id == action.menu.id){
+                    return action.menu
+                }else {
+                    return menu
+                }
+            })
             return {
                 ...state,
-                updateVisible: false
+                updateVisible: false,
+                list: newList,
+            }
+        }
+        case CHANGE_MODAL_NAME:{
+            return {
+                ...state,
+                name: action.name
+            }
+        }
+        case CHANGE_MODAL_TYPE:{
+            return {
+                ...state,
+                type: action.menuType
+            }
+        }
+        case CHANGE_MODAL_CODE:{
+            return {
+                ...state,
+                code: action.code
+            }
+        }
+        case CHANGE_MODAL_LEVEL:{
+            return {
+                ...state,
+                level: action.level
+            }
+        }
+        case CHANGE_MODAL_PARENT_ID:{
+            return {
+                ...state,
+                parentId: action.parentId
+            }
+        }
+        case CHANGE_MODAL_ICON:{
+            return {
+                ...state,
+                icon: action.icon
+            }
+        }
+        case CHANGE_MODAL_DIRECTION:{
+            return {
+                ...state,
+                direction: action.direction
+            }
+        }
+        case CHANGE_MODAL_COMPONENT:{
+            return {
+                ...state,
+                component: action.component
+            }
+        }
+        case CHANGE_MODAL_FILTER_CONDITION:{
+            return {
+                ...state,
+                filterCondition: action.filterCondition
+            }
+        }
+        case CHANGE_MODAL_CUSTOM_FUNC:{
+            return {
+                ...state,
+                customFunc: action.customFunc
             }
         }
         default : {

@@ -395,7 +395,7 @@ mock.onPost('projectManager/findProjects').reply(
     }
 )
 
-mock.onPost('/api/homeController/loadMenu')
+mock.onGet('/api/homeController/loadMenu')
     .reply('200', menu)
 
 mock.onPost('/api/jobManagerController/deleteJobByIds')
@@ -459,15 +459,17 @@ mock.onPost('/api/jobManagerController/saveJob')
 mock.onPost('/api/sumDicController/saveDic')
     .reply(config => {
         let {name, code, dicType, belongs} = JSON.parse(config.data)
+        let maxId = sum_dic_list[sum_dic_list.length-1].id+1
         return new Promise((resolve, reject) => {
             let newdic = {
+                id: maxId,
                 code: code,
                 name: name,
                 sort: 110,
                 createTime: "2018-09-09 12:34:44",
                 modifyTime: '2018-09-18 01:23:46',
                 creator: 'adan',
-                valid: 'N',
+                valid: 'Y',
                 dicType: dicType,
                 belongs: belongs
             }
@@ -500,9 +502,9 @@ mock.onPost('/api/sumDicController/deleteDicByIds')
         })
     })
 
-mock.onPost('/api/sumDicController/findDicTypes')
+mock.onGet('/api/sumDicController/findDicTypes')
     .reply(config => {
-        let code = config.data
+        let code = config.params.code
         return new Promise((resolve, reject) => {
             let newdic = sum_dic_list
             if(code!=undefined && code!=""){

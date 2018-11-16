@@ -38,7 +38,7 @@ export function selectMenu(e){
 export function loadMenu(){
     return (dispatch) => {
         axios({
-            method: 'post', 
+            method: 'get', 
             url: '/api/homeController/loadMenu'
         }).then((reponse) => {
             return reponse.data

@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {Table, Row, Col, Input, Form, Button, Checkbox, Modal, Select, Switch} from 'antd';
 import {connect} from 'react-redux';
 import {showList,
-        addModalShow, addModalSure, addModalCancel} from '../../redux/actions/sum_dic';
+        addModalShow, addModalSure, addModalCancel,
+        updateModalShow, updateModalSure, updateModalCancel} from '../../redux/actions/sum_dic';
 
 import axios from 'axios';
 
@@ -183,8 +184,8 @@ class SumDic extends Component{
                         </Table>
                     </Form>
                 </Row>
-                <AddModal visible={this.props.sumDic.addModalVisible} ok={()=>this.props.addModalSure()} cancel={()=>this.props.addModalCancel()}></AddModal>
-                <UpdateModal></UpdateModal>
+                <AddModal visible={this.props.sumDic.addModalVisible} ok={(dic)=>this.props.addModalSure(dic)} cancel={()=>this.props.addModalCancel()}></AddModal>
+                <UpdateModal ></UpdateModal>
             </div>
         )
     }
@@ -234,10 +235,8 @@ class AddModal extends Component{
     }
 
     findDicTypes = (code) => {
-        axios({
-            method: 'post',
-            url: '/api/sumDicController/findDicTypes',
-            data: code
+        axios.get('/api/sumDicController/findDicTypes', {
+            params: {code: code}
         }).then((r) => {
             return r.data
         }).then((list) => {
@@ -285,15 +284,28 @@ class AddModal extends Component{
         })
     }
 
+    cancel = () => {
+        this.changeDicTypeSwitch(false)
+        this.changeBelongsSwitch(false)
+
+        let dic = {
+            name: this.state.name,
+            code: this.state.code,
+            dicType: this.state.dicTypeSwitch?this.state.dicType_select:this.state.dicType_input,
+            belongs: this.state.belongs
+        }
+        this.props.cancel(dic)
+    }
 
     render(){
+        
 
         return (
             <Modal
                 title="新增字典"
                 visible={this.props.visible}
-                onOk={()=>this.props.ok()}
-                onCancel={()=>this.props.cancel()}
+                onOk={()=>this.props.ok(dic)}
+                onCancel={this.cancel}
                 okText="确认"
                 cancelText="取消"
                 destroyOnClose={true} 
@@ -343,6 +355,35 @@ class UpdateModal extends Component{
     constructor(props){
         super(props)
 
+        this.state = {
+            id: '',
+            name: '',
+            code: '',
+            rootDicTypes: [],
+            dicTypes: [],
+            visible: false,
+            dicTypeSwitch: false,
+            belongsSwitch: false,
+            //输入框字典类别
+            dicType_input: '',
+            //下拉框字典类别
+            dicType_select: '',
+            //所属对象
+            belongs: '',
+            //所属对象的开关是否有效
+            belongsSwitchValid: true,
+        }
+    }
+
+    componentDidMount = () => {
+        // this.findDicById(this.props.)
+    }
+
+    findDicById = (id) => {
+        axios.get('/api/sumDicController/findDicById/'+id)
+                .then(r => {
+                    return r.data
+                })
     }
 
     render(){                 
@@ -378,4 +419,5 @@ export default connect((state)=> ({
 
     sumDic: state.sumDic
 }), {showList,
-        addModalShow, addModalSure, addModalCancel})(SumDic)
+        addModalShow, addModalSure, addModalCancel,
+        updateModalShow, updateModalSure, updateModalCancel})(SumDic)

@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import {Table, Row, Col, Input, Form, Button, Checkbox, Modal, Select} from 'antd';
+import {Table, Row, Col, Input, Form, Button, Checkbox, Modal, Select, Switch} from 'antd';
 import {connect} from 'react-redux';
-import {showList, changeDisabled,
-        addModalShow, addModalSure, addModalCancel,
-        deleteDicByIds,
-        findDicTypes,
-        changeModalName, changeModalCode, changeModalType, changeModalBelongs,
-        updateModalShow, updateModalSure, updateModalCancel} from '../../redux/actions/sum_dic';
+import {showList,
+        addModalShow, addModalSure, addModalCancel} from '../../redux/actions/sum_dic';
+
+import axios from 'axios';
 
 import './SumDic.css';
 
@@ -22,25 +20,12 @@ class SumDic extends Component{
             name: '',
             valid: 'Y',
             dicType: '',
-            selectRows: []
+            selectRows: [],
         }
-
     }
-
+    
     componentDidMount = () => {
-        let dic = {
-            code: this.state.code,
-            name: this.state.name,
-            valid: this.state.valid,
-            dicType: this.state.dicType,
-        }
-        this.props.showList(dic)
-    }
-
-    changeDicCode = (e) => {
-        this.setState({
-            code: e.target.value
-        })
+        this.search()
     }
 
     changeDicName = (e) => {
@@ -49,15 +34,21 @@ class SumDic extends Component{
         })
     }
 
+    changeDicCode = (e) => {
+        this.setState({
+            code: e.target.value
+        })
+    }
+    
+    changeValid = (e) => {
+        this.setState({
+            valid: this.state.valid=='Y'?'N':'Y'
+        })
+    }
+    
     changeDicType = (e) => {
         this.setState({
             dicType: e.target.value
-        })
-    }
-
-    changeIsDisabled = () => {
-        this.setState({
-            valid: this.state.valid=='Y'?'N':'Y'
         })
     }
 
@@ -68,24 +59,18 @@ class SumDic extends Component{
             valid: this.state.valid,
             dicType: this.state.dicType,
         }
+
         this.props.showList(dic)
     }
 
     reset = () => {
-        this.setState({
-            selectRows: [],
-            code: '',
-            name: '',
-            valid: 'Y',
-            dicType: '',
-        })
-
         let dic = {
             code: '',
             name: '',
-            valid: 'Y',
+            valid: '',
             dicType: '',
         }
+
         this.props.showList(dic)
     }
 
@@ -123,7 +108,7 @@ class SumDic extends Component{
                             </Col>
                             <Col span={6} key={3}>
                                 <Form.Item label="是否禁用">
-                                    <Checkbox checked={this.state.valid=='N'?true:false} onClick={this.changeIsDisabled}></Checkbox>
+                                    <Checkbox checked={this.state.valid=='N'?true:false} onClick={this.changeValid}></Checkbox>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={4}>
@@ -142,7 +127,7 @@ class SumDic extends Component{
                 </Row>
                 <Row style={{marginTop:"15px"}}>
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
-                        <Button type="default" size="default" className="btn" onClick={() => this.props.addModalShow()}>新增</Button>
+                        <Button type="default" size="default" className="btn" onClick={()=>this.props.addModalShow()}>新增</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateModalShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.deleteDicByIds(this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
@@ -198,8 +183,8 @@ class SumDic extends Component{
                         </Table>
                     </Form>
                 </Row>
-                <AddModal visible={this.props.sumDic.addVisible} onOk={(dic) => this.props.addModalSure(dic)} onCancel={() => this.props.addModalCancel()} dicTypes={this.props.sumDic.dicTypes}></AddModal>
-                <UpdateModal visible={this.props.sumDic.updateVisible} onOk={(dic) => this.props.updateModalSure(dic)} onCancel={() => this.props.updateModalCancel()} id={this.props.sumDic.modalDicId} name={this.props.sumDic.modalDicName} code={this.props.sumDic.modalDicCode}  dicType={this.props.sumDic.modalDicType} belongs={this.props.sumDic.modalBelongs} changeName={(e) => this.props.changeModalName(e)} changeCode={(e) => this.props.changeModalCode(e)} changeType={(e) => this.props.changeModalType(e)} changeBelongs={(e) => this.props.changeModalBelongs(e)}></UpdateModal>
+                <AddModal visible={this.props.sumDic.addModalVisible} ok={()=>this.props.addModalSure()} cancel={()=>this.props.addModalCancel()}></AddModal>
+                <UpdateModal></UpdateModal>
             </div>
         )
     }
@@ -211,72 +196,142 @@ class AddModal extends Component{
         super(props)
 
         this.state = {
+            id: '',
             name: '',
             code: '',
-            dicType: '',
+            rootDicTypes: [],
+            dicTypes: [],
+            visible: false,
+            dicTypeSwitch: false,
+            belongsSwitch: false,
+            //输入框字典类别
+            dicType_input: '',
+            //下拉框字典类别
+            dicType_select: '',
+            //所属对象
             belongs: '',
+            //所属对象的开关是否有效
+            belongsSwitchValid: true,
         }
     }
 
-    changeDicName = (e) => {
-        this.setState({
-            name: e.target.value
+    componentDidMount = () => {
+        this.findRootDicTypes()
+        this.findDicTypes(this.state.dicType_select)
+    }
+
+    findRootDicTypes = () => {
+        axios({
+            method: 'post',
+            url: '/api/sumDicController/findRootDicTypes'
+        }).then((r) => {
+            return r.data
+        }).then((list) => {
+            this.setState({
+                rootDicTypes: list
+            })
         })
     }
 
-    changeDicCode = (e) => {
-        this.setState({
-            code: e.target.value
+    findDicTypes = (code) => {
+        axios({
+            method: 'post',
+            url: '/api/sumDicController/findDicTypes',
+            data: code
+        }).then((r) => {
+            return r.data
+        }).then((list) => {
+            this.setState({
+                dicTypes: list
+            })
         })
     }
 
-    changeDicType = (e) => {
+    changeDicTypeSwitch = (e) => {
         this.setState({
-            dicType: e.target.value
+            dicTypeSwitch: !this.state.dicTypeSwitch,
+            belongsSwitchValid: e?true:false,
+            belongsSwitch: e?true:false,
+            belongs: e?this.state.belongs:'',
+            dicType_input: e?'':this.state.dicType_input,
+            dicType_select: e?this.state.dicType_select:'',
         })
+    }
+
+    changeBelongsSwitch = (e) => {
+        this.setState({
+            belongsSwitch: !this.state.belongsSwitch,
+            dicTypeSwitch: e?true:false,
+            belongs: e?this.state.belongs:'',
+        })
+    }
+
+    changeDicTypeInput = (e) => {
+        this.setState({
+            dicType_input: e.target.value
+        })
+    }
+
+    changeDicTypeSelect = (e) => {
+        this.setState({
+            dicType_select: e,
+        })
+        this.findDicTypes(e)
     }
 
     changeBelongs = (e) => {
         this.setState({
-            belongs: e.target.value
+            belongs: e
         })
     }
 
+
     render(){
-        let dic = {
-            name: this.state.name,
-            code: this.state.code,
-            dicType: this.state.dicType,
-            belongs: this.state.belongs,
-        }
 
         return (
             <Modal
                 title="新增字典"
                 visible={this.props.visible}
+                onOk={()=>this.props.ok()}
+                onCancel={()=>this.props.cancel()}
                 okText="确认"
-                onOk={() => this.props.onOk(dic)}
-                onCancel={() => this.props.onCancel()}
                 cancelText="取消"
                 destroyOnClose={true} 
             >
                 <Form.Item label="字典名称">
-                    <Input placeholder="字典名称" value={this.state.name} onChange={this.changeDicName}/>
+                    <Input placeholder="字典名称" />
                 </Form.Item>
                 <Form.Item label="字典代码">
-                    <Input placeholder="字典代码" value={this.state.code} onChange={this.changeDicCode}/>
+                    <Input placeholder="字典代码" />
                 </Form.Item>
                 <Form.Item label="字典类别">
-                    <Select style={{width: 120}}>
-                    {this.props.dicTypes.map(type => {
-                        return (
-                            <Option key={type.code} value={type.code}>{type.name}</Option>
-                        )
-                    })}
-                    </Select>
+                    <Col span={4}>
+                        <Switch checked={this.state.dicTypeSwitch} onChange={this.changeDicTypeSwitch}></Switch>    
+                    </Col>
+                    <Col span={20}>
+                        <Input style={{width: 120, display: `${this.state.dicTypeSwitch?'none':'block'}`}} value={this.state.dicType_input} onChange={this.changeDicTypeInput}></Input>
+                        <Select style={{width: 120, display: `${this.state.dicTypeSwitch?'block':'none'}`}} value={this.state.dicType_select} onChange={this.changeDicTypeSelect}>
+                            {this.state.rootDicTypes.map(type => {
+                                return (
+                                    <Option key={type.code} value={type.code}>{type.name}</Option>
+                                )
+                            })}
+                        </Select>
+                    </Col>
                 </Form.Item>
                 <Form.Item label="所属对象">
-                    <Input placeholder="所属对象" value={this.state.belongs} onChange={this.changeBelongs}/>
+                    <Col span={4}>
+                        <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch} disabled={!this.state.belongsSwitchValid}></Switch>
+                    </Col>
+                    <Col span={20}>
+                        <Select style={{width: 120}} disabled={!this.state.belongsSwitch} value={this.state.belongs} onChange={this.changeBelongs}>
+                            {this.state.dicTypes.map(type => {
+                                return (
+                                    <Option key={type.id} value={type.code}>{type.name}</Option>
+                                )
+                            })}
+                        </Select>
+                    </Col>
                 </Form.Item>
             </Modal>
         )
@@ -291,13 +346,6 @@ class UpdateModal extends Component{
     }
 
     render(){                 
-        let dic = {
-            id: this.props.id,
-            name: this.props.name,
-            code: this.props.code,
-            dicType: this.props.dicType,
-            belongs: this.props.belongs,
-        }
 
         return (
             <Modal
@@ -310,16 +358,16 @@ class UpdateModal extends Component{
                 destroyOnClose={true} 
             >
                 <Form.Item label="字典名称">
-                    <Input placeholder="字典名称" onChange={(e) => this.props.changeName(e)} value={this.props.name}/>
+                    <Input placeholder="字典名称" />
                 </Form.Item>
                 <Form.Item label="字典代码">
-                    <Input placeholder="字典代码" onChange={(e) => this.props.changeCode(e)} value={this.props.code}/>
+                    <Input placeholder="字典代码" />
                 </Form.Item>
                 <Form.Item label="字典类型">
-                    <Input placeholder="字典类型" onChange={(e) => this.props.changeType(e)} value={this.props.dicType}/>
+                    <Input placeholder="字典类型" />
                 </Form.Item>
                 <Form.Item label="所属对象">
-                    <Input placeholder="所属对象" onChange={(e) => this.props.changeBelongs(e)} value={this.props.belongs}/>
+                    <Input placeholder="所属对象" />
                 </Form.Item>
             </Modal>
         )
@@ -327,10 +375,7 @@ class UpdateModal extends Component{
 }
 
 export default connect((state)=> ({
+
     sumDic: state.sumDic
-}), {showList, changeDisabled,
-        addModalShow, addModalSure, addModalCancel,
-        deleteDicByIds,
-        findDicTypes,
-        changeModalName, changeModalCode, changeModalType, changeModalBelongs,
-        updateModalShow, updateModalSure, updateModalCancel})(SumDic)
+}), {showList,
+        addModalShow, addModalSure, addModalCancel})(SumDic)

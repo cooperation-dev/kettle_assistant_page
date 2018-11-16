@@ -695,7 +695,32 @@ mock.onPost('/api/sumDicController/deleteDicByIds')
     })
 
 mock.onPost('/api/sumDicController/findDicTypes')
-    .reply('200', dic_types)
+    .reply(config => {
+        let code = config.data
+        return new Promise((resolve, reject) => {
+            let newdic = sum_dic_list
+            if(code!=undefined && code!=""){
+                let newdicone = sum_dic_list.filter(dic => dic.code==code)[0]
+                newdic = newdic.filter(dic => {
+                    return dic.sort.toString().charAt(0)==newdicone.id
+                })
+            }
+            
+            setTimeout(() => {
+                resolve([200, newdic]);
+            }, 500);
+        })
+    })
+
+mock.onPost('/api/sumDicController/findRootDicTypes')
+    .reply(() => {
+        let newdic = sum_dic_list.filter(dic => dic.parentId==undefined||dic.parentId=="")
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve([200, newdic]);
+            }, 500);
+        })
+    })
 
 mock.onPost('/api/jobManagerController/updateJob')
     .reply(config => {
@@ -745,3 +770,6 @@ for(let i=0; i<sum_dic_list.length; i++){
     mock.onPost('/api/sumDicController/findDicById/'+dic.id)
     .reply('200', dic)
 }
+
+mock.onPost('/api/sumDicController/findName')
+    .reply('200', 'aaa')

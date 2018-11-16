@@ -131,7 +131,7 @@ export const addProjectSure = (project) => {
 export const deleteProject = (selectRows) => {
     return (dispatch) => {
         let ids = [];
-        selectRows.map((row) => ids.push(row.obj_code))
+        selectRows.map((row) => ids.push(row.id))
         axios({
             method: 'post',
             url: 'projectManager/deleteProjectByIds',

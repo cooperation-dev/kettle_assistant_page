@@ -24,43 +24,43 @@ class ProjectManager extends Component{
     render(){
         const columns = [
             {
-                title: '对象代码',
-                dataIndex: 'obj_code',
-                key: 'obj_code'
+                title: 'ID',
+                dataIndex: 'id',
+                key: 'id'
             },
             {
-                title: '对象名称',
-                dataIndex: 'obj_name',
-                key: 'obj_name'
+                title: '名称',
+                dataIndex: 'name',
+                key: 'name'
             },
             {
-                title: '对象排序',
-                dataIndex: 'obj_sort',
-                key: 'obj_sort',
-                sorter: (a, b) => a.obj_sort - b.obj_sort
+                title: '排序',
+                dataIndex: 'sort',
+                key: 'sort',
+                sorter: (a, b) => a.sort - b.sort
             },
             {
                 title: '创建时间',
-                dataIndex: 'create_time',
-                key: 'create_time'
+                dataIndex: 'createTime',
+                key: 'createTime'
             },
             {
                 title: '创建人',
-                dataIndex: 'create_name',
-                key: 'create_name'
+                dataIndex: 'createName',
+                key: 'createName'
             },
             {
                 title: '是否禁用',
-                dataIndex: 'whether_to_disable',
-                key: 'whether_to_disable',
+                dataIndex: 'whetherToDisable',
+                key: 'whetherToDisable',
                 render: (text, record) => (
-                    record.whether_to_disable?<Checkbox defaultChecked></Checkbox>:<Checkbox></Checkbox>
+                    record.whetherToDisable?<Checkbox defaultChecked></Checkbox>:<Checkbox></Checkbox>
                 )
             },
             {
                 title: '项目URL',
-                dataIndex: 'project_url',
-                key: 'project_url'
+                dataIndex: 'projectUrl',
+                key: 'projectUrl'
             },
             {
                 title: '状态',
@@ -95,14 +95,13 @@ class ProjectManager extends Component{
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={3}>
-                                <Form.Item label="是否禁用:">
-                                    {/* <Input placeholder="是否禁用"/> */}
-                                    <Checkbox></Checkbox>
+                                <Form.Item label="状态:">
+                                    <Input placeholder="状态"/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={4}>
-                                <Form.Item label="状态:">
-                                    <Input placeholder="状态"/>
+                                <Form.Item label="是否禁用:">
+                                    <Checkbox></Checkbox>
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -119,16 +118,16 @@ class ProjectManager extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => this.props.addProjectShow()}>新增</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateProjectShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteProject, this.state.selectRows)}>删除</Button>
-                        <Button type="default" size="default" className="btn">查看</Button>
+                        {/* <Button type="default" size="default" className="btn">查看</Button> */}
                         <Table rowSelection={rowSelection} dataSource={this.props.projectManager.list} columns={columns} />
                     </Form>
                 </Row>
                 <AddModal 
-                visible={this.props.projectManager.add_visible} 
+                visible={this.props.projectManager.addVisible} 
                 onOk={(project) => this.props.addProjectSure(project)} 
                 onCancel={() => this.props.addProjectCancel()}></AddModal>
                 <UpdateModal 
-                visible={this.props.projectManager.update_visible} 
+                visible={this.props.projectManager.updateVisible} 
                 onOk={(project) => this.props.updateProjectSure(project)} 
                 onCancel={() => this.props.updateProjectCancel()} 
                 id={this.props.projectManager.id} 

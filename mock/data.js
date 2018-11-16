@@ -332,18 +332,18 @@ const database_manager = []
 for(let i=1; i<=11; i++){
     database_manager.push(Mock.mock({
         key: i+"",
-        obj_id: i+"",
-        obj_name: "测试名称" + i,
-        obj_sort: i+"",
-        create_time: '2018-11-05 00:00:00',
-        create_name: 'Dawn',
-        whether_to_disable: Mock.Random.integer(0,1)==0?true:false,
-        agency_name: 'Dawn',
-        agency_code: 'dawn_leewp@163.com',
-        db_type: '',
-        interview_method: 'Native',
-        jndi_name: '',
-        connection_string: ''
+        id: i+"",
+        name: "测试名称" + i,
+        sort: i+"",
+        createTime: '2018-11-05 00:00:00',
+        createName: 'Dawn',
+        valid: Mock.Random.integer(0,1)==0?'Y':'N',
+        agencyName: 'Dawn',
+        agencyCode: 'dawn_leewp@163.com',
+        dbType: '-',
+        interviewMethod: 'Native',
+        jndiName: '-',
+        connectionString: '-'
     }))
 }
 
@@ -369,8 +369,8 @@ for(let i=0; i<=10; i++){
 const user_manager = []
 for(let i=0; i<=10; i++){
     user_manager.push(Mock.mock({
-        id: i + 1,
         key: i + 1,
+        id: i + 1,
         nick_name: 'Name' + (i + 1),
         login_account: i + '7' + i + '546',
         role: 'Role' + (i + 1)
@@ -396,14 +396,14 @@ for(let i=0; i<=10; i++){
 const project_manager = []
 for(let i=0; i<=10; i++){
     project_manager.push(Mock.mock({
-        obj_code: i + 1,
         key: i + 1,
-        obj_name: 'Name' + (i + 1),
-        obj_sort: i + 1,
-        create_time: '2018-11-05 00:00:00',
-        create_name: 'CreateName' + (i + 1),
-        whether_to_disable:Mock.Random.integer(0,1) ==0 ? true:false,
-        project_url: 'www.test.com',
+        id: i + 1,
+        name: 'Name' + (i + 1),
+        sort: i + 1,
+        createTime: '2018-11-05 00:00:00',
+        createName: 'CreateName' + (i + 1),
+        whetherToDisable:Mock.Random.integer(0,1) ==0 ? true:false,
+        projectUrl: 'www.test.com',
         status: Mock.Random.integer(0,1) == 0?'成功':'失败'
     }))
 }
@@ -413,6 +413,7 @@ for(let i=0; i<=10; i++){
  */
 const menu = []
     menu.push(Mock.mock({
+        key: 1,
         id: 1,
         code: "job_manager",
         name: "作业管理",
@@ -425,6 +426,7 @@ const menu = []
         valid: 'Y',
         children: [
             {
+                key: 11,
                 id: 11,
                 code: 'job_manager_detail',
                 name: "作业管理",
@@ -438,6 +440,7 @@ const menu = []
                 // component: 'bundle-loader?lazy&name=[name]!pages/JobManager/JobManager',
                 // component: 'pages/JobManager/JobManager',
             },{
+                key: 12,
                 id: 12,
                 code: 'job_monitor',
                 name: '作业监控',
@@ -453,6 +456,7 @@ const menu = []
         ]
     }))
     menu.push(Mock.mock({
+        key: 2,
         id: 2,
         code: 'dic_manager',
         name: '字典管理',
@@ -465,6 +469,7 @@ const menu = []
         valid: 'Y',
         children: [
             {
+                key: 21,
                 id: 21,
                 code: 'sum_dic',
                 name: '统一字典',
@@ -480,6 +485,7 @@ const menu = []
         ]
     }))
     menu.push(Mock.mock({
+        key: 3,
         id: 3,
         code: 'config_manager',
         name: '配置管理',
@@ -492,6 +498,7 @@ const menu = []
         valid: 'Y',
         children: [
             {
+                key: 31,
                 id: 31,
                 code: 'database_manager',
                 name: '数据库管理',
@@ -507,6 +514,7 @@ const menu = []
         ]
     }))
     menu.push(Mock.mock({
+        key: 4,
         id: 4,
         code: 'system_manager',
         name: '系统管理',
@@ -519,6 +527,7 @@ const menu = []
         valid: 'Y',
         children: [
             {
+                key: 41,
                 id: 41,
                 code: 'menu_manager',
                 name: '菜单管理',
@@ -530,6 +539,7 @@ const menu = []
                 component: 'MenuManager',
                 valid: 'Y',
             },{
+                key: 42,
                 id: 42,
                 code: 'user_manager',
                 name: '用户管理',
@@ -541,6 +551,7 @@ const menu = []
                 component: 'UserManager',
                 valid: 'Y',
             },{
+                key: 43,
                 id: 43,
                 code: 'role_manager',
                 name: '角色管理',
@@ -552,6 +563,7 @@ const menu = []
                 component: 'RoleManager',
                 valid: 'Y',
             },{
+                key: 44,
                 id: 44,
                 code: 'project_manager',
                 name: '项目管理',
@@ -563,6 +575,7 @@ const menu = []
                 component: 'ProjectManager',
                 valid: 'Y',
             },{
+                key: 45,
                 id: 45,
                 code: 'system_log',
                 name: '系统日志',
@@ -577,6 +590,7 @@ const menu = []
         ]
     }))
     menu.push(Mock.mock({
+        key: 5,
         id: 5,
         code: 'assistant_tool',
         name: '辅助工具',
@@ -589,6 +603,7 @@ const menu = []
         valid: 'Y',
         children: [
             {
+                key: 51,
                 id: 51,
                 code: 'database_pool',
                 name: 'druid',
@@ -600,6 +615,7 @@ const menu = []
                 component: '',
                 valid: 'Y',
             },{
+                key: 52,
                 id: 52,
                 code: 'interval',
                 name: 'cron',
@@ -611,6 +627,7 @@ const menu = []
                 component: 'AuxCron',
                 valid: 'Y',
             },{
+                key: 53,
                 id: 53,
                 code: 'json',
                 name: 'json',

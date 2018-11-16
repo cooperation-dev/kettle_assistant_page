@@ -74,7 +74,7 @@ class RoleManager extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => this.props.addRoleShow()}>新增</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateRoleShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteRole, this.state.selectRows)}>删除</Button>
-                        <Button type="default" size="default" className="btn">查看</Button>
+                        {/* <Button type="default" size="default" className="btn">查看</Button> */}
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Button type="default" size="default" className="btn">权限分配</Button>
                         <Table rowSelection={rowSelection} dataSource={this.props.roleManager.list} columns={columns} />

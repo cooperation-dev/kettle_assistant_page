@@ -23,11 +23,54 @@ class DatabaseManager extends Component{
             agencyCode: '',
             connectionString: '',
             createName: '',
-            valid: 'N',
+            valid: '',
         }
     }
     componentDidMount = () => {
-        this.props.findDatabases()
+        let database = {
+            id: this.state.id,
+            name: this.state.name,
+            agencyName: this.state.agencyName,
+            agencyCode: this.state.agencyCode,
+            connectionString: this.state.connectionString,
+            createName: this.state.createName,
+            valid: this.state.valid,
+        }
+        this.props.findDatabases(database)
+    }
+    search = () => {
+        let database = {
+            id: this.state.id,
+            name: this.state.name,
+            agencyName: this.state.agencyName,
+            agencyCode: this.state.agencyCode,
+            connectionString: this.state.connectionString,
+            createName: this.state.createName,
+            valid: this.state.valid,
+        }
+        this.props.findDatabases(database)
+    }
+    reset = () => {
+        this.setState({
+            selectRows:[],
+            id: '',
+            name: '',
+            agencyName: '',
+            agencyCode: '',
+            connectionString: '',
+            createName: '',
+            valid: '',
+        })
+        let database = {
+            id: '',
+            name: '',
+            agencyName: '',
+            agencyCode: '',
+            connectionString: '',
+            createName: '',
+            valid: '',
+        }
+        this.props.findDatabases(database)
     }
     change = (event, attribute) => {
         let newState = {};
@@ -171,8 +214,8 @@ class DatabaseManager extends Component{
                         </Row>
                         <Row>
                             <Col span={24} style={{textAlign:"center"}}>
-                                <Button type="primary" htmlType="submit" style={{marginRight:8}}>查询</Button>
-                                <Button style={{ marginLeft: 8 }}>重置</Button>
+                                <Button type="primary" htmlType="submit" style={{marginRight:8}} onClick={this.search}>查询</Button>
+                                <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
                     </Form>

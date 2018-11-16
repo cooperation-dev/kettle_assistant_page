@@ -135,15 +135,17 @@ export const change_modal_connection_string = (connectionString) => {
     }
 }
 
-export const findDatabases = () => {
+export const findDatabases = (database) => {
     return (dispatch) => {
-        axios.post(FIND_DATABASES)
-                .then((response) => {
-                    return response.data.list
-                })
-                .then((list) => {
-                    dispatch(find_databases(list))
-                })
+        axios({
+            method: 'post',
+            url: FIND_DATABASES,
+            data: database,
+        }).then((res) => {
+            return res.data
+        }).then((list) => {
+            dispatch(find_databases(list))
+        })
     }
 }
 

@@ -370,8 +370,8 @@ for(let i=0; i<=10; i++){
     user_manager.push(Mock.mock({
         key: i + 1,
         id: i + 1,
-        nick_name: 'Name' + (i + 1),
-        login_account: i + '7' + i + '546',
+        nickName: 'Name' + (i + 1),
+        loginAccount: i + '7' + i + '546',
         role: 'Role' + (i + 1)
     }))
 }
@@ -384,8 +384,8 @@ for(let i=0; i<=10; i++){
     role_manager.push(Mock.mock({
         id: i + 1,
         key: i + 1,
-        role_name: 'Name' + (i + 1),
-        role_description: 'Description' + (i + 1)
+        roleName: 'Name' + (i + 1),
+        roleDescription: 'Description' + (i + 1)
     }))
 }
 
@@ -401,7 +401,7 @@ for(let i=0; i<=10; i++){
         sort: i + 1,
         createTime: '2018-11-05 00:00:00',
         createName: 'CreateName' + (i + 1),
-        whetherToDisable:Mock.Random.integer(0,1) ==0 ? true:false,
+        valid:Mock.Random.integer(0,1) ==0 ? 'Y':'N',
         projectUrl: 'www.test.com',
         status: Mock.Random.integer(0,1) == 0?'成功':'失败'
     }))

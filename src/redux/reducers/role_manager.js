@@ -44,8 +44,8 @@ export default function reducers(state = initState, action){
                 ...state,
                 updateVisible: true,
                 modalRoleId: action.role.id,
-                modalRoleName: action.role.role_name,
-                modalRoleDescription: action.role.role_description,
+                modalRoleName: action.role.roleName,
+                modalRoleDescription: action.role.roleDescription,
             }
         }
         case UPDATE_ROLE_MODAL_CANCEL:{

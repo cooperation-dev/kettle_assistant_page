@@ -223,10 +223,38 @@ mock.onPost('/api/sumDicController/changeDisabled')
         })
     })
 
-mock.onPost('databaseManager/findList').reply(
-    '200', {
-        list: database_manager
-    }
+mock.onPost('databaseManager/findList')
+.reply(config => {
+    let {id, name, agencyName, agencyCode, connectionString, createName, valid} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newDatabase = database_manager;
+        if(id != undefined && id != ''){
+            newDatabase = newDatabase.filter(database => database.id == id);
+        }
+        if(name != undefined && name != ''){
+            newDatabase = newDatabase.filter(database => database.name == name);
+        }
+        if(agencyName != undefined && agencyName != ''){
+            newDatabase = newDatabase.filter(database => database.agencyName == agencyName);
+        }
+        if(agencyCode != undefined && agencyCode != ''){
+            newDatabase = newDatabase.filter(database => database.agencyCode == agencyCode);
+        }
+        if(connectionString != undefined && connectionString != ''){
+            newDatabase = newDatabase.filter(database => database.connectionString == connectionString);
+        }
+        if(createName != undefined && createName != ''){
+            newDatabase = newDatabase.filter(database => database.createName == createName);
+        }
+        if(valid != undefined && valid != ''){
+            newDatabase = newDatabase.filter(database => database.valid == valid);
+        }
+        setTimeout(() => {
+            resolve(['200',newDatabase])
+        }, 500);
+    })
+}
+    
 )
 
 mock.onPost('menuManager/addMenuSure')
@@ -381,8 +409,8 @@ mock.onPost('roleManager/addRoleSure')
         let newRole = Mock.mock({
             key: "" + (max_key),
             id: ""+(max_key),
-            role_name: roleName,
-            role_description: roleDescription
+            roleName: roleName,
+            roleDescription: roleDescription
         })
         setTimeout(() => {
             resolve([200, {
@@ -423,10 +451,10 @@ mock.onPost('roleManager/updateRoleSure')
     return new Promise((resolve, reject) => {
         let newRole = role_manager.filter(role => role.id==roleId)[0]
         if(roleName!=undefined && roleName!=''){
-            newRole.role_name = roleName
+            newRole.roleName = roleName
         }
         if(roleDescription!=undefined && roleDescription!=''){
-            newRole.role_description = roleDescription
+            newRole.roleDescription = roleDescription
         }
         setTimeout(() => {
             resolve([200, {
@@ -436,11 +464,19 @@ mock.onPost('roleManager/updateRoleSure')
     })
 })
 
-mock.onPost('roleManager/findRoles').reply(
-    '200',{
-        list: role_manager
-    }
-)
+mock.onPost('roleManager/findRoles')
+.reply(config => {
+    let {roleName} = JSON.parse(config.data);
+    return new Promise((resolve, reject) => {
+        let newRole = role_manager;
+        if(roleName != undefined && roleName != ''){
+            newRole = newRole.filter(role => role.roleName == roleName)
+        }
+        setTimeout(() => {
+            resolve(['200', newRole])
+        }, 500);
+    })
+})
 
 mock.onPost('userManager/addUserSure')
 .reply(config => {
@@ -450,8 +486,8 @@ mock.onPost('userManager/addUserSure')
         let newUser = Mock.mock({
             key: "" + (max_key),
             id: ""+(max_key),
-            nick_name: nickName,
-            login_account: loginAccount,
+            nickName: nickName,
+            loginAccount: loginAccount,
             role: role
         })
         setTimeout(() => {
@@ -493,7 +529,7 @@ mock.onPost('userManager/updateUserSure')
     return new Promise((resolve, reject) => {
         let newUser = user_manager.filter(user => user.id==id)[0]
         if(nickName!=undefined && nickName!=''){
-            newUser.nick_name = nickName
+            newUser.nickName = nickName
         }
         if(role!=undefined && role!=''){
             newUser.role = role
@@ -506,15 +542,29 @@ mock.onPost('userManager/updateUserSure')
     })
 })
 
-mock.onPost('userManager/findUsers').reply(
-    '200',{
-        list: user_manager
-    }
-)
+mock.onPost('userManager/findUsers')
+.reply(config => {
+    let {nickName, loginAccount, role} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newUser = user_manager;
+        if(nickName != undefined && nickName != ''){
+            newUser = newUser.filter(user => user.name == name)
+        }
+        if(loginAccount != undefined && loginAccount != ''){
+            newUser = newUser.filter(user => user.loginAccount == loginAccount)
+        }
+        if(role != undefined && role != ''){
+            newUser = newUser.filter(user => user.role == role)
+        }
+        setTimeout(() => {
+            resolve(['200',newUser])
+        }, 500);
+    })
+})
 
 mock.onPost('projectManager/addProjectSure')
 .reply(config => {
-    let {name, projectUrl, sort, whetherToDisable} = JSON.parse(config.data)
+    let {name, projectUrl, sort, valid} = JSON.parse(config.data)
     return new Promise((resolve, reject) => {
         let max_key = project_manager[project_manager.length-1].key+1
         let newProject = Mock.mock({
@@ -525,7 +575,7 @@ mock.onPost('projectManager/addProjectSure')
             createTime: '2018-11-14 00:00:00',
             createName: 'Dawn',
             projectUrl: projectUrl,
-            whetherToDisable: whetherToDisable,
+            valid: valid,
             status: Mock.Random.integer(0,1)==0?'成功':'失败'
         })
         setTimeout(() => {
@@ -583,11 +633,28 @@ mock.onPost('projectManager/updateProjectSure')
     })
 })
 
-mock.onPost('projectManager/findProjects').reply(
-    '200',{
-        list: project_manager
-    }
-)
+mock.onPost('projectManager/findProjects')
+.reply(config => {
+    let {id, name, status, valid} = JSON.parse(config.data);
+    return new Promise((resolve, reject) => {
+        let newProject = project_manager;
+        if(id != undefined && id != ''){
+            newProject = newProject.filter(project => project.id == id)
+        }
+        if(name != undefined && name != ''){
+            newProject = newProject.filter(project => project.name == name)
+        }
+        if(status != undefined && status != ''){
+            newProject = newProject.filter(project => project.status == status)
+        }
+        if(valid != undefined && valid != ''){
+            newProject = newProject.filter(project => project.valid == valid)
+        }
+        setTimeout(() => {
+            resolve(['200', newProject])
+        }, 500);
+    })
+})
 
 mock.onPost('/api/homeController/loadMenu')
     .reply('200', menu)

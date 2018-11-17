@@ -16,11 +16,37 @@ class MenuManager extends Component{
         super(props)
 
         this.state = {
-            selectRows:[]
+            selectRows:[],
+            name: '',
+            code: '',
         }
     }
     componentDidMount = () => {
         this.props.findMenus()
+    }
+    search = () => {
+        let menu = {
+            name: this.state.name,
+            code: this.state.code,
+        }
+        this.props.findMenus(menu)
+    }
+    reset = () => {
+        this.setState({
+            selectRows:[],
+            name: '',
+            code: '',
+        })
+        let menu = {
+            name: '',
+            code: '',
+        }
+        this.props.findMenus(menu)
+    }
+    change = (event, attribute) => {
+        let newState = {};
+        newState[attribute] = event.target.value;
+        this.setState(newState);
     }
     render(){
         const columns = [
@@ -106,12 +132,12 @@ class MenuManager extends Component{
                         <Row gutter={24}>
                             <Col span={6} key={1}>
                                 <Form.Item label="名称:">
-                                    <Input placeholder="名称"/>
+                                    <Input placeholder="名称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={2}>
                                 <Form.Item label="编码:">
-                                    <Input placeholder="编码"/>
+                                    <Input placeholder="编码" onChange={(event) => this.change(event, 'code')} value={this.state.code}/>
                                 </Form.Item>
                             </Col>
                         </Row>

@@ -280,7 +280,7 @@ mock.onPost('menuManager/addMenuSure')
         let newMenuChildren;
         if(parentId != null && parentId != ''){
             newMenuChildren = menu.filter(m => m.code==parentId)[0];
-            newMenu.id=newMenuChildren.id + newMenu.id
+            newMenu.id=newMenuChildren.id + '' + (newMenuChildren.children.length + 1)
             newMenuChildren.children.push(newMenu)
         }else {
             newMenuChildren = newMenu;

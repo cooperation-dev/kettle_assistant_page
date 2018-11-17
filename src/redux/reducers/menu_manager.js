@@ -42,22 +42,20 @@ export default function reducers(state = initState, action){
             }
         }
         case ADD_MENU_MODAL_SURE:{
-            let flag;
-            state.list.map((menu) => {
+            let flag = true;
+            let newList = state.list.map((menu) => {
                 if(menu.id == action.menu.id){
-                    flag = true;
+                    flag = false;
                     return action.menu
                 }else {
-                    flag = false;
+                    return menu
                 }
             })
-            if(!flag){
-                state.list.push(action.menu)
-            }
-            
+            if(flag) newList.push(action.menu)
             return {
                 ...state,
-                addVisible: false
+                addVisible: false,
+                list: newList,
             }
         }
         case UPDATE_MENU_MODAL_SHOW:{

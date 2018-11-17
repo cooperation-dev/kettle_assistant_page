@@ -143,7 +143,7 @@ export const updateModalCancel = () => {
     }
 }
 
-export const deleteDicByIds = (selectRows) => {
+export const deleteDicByIds = (selectRows) => { 
     if(selectRows.length == 0){
         message.error('请选择行')
     }else{

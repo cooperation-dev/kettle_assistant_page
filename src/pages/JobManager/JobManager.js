@@ -192,7 +192,7 @@ class JobManager extends Component{
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.addJobModalShow()}>新增作业</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateJobModalShow(this.state.selectRows)}>修改作业</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => this.props.deleteJob(this.state.selectRows)}>删除作业</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteJob, this.state.selectRows)}>删除作业</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.displayLogShow(this.state.selectRows)}>查看运行日志</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Button type="default" size="default" className="btn">导出</Button>
@@ -438,6 +438,26 @@ class LogModal extends Component{
                 </Form.Item>
             </Modal>
         )
+    }
+}
+
+function showDeleteConfirm(deleteJob, selectRows) {
+    if(selectRows.length == 0){
+        message.error('请选择行!')
+    }else{
+        Modal.confirm({
+            title: '删除字典',
+            content: '确定要删除吗？',
+            okText: '确定',
+            okType: 'danger',
+            cancelText: '取消',
+            onOk() {
+                deleteJob(selectRows)
+            },
+            onCancel() {
+              console.log('Cancel');
+            },
+          });
     }
 }
 

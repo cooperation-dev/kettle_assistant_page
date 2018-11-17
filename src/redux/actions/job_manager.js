@@ -177,7 +177,7 @@ export const deleteJob = (selectRows) => {
             }).then((response) => {
                 return response.data
             }).then((list) => {
-                dispatch(find_jobs(list))
+                dispatch(delete_job_by_ids(list))
             })
         }
     }

@@ -663,21 +663,9 @@ mock.onPost('/api/jobManagerController/deleteJobByIds')
     .reply(config => {
         let ids = JSON.parse(config.data)
         return new Promise((resolve, reject) => {
-            let newjob = []
-            for(let i=0; i<Jobs.length; i++){
-                let flag = true
-                for(let j=0; j<ids.length; j++){
-                    if(ids[j] == Jobs[i].id){
-                        flag = false
-                        break;
-                    }
-                }
-                if(flag){
-                    newjob.push(Jobs[i])
-                }
-            }
+            
             setTimeout(() => {
-                resolve([200, newjob]);
+                resolve([200, ids]);
             }, 500);
         })
     })

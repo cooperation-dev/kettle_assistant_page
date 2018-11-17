@@ -1,10 +1,8 @@
 import {FIND_JOBS, 
     ADD_JOB_MODAL_SHOW, ADD_JOB_MODAL_SURE, ADD_JOB_MODAL_CANCEL,
     UPDATE_JOB_MODAL_SHOW, UPDATE_JOB_MODAL_SURE, UPDATE_JOB_MODAL_CANCEL,
-    DELETE_JOB,
     DISPLAY_LOG_SHOW, DISPLAY_LOG_CLOSE,
-    FIND_JOB_TYPES,
-    CHANGE_MODAL_NAME, CHANGE_MODAL_TYPE, CHANGE_MODAL_DESC} from '../actions/job_manager';
+    DELETE_JOB_BY_IDS} from '../actions/job_manager';
 
 const initState = {
     list: [],
@@ -79,6 +77,19 @@ export default function reducers(state=initState, action){
             return {
                 ...state, 
                 logVisible: false
+            }
+        }
+        case DELETE_JOB_BY_IDS: {
+            let deleteIds = action.deleteJobs
+            let newlist = []
+            for(var i=0; i<state.list.length; i++){
+                if(deleteIds.indexOf(state.list[i].id) == -1){
+                    newlist.push(state.list[i])
+                }
+            }
+            return {
+                ...state,
+                list: newlist
             }
         }
         default:

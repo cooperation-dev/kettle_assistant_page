@@ -570,7 +570,7 @@ function showDeleteConfirm(deleteDicByIds, selectRows) {
             },
           });
     }
-  }
+}
 
 export default connect((state)=> ({
 

@@ -1,6 +1,7 @@
 // import '../../../mock/api';
 import axios from 'axios';
 import {message} from 'antd';
+import { deepEqual } from 'assert';
 
 export const FIND_JOBS = "jobManager/findJobs";
 //新增作业框弹出
@@ -16,17 +17,11 @@ export const UPDATE_JOB_MODAL_SHOW = "jobManager/updateModalShow";
 export const UPDATE_JOB_MODAL_SURE = "jobManager/updateModalSure";
 //修改作业框取消
 export const UPDATE_JOB_MODAL_CANCEL = "jobManager/updateModalCancel";
+//删除作业
+export const DELETE_JOB_BY_IDS = "jobManager/deleteJobByIds";
 //查看运行日志
 export const DISPLAY_LOG_SHOW = "jobManager/displayLogShow";
 export const DISPLAY_LOG_CLOSE = "jobManager/displayLogClose";
-//作业类型下拉框
-export const FIND_JOB_TYPES = "jobManager/findJobTypes";
-//修改弹出框名称
-export const CHANGE_MODAL_NAME = 'jobManager/changeModalName';
-//修改弹出框类型
-export const CHANGE_MODAL_TYPE = 'jobManager/changeModalType';
-//修改弹出框描述
-export const CHANGE_MODAL_DESC = 'jobManager/changeModalDesc';
 
 export const find_jobs = (list) => {
     return {
@@ -54,10 +49,10 @@ export const add_job_modal_cancel = () => {
     }
 }
 
-export const update_job_modal_show = (row) => {
+export const update_job_modal_show = (id) => {
     return {
         type: UPDATE_JOB_MODAL_SHOW,
-        job: row,
+        updateJobId: id
     }
 }
 
@@ -74,10 +69,10 @@ export const update_job_modal_cancel = () => {
     }
 }
 
-export const display_log_show = (row) => {
+export const display_log_show = (id) => {
     return {
         type: DISPLAY_LOG_SHOW,
-        job: row
+        logJobId: id
     }
 }
 
@@ -87,31 +82,10 @@ export const display_log_close = () => {
     }
 }
 
-export const find_job_types = (list) => {
+export const delete_job_by_ids = (deleteJobs) => {
     return {
-        type: FIND_JOB_TYPES,
-        list: list
-    }
-}
-
-export const change_modal_name = (name) => {
-    return {
-        type: CHANGE_MODAL_NAME,
-        name: name
-    }
-}
-
-export const change_modal_type = (jobType) => {
-    return {
-        type: CHANGE_MODAL_TYPE,
-        jobType: jobType
-    }
-}
-
-export const change_modal_desc = (description) => {
-    return {
-        type: CHANGE_MODAL_DESC,
-        description: description
+        type: DELETE_JOB_BY_IDS,
+        deleteJobs: deleteJobs
     }
 }
 
@@ -133,13 +107,6 @@ export const findJobs = (job) => {
 export const addJobModalShow = () => {
     return (dispatch) => {
         dispatch(add_job_modal_show())
-
-        axios.post('/api/jobManagerController/findJobTypes')
-        .then((response) => {
-            return response.data
-        }).then((list) => {
-            dispatch(find_job_types(list))
-        })
 
     }
 }
@@ -171,18 +138,7 @@ export const updateJobModalShow = (selectRows) => {
         }else if(selectRows.length > 1){
             message.error('选中纪录超过一行')
         }else{
-            axios.post('/api/jobManagerController/findJobById/'+selectRows[0].id)
-                .then((response) => {
-                    return response.data
-                }).then((data) => {
-                    dispatch(update_job_modal_show(data))
-                })
-            axios.post('/api/jobManagerController/findJobTypes')
-                .then((response) => {
-                    return response.data
-                }).then((list) => {
-                    dispatch(find_job_types(list))
-                })
+            dispatch(update_job_modal_show(selectRows[0].id))
         }
     }
 }
@@ -234,13 +190,7 @@ export const displayLogShow = (selectRows) => {
         }else if(selectRows.length > 1){
             message.error('选中纪录超过一行')
         }else{
-            const id = selectRows[0].id;
-            axios.post('/api/jobManagerController/findJobById/'+id)
-                .then((response) => {
-                    return response.data
-                }).then((data) => {
-                    dispatch(display_log_show(data))
-                })
+            dispatch(display_log_show(selectRows[0].id))
         }
     }
 }
@@ -248,34 +198,5 @@ export const displayLogShow = (selectRows) => {
 export const displayLogClose = () => {
     return (dispatch) => {
         dispatch(display_log_close())
-    }
-}
-
-export const findJobTypes = () => {
-    return (dispatch) => {
-        axios.post('/api/jobManagerController/findJobTypes')
-            .then((response) => {
-                return response.data
-            }).then((list) => {
-                dispatch(find_job_types(list))
-            })
-    }
-}
-
-export const changeModalName = (e) => {
-    return (dispatch) => {
-        dispatch(change_modal_name(e.target.value))
-    }
-}
-
-export const changeModalType = (e) => {
-    return (dispatch) => {
-        dispatch(change_modal_type(e))
-    }
-}
-
-export const changeModalDesc = (e) => {
-    return (dispatch) => {
-        dispatch(change_modal_desc(e.target.value))
     }
 }

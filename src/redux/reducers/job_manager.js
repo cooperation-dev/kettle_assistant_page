@@ -11,12 +11,8 @@ const initState = {
     addVisible: false,
     updateVisible: false,
     logVisible: false,
-    jobTypes: [],
-    modalJobId: '',
-    modalJobName: '',
-    modalJobType: '',
-    modalJobDesc: '',
-    modalLog: '',
+    updateJobId: '',
+    logJobId: '',
 }
 
 export default function reducers(state=initState, action){
@@ -50,10 +46,7 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 updateVisible: true,
-                modalJobId: action.job.id,
-                modalJobName: action.job.name,
-                modalJobType: action.job.jobType,
-                modalJobDesc: action.job.description,
+                updateJobId: action.updateJobId
             }
         }
         case UPDATE_JOB_MODAL_SURE: {
@@ -79,38 +72,13 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 logVisible: true,
-                modalJobName: action.job.name,
-                modalLog: action.job.log,
+                logJobId: action.logJobId
             }
         }
         case DISPLAY_LOG_CLOSE: {
             return {
                 ...state, 
                 logVisible: false
-            }
-        }
-        case FIND_JOB_TYPES: {
-            return {
-                ...state,
-                jobTypes: action.list
-            }
-        }
-        case CHANGE_MODAL_NAME: {
-            return {
-                ...state,
-                modalJobName: action.name
-            }
-        }
-        case CHANGE_MODAL_TYPE: {
-            return {
-                ...state,
-                modalJobType: action.jobType
-            }
-        }
-        case CHANGE_MODAL_DESC: {
-            return {
-                ...state,
-                modalJobDesc: action.description
             }
         }
         default:

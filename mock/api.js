@@ -688,7 +688,7 @@ for(let i=0; i<Jobs.length; i++){
     .reply('200', job)
 }
 
-mock.onPost('/api/jobManagerController/findJobTypes')
+mock.onGet('/api/jobManagerController/findJobTypes')
     .reply('200', jobTypes)
 
 mock.onPost('/api/jobManagerController/saveJob')
@@ -696,7 +696,7 @@ mock.onPost('/api/jobManagerController/saveJob')
         let {name, jobType, description} = JSON.parse(config.data)
         let jobTypeCn = jobTypes.filter(t => t.code==jobType)[0].name
         return new Promise((resolve, reject) => {
-            let maxKey = Jobs[Jobs.length-1].key+1
+            let maxKey = Jobs[Jobs.length-1].id+1
             let newjob = Mock.mock({
                 id: ""+(maxKey),
                 name: name,

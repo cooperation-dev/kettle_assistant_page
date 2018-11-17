@@ -744,21 +744,9 @@ mock.onPost('/api/sumDicController/deleteDicByIds')
     .reply(config => {
         let ids = JSON.parse(config.data)
         return new Promise((resolve, reject) => {
-            let newdic = []
-            for(let i=0; i<sum_dic_list.length; i++){
-                let flag = true
-                for(let j=0; j<ids.length; j++){
-                    if(ids[j] == sum_dic_list[i].id){
-                        flag = false
-                        break;
-                    }
-                }
-                if(flag){
-                    newdic.push(sum_dic_list[i])
-                }
-            }
+            
             setTimeout(() => {
-                resolve([200, newdic]);
+                resolve([200, ids]);
             }, 500);
         })
     })
@@ -836,7 +824,7 @@ mock.onPost('/api/sumDicController/updateDic')
 
 for(let i=0; i<sum_dic_list.length; i++){
     let dic = sum_dic_list[i]
-    mock.onPost('/api/sumDicController/findDicById/'+dic.id)
+    mock.onGet('/api/sumDicController/findDicById/'+dic.id)
     .reply('200', dic)
 }
 

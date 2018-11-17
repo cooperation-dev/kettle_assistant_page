@@ -1,5 +1,6 @@
 import '../../../mock/api';
 import axios from 'axios';
+import {message} from 'antd';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //渲染字典列表
@@ -16,6 +17,8 @@ export const UPDATE_MODAL_SHOW = "sumDic/updateModalShow"
 export const UPADTE_MODAL_SURE = "sumDic/updateModalSure"
 //修改窗口取消按钮
 export const UPDATE_MODAL_CANCEL = "sumDic/updateModalCancel"
+//删除行
+export const DELETE_DIC_BY_IDS = "sumDic/deleteDicByIds"
 
 export const show_list = (list) => {
     return {
@@ -50,15 +53,23 @@ export const update_modal_show = (id) => {
     }
 }
 
-export const update_modal_sure = () => {
+export const update_modal_sure = (dic) => {
     return {
-        type: UPADTE_MODAL_SURE
+        type: UPADTE_MODAL_SURE,
+        dic
     }
 }
 
 export const update_modal_cancel = () => {
     return {
         type: UPDATE_MODAL_CANCEL
+    }
+}
+
+export const delete_dic_by_ids = (deleteDics) => {
+    return {
+        type: DELETE_DIC_BY_IDS,
+        deleteDics: deleteDics
     }
 }
 
@@ -102,18 +113,52 @@ export const addModalCancel = () => {
 
 export const updateModalShow = (selectRows) => {
     return (dispatch) => {
-        dispatch(update_modal_show(selectRows[0].id))
+        if(selectRows.length == 0){
+            message.error('请选择行')
+        }else if(selectRows.length > 1){
+            message.error('选中纪录超过一行')
+        }else{
+            dispatch(update_modal_show(selectRows[0].id))
+        }
     }
 }
 
-export const updateModalSure = () => {
+export const updateModalSure = (dic) => {
     return (dispatch) => {
-        dispatch(update_modal_sure())
+        axios({
+            method: 'post',
+            url: '/api/sumDicController/updateDic',
+            data: dic
+        }).then((response) => {
+            return response.data
+        }).then((data) => {
+            dispatch(update_modal_sure(data))
+        })
     }
 }
 
 export const updateModalCancel = () => {
     return (dispatch) => {
         dispatch(update_modal_cancel())
+    }
+}
+
+export const deleteDicByIds = (selectRows) => {
+    if(selectRows.length == 0){
+        message.error('请选择行')
+    }else{
+        return (dispatch) => {
+            let ids = []
+            selectRows.map(row => ids.push(row.id))
+            axios({
+                method: 'post',
+                url: '/api/sumDicController/deleteDicByIds',
+                data: ids
+            }).then((r) => {
+                return r.data
+            }).then((list) => {
+                dispatch(delete_dic_by_ids(list))
+            })
+        }
     }
 }

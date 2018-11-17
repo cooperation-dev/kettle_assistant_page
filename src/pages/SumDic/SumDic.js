@@ -220,8 +220,8 @@ class AddModal extends Component{
     }
 
     findRootDicTypes = () => {
-        axios({
-            method: 'post',
+        /* axios({
+            method: 'get',
             url: '/api/sumDicController/findRootDicTypes'
         }).then((r) => {
             return r.data
@@ -229,7 +229,15 @@ class AddModal extends Component{
             this.setState({
                 rootDicTypes: list
             })
-        })
+        }) */
+        axios.get('/api/sumDicController/findRootDicTypes')
+            .then((r) => {
+                return r.data
+            }).then((list) => {
+                this.setState({
+                    rootDicTypes: list
+                })
+            }) 
     }
 
     findDicTypes = (code) => {

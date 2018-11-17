@@ -1,4 +1,3 @@
-// import '../../../mock/api';
 import axios from 'axios';
 
 export const LOAD_DATA = "jobMonitor/loadData";

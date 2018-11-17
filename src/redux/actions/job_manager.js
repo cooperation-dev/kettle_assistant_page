@@ -1,7 +1,5 @@
-// import '../../../mock/api';
 import axios from 'axios';
 import {message} from 'antd';
-import { deepEqual } from 'assert';
 
 export const FIND_JOBS = "jobManager/findJobs";
 //新增作业框弹出

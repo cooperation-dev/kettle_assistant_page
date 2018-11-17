@@ -1,4 +1,3 @@
-// import '../../../mock/api';
 import axios from 'axios';
 
 export const FIND_LOGS = "systemLog/findLogs";

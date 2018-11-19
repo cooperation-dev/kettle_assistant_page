@@ -264,6 +264,8 @@ const org_sum_dic_oracle = Mock.mock({
     modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
     valid: 'Y',
+    dicType: 'dic_type',
+    dicTypeCN: '字典管理', 
     belongs: '',
     parentId: ''
 })
@@ -288,7 +290,6 @@ const org_sum_dic_sqlserver = Mock.mock({
     modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
     valid: 'Y',
-    dicType: '字典类型',
     belongs: '字典类型',
     parentId: 1
 })
@@ -301,7 +302,6 @@ const org_sum_dic_success_failed = Mock.mock({
     modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
     valid: 'Y',
-    dicType: '字典类型',
     belongs: '有效性',
     parentId: 3
 })
@@ -314,7 +314,6 @@ const org_sum_dic_encoding = Mock.mock({
     modifyTime: '2018-09-18 01:23:46',
     creator: 'adan',
     valid: 'Y',
-    dicType: '字典类型',
     belongs: '有效性',
     parentId: 3
 })

@@ -21,7 +21,7 @@ class SumDic extends Component{
             code: '',
             name: '',
             valid: 'Y',
-            dicType: '',
+            belongs: '',
             selectRows: [],
         }
     }
@@ -47,10 +47,10 @@ class SumDic extends Component{
             valid: this.state.valid=='Y'?'N':'Y'
         })
     }
-    
-    changeDicType = (e) => {
+
+    changeBelongs = (e) => {
         this.setState({
-            dicType: e.target.value
+            belongs: e.target.value
         })
     }
 
@@ -59,7 +59,6 @@ class SumDic extends Component{
             code: this.state.code,
             name: this.state.name,
             valid: this.state.valid,
-            dicType: this.state.dicType,
         }
 
         this.props.showList(dic)
@@ -70,7 +69,6 @@ class SumDic extends Component{
             code: '',
             name: '',
             valid: '',
-            dicType: '',
         }
 
         this.props.showList(dic)
@@ -114,8 +112,8 @@ class SumDic extends Component{
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={4}>
-                                <Form.Item label="字典类别">
-                                    <Input placeholder="字典类别" onChange={this.changeDicType} value={this.state.dicType}/>
+                                <Form.Item label="所属对象">
+                                    <Input placeholder="所属对象" onChange={this.changeBelongs} value={this.state.belongs}/>
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -132,8 +130,8 @@ class SumDic extends Component{
                         <Button type="default" size="default" className="btn" onClick={()=>this.props.addModalShow()}>新增</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateModalShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteDicByIds, this.state.selectRows)}>删除</Button>
-                        {/* <Button type="default" size="default" className="btn" onClick={() => this.props.deleteDicByIds(this.state.selectRows)}>删除</Button> */}
                         <Button type="default" size="default" className="btn">导入</Button>
+                        <Button type="default" size="default" className="btn">显示关系</Button>
                         <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.sumDic.list} >
                         <Column 
                             title = '排序'
@@ -174,11 +172,6 @@ class SumDic extends Component{
                             )}
                         />
                         <Column 
-                            title = '字典类别'
-                            dataIndex = 'dicType'
-                            key = 'dicType'
-                        />
-                        <Column 
                             title = '所属对象'
                             dataIndex = 'belongs'
                             key = 'belong'
@@ -202,52 +195,23 @@ class AddModal extends Component{
             id: '',
             name: '',
             code: '',
-            rootDicTypes: [],
             dicTypes: [],
-            dicTypeSwitch: false,
-            //输入框字典类别
-            dicType_input: '',
-            //下拉框字典类别
-            dicType_select: '',
+            belongsSwitch: false,
             //所属对象
             belongs: '',
         }
     }
 
     componentDidMount = () => {
-        this.findRootDicTypes()
-        this.findDicTypes(this.state.dicType_select)
+        this.findDicTypes()
     }
 
-    findRootDicTypes = () => {
-        /* axios({
-            method: 'get',
-            url: '/api/sumDicController/findRootDicTypes'
-        }).then((r) => {
+    findDicTypes = () => {
+        axios.get('/api/sumDicController/findDicTypes').then((r) => {
             return r.data
         }).then((list) => {
             this.setState({
-                rootDicTypes: list
-            })
-        }) */
-        axios.get('/api/sumDicController/findRootDicTypes')
-            .then((r) => {
-                return r.data
-            }).then((list) => {
-                this.setState({
-                    rootDicTypes: list
-                })
-            }) 
-    }
-
-    findDicTypes = (code) => {
-        axios.get('/api/sumDicController/findDicTypes', {
-            params: {code: code}
-        }).then((r) => {
-            return r.data
-        }).then((list) => {
-            this.setState({
-                dicTypes: list
+                dicTypes: list,
             })
         })
     }
@@ -264,27 +228,11 @@ class AddModal extends Component{
         })
     }
 
-    changeDicTypeSwitch = (e) => {
+    changeBelongsSwitch = (e) => {
         this.setState({
-            dicTypeSwitch: e,
-            belongsSwitchValid: e?true:false,
-            belongs: e?this.state.belongs:'',
-            dicType_input: e?'':this.state.dicType_input,
-            dicType_select: e?this.state.dicType_select:'',
+            belongsSwitch: e,
+            belongs: e?this.state.belongs: ''
         })
-    }
-
-    changeDicTypeInput = (e) => {
-        this.setState({
-            dicType_input: e.target.value
-        })
-    }
-
-    changeDicTypeSelect = (e) => {
-        this.setState({
-            dicType_select: e,
-        })
-        this.findDicTypes(e)
     }
 
     changeBelongs = (e) => {
@@ -297,7 +245,7 @@ class AddModal extends Component{
         let dic = {
             name: this.state.name,
             code: this.state.code,
-            dicType: this.state.dicTypeSwitch?this.state.dicType_select:this.state.dicType_input,
+            dicType: this.state.dicTypeSwitch?this.state.dicType_select:'',
             belongs: this.state.belongs
         }
         this.props.ok(dic)
@@ -306,7 +254,6 @@ class AddModal extends Component{
             name: '',
             code: ''
         })
-        this.changeDicTypeSwitch(false)
     }
 
     cancel = () => {
@@ -316,7 +263,6 @@ class AddModal extends Component{
             name: '',
             code: ''
         })
-        this.changeDicTypeSwitch(false)
     }
 
     render(){
@@ -338,30 +284,24 @@ class AddModal extends Component{
                 <Form.Item label="字典代码">
                     <Input placeholder="字典代码" value={this.state.code} onChange={this.changeDicCode}/>
                 </Form.Item>
-                <Form.Item label="字典类别">
-                    <Col span={4}>
-                        <Switch checked={this.state.dicTypeSwitch} onChange={this.changeDicTypeSwitch}></Switch>    
-                    </Col>
-                    <Col span={20}>
-                        <Input style={{width: 120, display: `${this.state.dicTypeSwitch?'none':'block'}`}} value={this.state.dicType_input} onChange={this.changeDicTypeInput}></Input>
-                        <Select style={{width: 120, display: `${this.state.dicTypeSwitch?'block':'none'}`}} value={this.state.dicType_select} onChange={this.changeDicTypeSelect}>
-                            {this.state.rootDicTypes.map(type => {
-                                return (
-                                    <Option key={type.code} value={type.code}>{type.name}</Option>
-                                )
-                            })}
-                        </Select>
-                    </Col>
-                </Form.Item>
-                <Form.Item label="所属对象" style={{display: `${this.state.dicTypeSwitch?'block':'none'}`}}>
-                    <Select style={{width: 120}} value={this.state.belongs} onChange={this.changeBelongs}>
-                        {this.state.dicTypes.map(type => {
-                            return (
-                                <Option key={type.id} value={type.code}>{type.name}</Option>
-                            )
-                        })}
-                    </Select>
-                </Form.Item>
+
+                <Row>
+                    <Form.Item label="所属对象" >
+                        <Col span={4}>
+                            <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
+                        </Col>
+                        <Col span={12} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
+                                <Select style={{width: 120}} value={this.state.belongs} onChange={this.changeBelongs}>
+                                    {this.state.dicTypes.map(type => {
+                                        return (
+                                            <Option key={type.id} value={type.code}>{type.name}</Option>
+                                        )
+                                    })}
+                                </Select>
+                        </Col>
+                    </Form.Item>
+                </Row>
+                
             </Modal>
         )
     }
@@ -376,14 +316,9 @@ class UpdateModal extends Component{
             id: '',
             name: '',
             code: '',
-            rootDicTypes: [],
             dicTypes: [],
             visible: false,
-            dicTypeSwitch: false,
-            //输入框字典类别
-            dicType_input: '',
-            //下拉框字典类别
-            dicType_select: '',
+            belongsSwitch: false,
             //所属对象
             belongs: '',
         }
@@ -400,27 +335,12 @@ class UpdateModal extends Component{
 
     }
 
-    findRootDicTypes = () => {
-        axios({
-            method: 'post',
-            url: '/api/sumDicController/findRootDicTypes'
-        }).then((r) => {
+    findDicTypes = () => {
+        axios.get('/api/sumDicController/findDicTypes').then((r) => {
             return r.data
         }).then((list) => {
             this.setState({
-                rootDicTypes: list
-            })
-        })
-    }
-
-    findDicTypes = (code) => {
-        axios.get('/api/sumDicController/findDicTypes', {
-            params: {code: code}
-        }).then((r) => {
-            return r.data
-        }).then((list) => {
-            this.setState({
-                dicTypes: list
+                dicTypes: list,
             })
         })
     }
@@ -429,19 +349,16 @@ class UpdateModal extends Component{
         axios.get('/api/sumDicController/findDicById/'+id)
             .then(r => {
                 let data = r.data
-                let closeDicTypeSwitch = data.belongs==undefined||data.belongs==""
+                let belongsSwitch = data.belongs==undefined||data.belongs==""
                 this.setState({
                     id: data.id,
                     name: data.name,
                     code: data.code,
-                    dicTypeSwitch: closeDicTypeSwitch?false:true,
-                    dicType_input: closeDicTypeSwitch?data.dicType:'',
-                    dicType_select: closeDicTypeSwitch?'':data.dicType,
-                    belongs: closeDicTypeSwitch?'':data.belongs,
+                    belongsSwitch: belongsSwitch?false:true,
+                    belongs: belongsSwitch?'':data.belongs,
                 })
-                this.findRootDicTypes()
-                this.findDicTypes(data.dicType)
             })
+            this.findDicTypes()
     }
 
     changeName = (e) => {
@@ -456,27 +373,11 @@ class UpdateModal extends Component{
         })
     }
 
-    changeDicTypeSwitch = (e) => {
+    changeBelongsSwitch = (e) => {
         this.setState({
-            dicTypeSwitch: e,
-            belongsSwitchValid: e?true:false,
+            belongsSwitch: e,
             belongs: e?this.state.belongs:'',
-            dicType_input: e?'':this.state.dicType_input,
-            dicType_select: e?this.state.dicType_select:'',
         })
-    }
-
-    changeDicTypeInput = (e) => {
-        this.setState({
-            dicType_input: e.target.value
-        })
-    }
-
-    changeDicTypeSelect = (e) => {
-        this.setState({
-            dicType_select: e,
-        })
-        this.findDicTypes(e)
     }
 
     changeBelongs = (e) => {
@@ -490,26 +391,15 @@ class UpdateModal extends Component{
             id: this.state.id,
             name: this.state.name,
             code: this.state.code,
-            dicType: this.state.dicTypeSwitch?this.state.dicType_select:this.state.dicType_input,
-            belongs: this.state.belongs
+            belongs: this.state.belongsSwitch?this.state.belongs:''
         }
         this.props.ok(dic)
 
-        this.setState({
-            name: '',
-            code: ''
-        })
-        this.changeDicTypeSwitch(false)
     }
 
     cancel = () => {
         this.props.cancel()
 
-        this.setState({
-            name: '',
-            code: ''
-        })
-        this.changeDicTypeSwitch(false)
     }
 
     render(){                 
@@ -530,31 +420,24 @@ class UpdateModal extends Component{
                 <Form.Item label="字典代码">
                     <Input placeholder="字典代码" value={this.state.code} onChange={this.changeCode}/>
                 </Form.Item>
-                <Form.Item label="字典类型">
-                    <Col span={4}>
-                        <Switch checked={this.state.dicTypeSwitch} onChange={this.changeDicTypeSwitch}></Switch>    
-                    </Col>
-                    <Col span={20}>
-                        <Input style={{width: 120, display: `${this.state.dicTypeSwitch?'none':'block'}`}} value={this.state.dicType_input} onChange={this.changeDicTypeInput}></Input>
-                        <Select style={{width: 120, display: `${this.state.dicTypeSwitch?'block':'none'}`}} value={this.state.dicType_select} onChange={this.changeDicTypeSelect}>
-                            {this.state.rootDicTypes.map(type => {
-                                return (
-                                    <Option key={type.code} value={type.code}>{type.name}</Option>
-                                )
-                            })}
-                        </Select>
-                    </Col>
-                </Form.Item>
-                <Form.Item label="所属对象">
-                    {/* <Input placeholder="所属对象" /> */}
-                    <Select style={{width: 120}} value={this.state.belongs} onChange={this.changeBelongs}>
-                        {this.state.dicTypes.map(type => {
-                            return (
-                                <Option key={type.id} value={type.code}>{type.name}</Option>
-                            )
-                        })}
-                    </Select>
-                </Form.Item>
+
+                <Row >
+                    <Form.Item label="所属对象">
+                        <Col span={4}>
+                            <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
+                        </Col>
+                        <Col span={12} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
+                                <Select style={{width: 120}} value={this.state.belongs} onChange={this.changeBelongs}>
+                                    {this.state.dicTypes.map(type => {
+                                        return (
+                                            <Option key={type.id} value={type.code}>{type.name}</Option>
+                                        )
+                                    })}
+                                </Select>
+                        </Col>
+
+                    </Form.Item>
+                </Row>
             </Modal>
         )
     }

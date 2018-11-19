@@ -9,7 +9,7 @@ import {Jobs, job_monitor_analysis,
             sum_dic_list, database_manager,role_manager,
             user_manager,project_manager,
             data_system_log,
-            menu, jobTypes, dic_types} from './data';
+            menu, jobTypes, dic_types, dic_tree} from './data';
 
 const mock = new MockAdapter(axios);
 
@@ -748,7 +748,8 @@ mock.onGet('/api/sumDicController/findDicTypes')
     .reply(config => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve([200, sum_dic_list]);
+                resolve([200, dic_tree]);
+                // resolve([200, sum_dic_list]);
             }, 500);
         })
     })

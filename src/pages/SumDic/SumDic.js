@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table, Row, Col, Input, Form, Button, Checkbox, Modal, Select, Switch, message} from 'antd';
+import {Table, Row, Col, Input, Form, Button, Checkbox, Modal, Select, TreeSelect, Switch, message} from 'antd';
 import {connect} from 'react-redux';
 import {showList,
         addModalShow, addModalSure, addModalCancel,
@@ -291,13 +291,22 @@ class AddModal extends Component{
                             <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
                         </Col>
                         <Col span={12} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
-                                <Select style={{width: 120}} value={this.state.belongs} onChange={this.changeBelongs}>
+                                {/* <Select style={{width: 120}} value={this.state.belongs} onChange={this.changeBelongs}>
                                     {this.state.dicTypes.map(type => {
                                         return (
                                             <Option key={type.id} value={type.code}>{type.name}</Option>
                                         )
                                     })}
-                                </Select>
+                                </Select> */}
+                                <TreeSelect
+                                    style={{ width: 300 }}
+                                    value={this.state.belongs}
+                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                    treeData={this.state.dicTypes}
+                                    placeholder="Please select"
+                                    treeDefaultExpandAll
+                                    onChange={this.changeBelongs}
+                                />
                         </Col>
                     </Form.Item>
                 </Row>
@@ -427,13 +436,22 @@ class UpdateModal extends Component{
                             <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
                         </Col>
                         <Col span={12} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
-                                <Select style={{width: 120}} value={this.state.belongs} onChange={this.changeBelongs}>
+                                {/* <Select style={{width: 120}} value={this.state.belongs} onChange={this.changeBelongs}>
                                     {this.state.dicTypes.map(type => {
                                         return (
                                             <Option key={type.id} value={type.code}>{type.name}</Option>
                                         )
                                     })}
-                                </Select>
+                                </Select> */}
+                                <TreeSelect
+                                    style={{ width: 300 }}
+                                    value={this.state.belongs}
+                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                    treeData={this.state.dicTypes}
+                                    placeholder="Please select"
+                                    treeDefaultExpandAll
+                                    onChange={this.changeBelongs}
+                                />
                         </Col>
 
                     </Form.Item>

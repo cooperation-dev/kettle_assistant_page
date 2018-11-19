@@ -669,6 +669,37 @@ dic_types.push(Mock.mock({
     code: 'normal_dic'
 }))
 
+const dic_tree = [
+    {
+        title: '字典类型',
+        key: 'dic_type',
+        value: 'dic_type',
+        children: [
+            {
+                title: '有效性',
+                key: 'valid', 
+                value: 'valid',
+                children: [
+                    {
+                        title: '有效',
+                        key: 'Y',
+                        value: 'Y'
+                    },{
+                        title: '无效',
+                        key: 'N',
+                        value: 'N'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        title: '数据库类型',
+        key: 'database_type', 
+        value: 'database_type', 
+    }
+]
+
 export {Jobs, job_monitor_analysis, 
     input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
     input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year,
@@ -676,4 +707,4 @@ export {Jobs, job_monitor_analysis,
     database_manager,role_manager,user_manager,project_manager,
     data_system_log, menu,
     jobTypes,
-    dic_types}
+    dic_types, dic_tree}

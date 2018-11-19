@@ -1,6 +1,7 @@
 import {SHOW_LIST,
         ADD_MODAL_SHOW, ADD_MODAL_SURE, ADD_MODAL_CANCEL,
-        UPDATE_MODAL_SHOW, UPADTE_MODAL_SURE, UPDATE_MODAL_CANCEL, DELETE_DIC_BY_IDS} from '../actions/sum_dic';
+        UPDATE_MODAL_SHOW, UPADTE_MODAL_SURE, UPDATE_MODAL_CANCEL, DELETE_DIC_BY_IDS,
+        CHANGE_DISABLED} from '../actions/sum_dic';
 
 const initState = {
     list: [],
@@ -71,6 +72,19 @@ export default function reducers(state=initState, action){
                     newlist.push(state.list[i])
                 }
             }
+            return {
+                ...state,
+                list: newlist
+            }
+        }
+        case CHANGE_DISABLED: {
+            let newlist = state.list.map(ele => {
+                if(ele.id == action.row.id){
+                    return action.row
+                }else{
+                    return ele
+                }
+            })
             return {
                 ...state,
                 list: newlist

@@ -18,6 +18,7 @@ export const UPADTE_MODAL_SURE = "sumDic/updateModalSure"
 export const UPDATE_MODAL_CANCEL = "sumDic/updateModalCancel"
 //删除行
 export const DELETE_DIC_BY_IDS = "sumDic/deleteDicByIds"
+export const CHANGE_DISABLED = "sumDic/changeDisabled";
 
 export const show_list = (list) => {
     return {
@@ -69,6 +70,13 @@ export const delete_dic_by_ids = (deleteDics) => {
     return {
         type: DELETE_DIC_BY_IDS,
         deleteDics: deleteDics
+    }
+}
+
+export const change_disabled = (row) => {
+    return {
+        type: CHANGE_DISABLED,
+        row: row
     }
 }
 
@@ -159,5 +167,19 @@ export const deleteDicByIds = (selectRows) => {
                 dispatch(delete_dic_by_ids(list))
             })
         }
+    }
+}
+
+export const changeDisabled = (row) => {
+    return (dispatch) => {
+        axios({
+            method: 'post',
+            url: '/api/sumDicController/changeDisabled',
+            data: row
+        }).then((r) => {
+            return r.data
+        }).then(d => {
+            dispatch(change_disabled(d))
+        }) 
     }
 }

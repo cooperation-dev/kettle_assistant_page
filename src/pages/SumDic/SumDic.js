@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {showList,
         addModalShow, addModalSure, addModalCancel,
         updateModalShow, updateModalSure, updateModalCancel,
-        deleteDicByIds} from '../../redux/actions/sum_dic';
+        deleteDicByIds, changeDisabled} from '../../redux/actions/sum_dic';
 
 import axios from 'axios';
 
@@ -487,4 +487,4 @@ export default connect((state)=> ({
 }), {showList,
         addModalShow, addModalSure, addModalCancel,
         updateModalShow, updateModalSure, updateModalCancel,
-        deleteDicByIds})(SumDic)
+        deleteDicByIds, changeDisabled})(SumDic)

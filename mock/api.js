@@ -125,7 +125,7 @@ mock.onPost('/api/sumDicController/showList')
 mock.onPost('/api/sumDicController/changeDisabled')
     .reply(config => {
         let row = JSON.parse(config.data)
-        row.valid = !row.valid
+        row.valid = row.valid=='Y'?'N':'Y'
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve([200, row]);
@@ -709,7 +709,7 @@ mock.onPost('/api/sumDicController/saveDic')
     .reply(config => {
         let {name, code, belongs} = JSON.parse(config.data)
         //dicType中文
-        let dicTypeCN="", belongsCN=""
+        let belongsCN=""
         //belongs中文
         if(belongs!=undefined && ""!=belongs){
             belongsCN = sum_dic_list.filter(ele => ele.code == belongs)[0].name;
@@ -805,6 +805,3 @@ for(let i=0; i<sum_dic_list.length; i++){
     mock.onGet('/api/sumDicController/findDicById/'+dic.id)
     .reply('200', dic)
 }
-
-mock.onPost('/api/sumDicController/findName')
-    .reply('200', 'aaa')

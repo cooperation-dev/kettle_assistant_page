@@ -86,9 +86,10 @@ export const change_disabled = (row) => {
     }
 }
 
-export const details_modal_show = () => {
+export const details_modal_show = (data) => {
     return {
-        type: DETAILS_MODAL_SHOW
+        type: DETAILS_MODAL_SHOW,
+        data: data
     }
 }
 
@@ -210,7 +211,20 @@ export const changeDisabled = (row) => {
 
 export const detailsModalShow = () => {
     return (dispatch) => {
-        dispatch(details_modal_show())
+        axios.get('/api/sumDicController/findDicTree')
+                .then(r => 
+                    {
+                        let children = []
+                        r.data.data.map(d => children.push(d))
+                        let data = {
+                            children: children
+                        }
+                        return [data]
+                    })
+                .then(data => {
+                    dispatch(details_modal_show(data))
+                })
+
     }
 }
 

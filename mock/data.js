@@ -699,6 +699,7 @@ const dic_tree = [
     },
     {
         title: '数据库类型',
+        name: '数据库类型',
         key: 'database_type', 
         value: 'database_type', 
     }

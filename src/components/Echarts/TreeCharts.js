@@ -34,18 +34,13 @@ const dic_tree = [
 
 class TreeCharts extends Component{
     
-    componentDidUpdate = () => {
-        this.showCharts(dic_tree)
+    componentDidMount = () => {
+        this.showCharts(this.props.data)
     }
     
     showCharts = (data) => {
-        
-        echarts.util.each(data.children, function (datum, index) {
-            index % 2 === 0 && (datum.collapsed = true);
-        });
-        
-        const myCharts = echarts.init(document.getElementById('main'))
-        myCharts.setOption(option = {
+
+        const option = {
             tooltip: {
                 trigger: 'item',
                 triggerOn: 'mousemove'
@@ -54,7 +49,7 @@ class TreeCharts extends Component{
                 {
                     type: 'tree',
     
-                    data: [data],
+                    data: data,
     
                     top: '1%',
                     left: '7%',
@@ -80,15 +75,14 @@ class TreeCharts extends Component{
                                 align: 'left'
                             }
                         }
-                    },
+                    }
     
-                    expandAndCollapse: true,
-                    animationDuration: 550,
-                    animationDurationUpdate: 750
+                    
                 }
             ]
-        });
-
+        };
+        const myCharts = echarts.init(document.getElementById('main'))
+        myCharts.setOption(option)
     }
 
     render(){

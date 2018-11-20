@@ -814,3 +814,19 @@ for(let i=0; i<sum_dic_list.length; i++){
             })
         })
 }
+
+mock.onGet('/api/sumDicController/findDicTree')
+    .reply(config => {
+        return new Promise((resolve, reject) => {
+
+            let data = {
+                code: '200',
+                msg: '',
+                data: dic_tree
+            }
+
+            setTimeout(() => {
+                resolve([200, data]);
+            }, 500);
+        })
+    })

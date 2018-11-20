@@ -11,6 +11,7 @@ const initState = {
     updateModalVisible: false,
     detailsModalVisible: false,
     updateId: '',
+    dicTree: {}
 }
 
 export default function reducers(state=initState, action){
@@ -96,7 +97,8 @@ export default function reducers(state=initState, action){
         case DETAILS_MODAL_SHOW: {
             return {
                 ...state,
-                detailsModalVisible: true
+                detailsModalVisible: true,
+                dicTree: action.data
             }
         }
         case DETAILS_MODAL_SURE: {

@@ -87,7 +87,7 @@ export const showList = (dic) => {
             url: '/api/sumDicController/showList',
             data: dic
         }).then((r) => {
-            return r.data
+            return r.data.data
         }).then((l) => {
             dispatch(show_list(l))
         })
@@ -106,7 +106,7 @@ export const addModalSure = (dic) => {
             method: 'post',
             url: '/api/sumDicController/saveDic',
             data: dic
-        }).then(r => {return r.data})
+        }).then(r => {return r.data.data})
             .then(dic => dispatch(add_modal_sure(dic)))
 
     }
@@ -137,7 +137,7 @@ export const updateModalSure = (dic) => {
             url: '/api/sumDicController/updateDic',
             data: dic
         }).then((response) => {
-            return response.data
+            return response.data.data
         }).then((data) => {
             dispatch(update_modal_sure(data))
         })
@@ -162,7 +162,7 @@ export const deleteDicByIds = (selectRows) => {
                 url: '/api/sumDicController/deleteDicByIds',
                 data: ids
             }).then((r) => {
-                return r.data
+                return r.data.data
             }).then((list) => {
                 dispatch(delete_dic_by_ids(list))
             })
@@ -177,7 +177,7 @@ export const changeDisabled = (row) => {
             url: '/api/sumDicController/changeDisabled',
             data: row
         }).then((r) => {
-            return r.data
+            return r.data.data
         }).then(d => {
             dispatch(change_disabled(d))
         }) 

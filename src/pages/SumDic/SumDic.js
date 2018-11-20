@@ -208,7 +208,7 @@ class AddModal extends Component{
 
     findDicTypes = () => {
         axios.get('/api/sumDicController/findDicTypes').then((r) => {
-            return r.data
+            return r.data.data
         }).then((list) => {
             this.setState({
                 dicTypes: list,
@@ -346,7 +346,7 @@ class UpdateModal extends Component{
 
     findDicTypes = () => {
         axios.get('/api/sumDicController/findDicTypes').then((r) => {
-            return r.data
+            return r.data.data
         }).then((list) => {
             this.setState({
                 dicTypes: list,
@@ -357,7 +357,7 @@ class UpdateModal extends Component{
     findDicById = (id) => {
         axios.get('/api/sumDicController/findDicById/'+id)
             .then(r => {
-                let data = r.data
+                let data = r.data.data
                 let belongsSwitch = data.belongs==undefined||data.belongs==""
                 this.setState({
                     id: data.id,
@@ -436,13 +436,6 @@ class UpdateModal extends Component{
                             <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
                         </Col>
                         <Col span={12} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
-                                {/* <Select style={{width: 120}} value={this.state.belongs} onChange={this.changeBelongs}>
-                                    {this.state.dicTypes.map(type => {
-                                        return (
-                                            <Option key={type.id} value={type.code}>{type.name}</Option>
-                                        )
-                                    })}
-                                </Select> */}
                                 <TreeSelect
                                     style={{ width: 300 }}
                                     value={this.state.belongs}

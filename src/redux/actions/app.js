@@ -1,4 +1,4 @@
-// import '../../../mock/api';
+import '../../../mock/api';
 import axios from 'axios';
 
 export const TOGGLE_MENU = "toggle/menu";
@@ -42,7 +42,7 @@ export function loadMenu(){
             method: 'get', 
             url: '/api/homeController/loadMenu'
         }).then((reponse) => {
-            return reponse.data
+            return reponse.data.data
         }).then((list) => {
             dispatch(load_menu(list))
         })

@@ -3,9 +3,6 @@ import echarts from 'echarts';
 
 class Bar extends Component{
 
-    /* componentWillReceiveProps(){
-        this.showCharts(this.props.data)
-    }  */
     componentDidUpdate = () => {
         this.showCharts(this.props.data)
     }

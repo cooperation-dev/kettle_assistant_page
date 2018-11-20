@@ -1,13 +1,15 @@
 import {SHOW_LIST,
         ADD_MODAL_SHOW, ADD_MODAL_SURE, ADD_MODAL_CANCEL,
         UPDATE_MODAL_SHOW, UPADTE_MODAL_SURE, UPDATE_MODAL_CANCEL, DELETE_DIC_BY_IDS,
-        CHANGE_DISABLED} from '../actions/sum_dic';
+        CHANGE_DISABLED,
+        DETAILS_MODAL_SHOW, DETAILS_MODAL_SURE, DETAILS_MODAL_CANCEL} from '../actions/sum_dic';
 
 const initState = {
     list: [],
     dicTypes: [],
     addModalVisible: false,
     updateModalVisible: false,
+    detailsModalVisible: false,
     updateId: '',
 }
 
@@ -89,6 +91,24 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 list: newlist
+            }
+        }
+        case DETAILS_MODAL_SHOW: {
+            return {
+                ...state,
+                detailsModalVisible: true
+            }
+        }
+        case DETAILS_MODAL_SURE: {
+            return {
+                ...state,
+                detailsModalVisible: false
+            }
+        }
+        case DETAILS_MODAL_CANCEL: {
+            return {
+                ...state,
+                detailsModalVisible: false
             }
         }
         default: 

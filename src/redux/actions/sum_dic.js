@@ -19,6 +19,12 @@ export const UPDATE_MODAL_CANCEL = "sumDic/updateModalCancel"
 //删除行
 export const DELETE_DIC_BY_IDS = "sumDic/deleteDicByIds"
 export const CHANGE_DISABLED = "sumDic/changeDisabled";
+//显示细节窗口
+export const DETAILS_MODAL_SHOW = "sumDic/detailsModalShow"
+//细节窗口确认
+export const DETAILS_MODAL_SURE = "sumDic/detailsModalSure"
+//细节窗口取消
+export const DETAILS_MODAL_CANCEL = "sumDic/detailsModalCancel"
 
 export const show_list = (list) => {
     return {
@@ -77,6 +83,24 @@ export const change_disabled = (row) => {
     return {
         type: CHANGE_DISABLED,
         row: row
+    }
+}
+
+export const details_modal_show = () => {
+    return {
+        type: DETAILS_MODAL_SHOW
+    }
+}
+
+export const details_modal_sure = () => {
+    return {
+        type: DETAILS_MODAL_SURE
+    }
+}
+
+export const details_modal_cancel = () => {
+    return {
+        type: DETAILS_MODAL_CANCEL
     }
 }
 
@@ -181,5 +205,23 @@ export const changeDisabled = (row) => {
         }).then(d => {
             dispatch(change_disabled(d))
         }) 
+    }
+}
+
+export const detailsModalShow = () => {
+    return (dispatch) => {
+        dispatch(details_modal_show())
+    }
+}
+
+export const detailsModalSure = () => {
+    return (dispatch) => {
+        dispatch(details_modal_sure())
+    }
+}
+
+export const detailsModalCancel = () => {
+    return (dispatch) => {
+        dispatch(details_modal_cancel())
     }
 }

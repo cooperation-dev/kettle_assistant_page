@@ -4,14 +4,16 @@ import {connect} from 'react-redux';
 import {showList,
         addModalShow, addModalSure, addModalCancel,
         updateModalShow, updateModalSure, updateModalCancel,
-        deleteDicByIds, changeDisabled} from '../../redux/actions/sum_dic';
+        deleteDicByIds, changeDisabled,
+        detailsModalShow, detailsModalSure, detailsModalCancel} from '../../redux/actions/sum_dic';
+
+import {TreeCharts} from 'components/Echarts/TreeCharts';
 
 import axios from 'axios';
 
 import './SumDic.css';
 
 const {Column} = Table
-const {Option} = Select
 
 class SumDic extends Component{
     constructor(props){
@@ -131,7 +133,7 @@ class SumDic extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateModalShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteDicByIds, this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
-                        <Button type="default" size="default" className="btn">显示关系</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.detailsModalShow()}>显示关系</Button>
                         <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.sumDic.list} >
                         <Column 
                             title = '排序'
@@ -181,6 +183,7 @@ class SumDic extends Component{
                 </Row>
                 <AddModal visible={this.props.sumDic.addModalVisible} ok={(dic)=>this.props.addModalSure(dic)} cancel={()=>this.props.addModalCancel()}></AddModal>
                 <UpdateModal visible={this.props.sumDic.updateModalVisible} id={this.props.sumDic.updateId} ok={(dic)=>this.props.updateModalSure(dic)} cancel={()=>this.props.updateModalCancel()}></UpdateModal>
+                <DetailsModal visible={this.props.sumDic.detailsModalVisible} ok={(dic)=>this.props.detailsModalSure(dic)} cancel={()=>this.props.detailsModalCancel()}></DetailsModal>
             </div>
         )
     }
@@ -454,6 +457,24 @@ class UpdateModal extends Component{
     }
 }
 
+class DetailsModal extends Component{
+    render = () => {
+        return (
+            <Modal
+                title="显示细节"
+                visible={this.props.visible}
+                onOk={() => this.props.ok()}
+                onCancel={() => this.props.cancel()}
+                okText="确认"
+                cancelText="取消"
+                destroyOnClose={true} 
+            >
+                <TreeCharts></TreeCharts>
+            </Modal>
+        )
+    }
+}
+
 function showDeleteConfirm(deleteDicByIds, selectRows) {
     if(selectRows.length == 0){
         message.error('请选择行!')
@@ -480,4 +501,5 @@ export default connect((state)=> ({
 }), {showList,
         addModalShow, addModalSure, addModalCancel,
         updateModalShow, updateModalSure, updateModalCancel,
-        deleteDicByIds, changeDisabled})(SumDic)
+        deleteDicByIds, changeDisabled,
+        detailsModalShow, detailsModalSure, detailsModalCancel})(SumDic)

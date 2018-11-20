@@ -9,7 +9,7 @@ import {Jobs, job_monitor_analysis,
             sum_dic_list, database_manager,role_manager,
             user_manager,project_manager,
             data_system_log,
-            menu, jobTypes, dic_types} from './data';
+            menu, jobTypes, dic_types, dic_tree} from './data';
 
 const mock = new MockAdapter(axios);
 
@@ -103,7 +103,7 @@ mock.onPost('/api/jobMonitorController/showRange')
 
 mock.onPost('/api/sumDicController/showList')
     .reply(config => {
-        let {code, name, valid, dicType} = JSON.parse(config.data)
+        let {code, name, valid, belongs} = JSON.parse(config.data)
         return new Promise((resolve, reject) => {
             let newdic = sum_dic_list
             if(code!=undefined && code!=""){
@@ -113,8 +113,8 @@ mock.onPost('/api/sumDicController/showList')
                 newdic = newdic.filter(dic => dic.name==name)
             }
             newdic = newdic.filter(dic => dic.valid==valid)
-            if(dicType!=undefined && dicType!=""){
-                newdic = newdic.filter(dic => dic.dicType==dicType)
+            if(belongs!=undefined && belongs!=""){
+                newdic = newdic.filter(dic => dic.belongs==belongs)
             }
             setTimeout(() => {
                 resolve([200, newdic]);
@@ -125,7 +125,7 @@ mock.onPost('/api/sumDicController/showList')
 mock.onPost('/api/sumDicController/changeDisabled')
     .reply(config => {
         let row = JSON.parse(config.data)
-        row.valid = !row.valid
+        row.valid = row.valid=='Y'?'N':'Y'
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve([200, row]);
@@ -605,21 +605,9 @@ mock.onPost('/api/jobManagerController/deleteJobByIds')
     .reply(config => {
         let ids = JSON.parse(config.data)
         return new Promise((resolve, reject) => {
-            let newjob = []
-            for(let i=0; i<Jobs.length; i++){
-                let flag = true
-                for(let j=0; j<ids.length; j++){
-                    if(ids[j] == Jobs[i].id){
-                        flag = false
-                        break;
-                    }
-                }
-                if(flag){
-                    newjob.push(Jobs[i])
-                }
-            }
+            
             setTimeout(() => {
-                resolve([200, newjob]);
+                resolve([200, ids]);
             }, 500);
         })
     })
@@ -630,7 +618,7 @@ for(let i=0; i<Jobs.length; i++){
     .reply('200', job)
 }
 
-mock.onPost('/api/jobManagerController/findJobTypes')
+mock.onGet('/api/jobManagerController/findJobTypes')
     .reply('200', jobTypes)
 
 mock.onPost('/api/jobManagerController/saveJob')
@@ -638,7 +626,7 @@ mock.onPost('/api/jobManagerController/saveJob')
         let {name, jobType, description} = JSON.parse(config.data)
         let jobTypeCn = jobTypes.filter(t => t.code==jobType)[0].name
         return new Promise((resolve, reject) => {
-            let maxKey = Jobs[Jobs.length-1].key+1
+            let maxKey = Jobs[Jobs.length-1].id+1
             let newjob = Mock.mock({
                 id: ""+(maxKey),
                 name: name,
@@ -661,7 +649,13 @@ mock.onPost('/api/jobManagerController/saveJob')
 
 mock.onPost('/api/sumDicController/saveDic')
     .reply(config => {
-        let {name, code, dicType, belongs} = JSON.parse(config.data)
+        let {name, code, belongs} = JSON.parse(config.data)
+        //dicType中文
+        let belongsCN=""
+        //belongs中文
+        if(belongs!=undefined && ""!=belongs){
+            belongsCN = sum_dic_list.filter(ele => ele.code == belongs)[0].name;
+        }
         let maxId = sum_dic_list[sum_dic_list.length-1].id+1
         return new Promise((resolve, reject) => {
             let newdic = {
@@ -673,8 +667,7 @@ mock.onPost('/api/sumDicController/saveDic')
                 modifyTime: '2018-09-18 01:23:46',
                 creator: 'adan',
                 valid: 'Y',
-                dicType: dicType,
-                belongs: belongs
+                belongs: belongsCN
             }
             setTimeout(() => {
                 resolve([200, newdic]);
@@ -695,28 +688,10 @@ mock.onPost('/api/sumDicController/deleteDicByIds')
 
 mock.onGet('/api/sumDicController/findDicTypes')
     .reply(config => {
-        let code = config.params.code
-        return new Promise((resolve, reject) => {
-            let newdic = sum_dic_list
-            if(code!=undefined && code!=""){
-                let newdicone = sum_dic_list.filter(dic => dic.code==code)[0]
-                newdic = newdic.filter(dic => {
-                    return dic.sort.toString().charAt(0)==newdicone.id
-                })
-            }
-            
-            setTimeout(() => {
-                resolve([200, newdic]);
-            }, 500);
-        })
-    })
-
-mock.onPost('/api/sumDicController/findRootDicTypes')
-    .reply(() => {
-        let newdic = sum_dic_list.filter(dic => dic.parentId==undefined||dic.parentId=="")
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve([200, newdic]);
+                resolve([200, dic_tree]);
+                // resolve([200, sum_dic_list]);
             }, 500);
         })
     })
@@ -743,20 +718,23 @@ mock.onPost('/api/jobManagerController/updateJob')
 
 mock.onPost('/api/sumDicController/updateDic')
     .reply(config => {
-        let {id, name, code, dicType, belongs} = JSON.parse(config.data)
+        let {id, name, code, belongs} = JSON.parse(config.data)
         return new Promise((resolve, reject) => {
             let newdic = sum_dic_list.filter(dic => dic.id==id)[0]
-            if(name!=undefined && name!=''){
+            if(name!=undefined){
                 newdic.name = name
             }
-            if(code!=undefined && code!=''){
+            if(code!=undefined){
                 newdic.code = code
             }
-            if(dicType!=undefined && dicType!=''){
-                newdic.dicType = dicType
-            }
-            if(belongs!=undefined && belongs!=''){
-                newdic.belongs = belongs
+            if(belongs!=undefined){
+                if(belongs != ""){
+                    //中文
+                    let belongsCN = sum_dic_list.filter(ele => ele.code==belongs)[0].name
+                    newdic.belongs = belongsCN
+                }else{
+                    newdic.belongs = ''
+                }
             }
             setTimeout(() => {
                 resolve([200, newdic]);
@@ -769,6 +747,3 @@ for(let i=0; i<sum_dic_list.length; i++){
     mock.onGet('/api/sumDicController/findDicById/'+dic.id)
     .reply('200', dic)
 }
-
-mock.onPost('/api/sumDicController/findName')
-    .reply('200', 'aaa')

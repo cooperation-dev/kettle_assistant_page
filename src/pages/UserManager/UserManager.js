@@ -1,12 +1,13 @@
 import React, {Component} from 'react'
-import {Form, Input, Button, Row, Col, Table, Modal, message} from 'antd'
+import {Form, Input, Button, Row, Col, Table, Modal, message, Select} from 'antd'
 
 import {findUsers, 
         addUserShow, addUserCancel, addUserSure, 
-        deleteUser, 
-        updateUserShow, updateUserCancel, updateUserSure, 
-        changeModalNickName, changeModalRole} from '../../redux/actions/user_manager'
+        deleteUsersByIds, 
+        updateUserShow, updateUserCancel, updateUserSure,} from '../../redux/actions/user_manager'
 import {connect} from 'react-redux';
+
+import axios from 'axios';
 
 import './UserManager.css'
 
@@ -51,9 +52,9 @@ class UserManager extends Component{
         }
         this.props.findUsers(user)
     }
-    change = (event, attributes) => {
+    change = (event, attribute) => {
         let newState = {};
-        newState[attributes] = event.target.value;
+        newState[attribute] = event.target.value;
         this.setState(newState);
     }
     render(){
@@ -123,7 +124,7 @@ class UserManager extends Component{
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.addUserShow()}>新增</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateUserShow(this.state.selectRows)}>修改</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteUser, this.state.selectRows)}>删除</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteUsersByIds, this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Table rowSelection={rowSelection} dataSource={this.props.userManager.list} columns={columns} />
                     </Form>
@@ -136,11 +137,7 @@ class UserManager extends Component{
                 visible={this.props.userManager.updateVisible} 
                 onOk={(user) => this.props.updateUserSure(user)} 
                 onCancel={() => this.props.updateUserCancel()} 
-                id={this.props.userManager.id} 
-                nickName={this.props.userManager.nickName} 
-                role={this.props.userManager.role} 
-                changeNickName={(event) => this.props.changeModalNickName(event)}
-                changeRole={(event) => this.props.changeModalRole(event)}></UpdateModal>
+                id={this.props.userManager.id}></UpdateModal>
             </div>
         )
     }
@@ -155,9 +152,9 @@ class AddModal extends Component{
             role: ''
         }
     }
-    change = (event, attributes) => {
+    change = (event, attribute) => {
         let newState = {};
-        newState[attributes] = event.target.value;
+        newState[attribute] = event.target.value;
         this.setState(newState);
     }
     render(){
@@ -171,6 +168,9 @@ class AddModal extends Component{
                 visible={this.props.visible}
                 onOk={() => this.props.onOk(user)}
                 onCancel={() => this.props.onCancel()}
+                okText='确定'
+                cancelText='取消'
+                destroyOnClose={true}
                 >
                 <Form.Item label="昵称">
                     <Input placeholder="昵称" onChange={(event) => this.change(event, 'nickName')} value={this.state.nickName}/>
@@ -179,7 +179,14 @@ class AddModal extends Component{
                     <Input placeholder="登陆账号" onChange={(event) => this.change(event, 'loginAccount')} value={this.state.loginAccount}/>
                 </Form.Item>
                 <Form.Item label="角色">
-                    <Input placeholder="角色" onChange={(event) => this.change(event, 'role')} value={this.state.role}/>
+                    {/* <Input placeholder="角色" onChange={(event) => this.change(event, 'role')} value={this.state.role}/> */}
+                    <Select style={{width: 150 }}>
+                        <Select.Option value="role1">role1</Select.Option>
+                        <Select.Option value="role2">role2</Select.Option>
+                        <Select.Option value="role3">role3</Select.Option>
+                        <Select.Option value="role4">role4</Select.Option>
+                        <Select.Option value="role5">role5</Select.Option>
+                    </Select>
                 </Form.Item>
             </Modal>
         )
@@ -187,30 +194,88 @@ class AddModal extends Component{
 }
 
 class UpdateModal extends Component{
-    render(){
-        let user = {
-            id: this.props.id,
-            nickName: this.props.nickName,
-            role: this.props.role
+    constructor(){
+        super();
+
+        this.state = {
+            id: '',
+            nickName: '',
+            role: '',
         }
+    }
+    componentWillReceiveProps = (nextProps) => {
+        if(this.props.id == nextProps.id){
+            return
+        }
+        let id = nextProps.id
+        if(id!=undefined && id!=""){
+            this.findUserById(id)
+        }
+    }
+    findUserById = (id) => {
+        axios.get('userManager/findUserById/'+id)
+            .then(r => {
+                let data = r.data
+                this.setState({
+                    id: data.id,
+                    nickName: data.nickName,
+                    role: data.role,
+                })
+            })
+    }
+    change = (event, attribute) => {
+        let newState = {};
+        newState[attribute] = event.target.value;
+        this.setState(newState);
+    }
+    ok = () => {
+        let user = {
+            id: this.state.id,
+            nickName: this.state.nickName,
+            role: this.state.role
+        }
+        this.setState({
+            nickName: '',
+            role: '',
+        })
+        this.props.onOk(user);
+    }
+    cancel = () => {
+        this.setState({
+            nickName: '',
+            role: '',
+        })
+        this.props.onCancel();
+    }
+    render(){
         return (
             <Modal title="修改用户"
                 visible={this.props.visible}
-                onOk={() => this.props.onOk(user)}
-                onCancel={() => this.props.onCancel()}
+                onOk={this.ok}
+                onCancel={this.cancel}
+                okText="确认"
+                cancelText="取消"
+                destroyOnClose={true} 
                 >
                 <Form.Item label="昵称">
-                    <Input placeholder="昵称" onChange={(event) => this.props.changeNickName(event)} value={this.props.nickName}/>
+                    <Input placeholder="昵称" onChange={(event) => this.change(event, 'nickName')} value={this.state.nickName}/>
                 </Form.Item>
                 <Form.Item label="角色">
-                    <Input placeholder="角色" onChange={(event) => this.props.changeRole(event)} value={this.props.role}/>
+                    {/* <Input placeholder="角色" onChange={(event) => this.props.changeRole(event)} value={this.props.role}/> */}
+                    <Select style={{width: 150 }} value={this.state.role}>
+                        <Select.Option value="role1">role1</Select.Option>
+                        <Select.Option value="role2">role2</Select.Option>
+                        <Select.Option value="role3">role3</Select.Option>
+                        <Select.Option value="role4">role4</Select.Option>
+                        <Select.Option value="role5">role5</Select.Option>
+                    </Select>
                 </Form.Item>
             </Modal>
         )
     }
 }
 
-function showDeleteConfirm(deleteUser, selectRows) {
+function showDeleteConfirm(deleteUsersByIds, selectRows) {
     if(selectRows.length == 0){
         message.error('请选择行!')
     }else {
@@ -221,7 +286,7 @@ function showDeleteConfirm(deleteUser, selectRows) {
             okType: 'danger',
             cancelText: '取消',
             onOk() {
-              deleteUser(selectRows)
+                deleteUsersByIds(selectRows)
             },
             onCancel() {
               console.log('Cancel');
@@ -233,7 +298,6 @@ function showDeleteConfirm(deleteUser, selectRows) {
 export default connect((state) => ({userManager: state.userManager}), {
     findUsers, 
     addUserShow, addUserCancel, addUserSure, 
-    deleteUser, 
+    deleteUsersByIds, 
     updateUserShow, updateUserCancel, updateUserSure, 
-    changeModalNickName, changeModalRole
 })(UserManager)

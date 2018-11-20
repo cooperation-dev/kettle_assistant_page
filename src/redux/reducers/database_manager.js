@@ -1,22 +1,13 @@
 import {FIND_DATABASES, 
         ADD_DATABASE_MODAL_SHOW, ADD_DATABASE_MODAL_CANCEL, ADD_DATABASE_MODAL_SURE, 
         UPDATE_DATABASE_MODAL_SHOW, UPDATE_DATABASE_MODAL_CANCEL, UPDATE_DATABASE_MODAL_SURE, 
-        CHANGE_MODAL_NAME, CHANGE_MODAL_SORT, CHANGE_MODAL_AGENCY_NAME, CHANGE_MODAL_AGENCY_CODE, 
-        CHANGE_MODAL_DB_TYPE, CHANGE_MODAL_INTERVIEW_METHOD, CHANGE_MODAL_JNDI_NAME, CHANGE_MODAL_CONNECTION_STRING} from '../actions/database_manager'
+        DELETE_DATABASES_BY_IDS} from '../actions/database_manager'
 
 const initState = {
     list : [],
     addVisible: false,
     updateVisible: false,
-    id: '',
-    name: '',
-    sort: '',
-    agencyName: '',
-    agencyCode: '',
-    dbType: '',
-    interviewMethod: '',
-    jndiName: '',
-    connectionString: '',
+    updateId: '',
 }
 
 export default function reducers (state = initState, action){
@@ -51,14 +42,6 @@ export default function reducers (state = initState, action){
                 ...state,
                 updateVisible: true,
                 id: action.database.id,
-                name: action.database.name,
-                sort: action.database.sort,
-                agencyName: action.database.agencyName,
-                agencyCode: action.database.agencyCode,
-                dbType: action.database.dbType,
-                interviewMethod: action.database.interviewMethod,
-                jndiName: action.database.jndiName,
-                connectionString: action.database.connectionString,
             }
         }
         case UPDATE_DATABASE_MODAL_CANCEL:{
@@ -68,7 +51,7 @@ export default function reducers (state = initState, action){
             }
         }
         case UPDATE_DATABASE_MODAL_SURE:{
-            let newList = state.list.map(database => {
+            state.list.map(database => {
                 if(database.id == action.database.id){
                     return action.database
                 }else {
@@ -78,55 +61,19 @@ export default function reducers (state = initState, action){
             return {
                 ...state,
                 updateVisible: false,
-                list: newList,
             }
         }
-        case CHANGE_MODAL_NAME:{
-            return {
-                ...state,
-                name: action.name,
+        case DELETE_DATABASES_BY_IDS:{
+            let newList = [];
+            let deleteIds = action.deleteIds;
+            for(let i = 0; i < state.list.length; i ++){
+                if(deleteIds.indexOf(state.list[i].id) == -1){
+                    newList.push(state.list[i]);
+                }
             }
-        }
-        case CHANGE_MODAL_SORT:{
             return {
                 ...state,
-                sort: action.sort,
-            }
-        }
-        case CHANGE_MODAL_AGENCY_NAME:{
-            return {
-                ...state,
-                agencyName: action.agencyName,
-            }
-        }
-        case CHANGE_MODAL_AGENCY_CODE:{
-            return {
-                ...state,
-                agencyCode: action.agencyCode,
-            }
-        } 
-        case CHANGE_MODAL_DB_TYPE:{
-            return {
-                ...state,
-                dbType: action.dbType,
-            }
-        }
-        case CHANGE_MODAL_INTERVIEW_METHOD:{
-            return {
-                ...state,
-                interviewMethod: action.interviewMethod,
-            }
-        }
-        case CHANGE_MODAL_JNDI_NAME:{
-            return {
-                ...state,
-                jndiName: action.jndiName,
-            }
-        }
-        case CHANGE_MODAL_CONNECTION_STRING:{
-            return {
-                ...state,
-                connectionString: action.connectionString,
+                list: newList
             }
         }
         default : 

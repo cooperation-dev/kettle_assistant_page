@@ -16,22 +16,8 @@ export const UPDATE_DATABASE_MODAL_SHOW = "databaseManager/updateDatabaseShow"
 export const UPDATE_DATABASE_MODAL_CANCEL = "databaseManager/updateDatabaseCancel"
 //修改确认
 export const UPDATE_DATABASE_MODAL_SURE = "databaseManager/updateDatabasetSure"
-//修改Modal名称
-export const CHANGE_MODAL_NAME = "databaseManager/changeModalName"
-//修改Modal排序
-export const CHANGE_MODAL_SORT = "databaseManager/changeModalSort"
-//修改Modal机构名称
-export const CHANGE_MODAL_AGENCY_NAME = "databaseManager/changeModalAgencyName"
-//修改Modal机构代码
-export const CHANGE_MODAL_AGENCY_CODE = "databaseManager/changeModalAgencyCode"
-//修改Modal数据库类型
-export const CHANGE_MODAL_DB_TYPE = "databaseManager/changeModalDbType"
-//修改Modal访问方式
-export const CHANGE_MODAL_INTERVIEW_METHOD = "databaseManager/changeModalInterviewMethod"
-//修改ModalJNDI名称
-export const CHANGE_MODAL_JNDI_NAME = "databaseManager/changeModalJndiName"
-//修改Modal连接串
-export const CHANGE_MODAL_CONNECTION_STRING = "databaseManager/changeModalConnectionString"
+//删除行
+export const DELETE_DATABASES_BY_IDS = 'databaseManager/deleteDatabasesByIds';
 
 export const find_databases = (list) => {
     return {
@@ -79,59 +65,10 @@ export const update_database_modal_sure = (database) => {
     }
 }
 
-export const change_modal_name = (name) => {
+export const delete_databases_by_ids = (deleteIds) => {
     return {
-        type: CHANGE_MODAL_NAME,
-        name: name
-    }
-}
-
-export const change_modal_sort = (sort) => {
-    return {
-        type: CHANGE_MODAL_SORT,
-        sort: sort
-    }
-}
-
-export const change_modal_agency_name = (agencyName) => {
-    return {
-        type: CHANGE_MODAL_AGENCY_NAME,
-        agencyName: agencyName
-    }
-}
-
-export const change_modal_agency_code = (agencyCode) => {
-    return {
-        type: CHANGE_MODAL_AGENCY_CODE,
-        agencyCode: agencyCode
-    }
-}
-
-export const change_modal_db_type = (dbType) => {
-    return {
-        type: CHANGE_MODAL_DB_TYPE,
-        dbType: dbType
-    }
-}
-
-export const change_modal_interview_method = (interviewMethod) => {
-    return {
-        type: CHANGE_MODAL_INTERVIEW_METHOD,
-        interviewMethod: interviewMethod
-    }
-}
-
-export const change_modal_jndi_name = (jndiName) => {
-    return {
-        type: CHANGE_MODAL_JNDI_NAME,
-        jndiName: jndiName
-    }
-}
-
-export const change_modal_connection_string = (connectionString) => {
-    return {
-        type: CHANGE_MODAL_CONNECTION_STRING,
-        connectionString: connectionString
+        type: DELETE_DATABASES_BY_IDS,
+        deleteIds: deleteIds
     }
 }
 
@@ -168,25 +105,9 @@ export const addDatabaseSure = (database) => {
             url: ADD_DATABASE_MODAL_SURE,
             data: database,
         }).then((res) => {
-            return res.data.database;
+            return res.data;
         }).then((database) => {
             dispatch(add_database_modal_sure(database));  
-        })
-    }
-}
-
-export const deleteDatabase = (selectRows) => {
-    return (dispatch) => {
-        let ids = [];
-        selectRows.map(row => ids.push(row.id));
-        axios({
-            method: 'post',
-            url: 'databaseManager/deleteDatabaseByIds',
-            data: ids,
-        }).then((res) => {
-            return res.data.list;
-        }).then((list) => {
-            dispatch(find_databases(list));
         })
     }
 }
@@ -216,57 +137,25 @@ export const updateDatabaseSure = (database) => {
             url: UPDATE_DATABASE_MODAL_SURE,
             data: database,
         }).then((res) => {
-            return res.data.database
+            return res.data;
         }).then((database) => {
             dispatch(update_database_modal_sure(database));
         })
     }
 }
 
-export const changeModalName = (event) => {
+export const deleteDatabasesByIds = (selectRows) => {
     return (dispatch) => {
-        dispatch(change_modal_name(event.target.value))
-    }
-}
-
-export const changeModalSort = (event) => {
-    return (dispatch) => {
-        dispatch(change_modal_sort(event.target.value))
-    }
-}
-
-export const changeModalAgencyName = (event) => {
-    return (dispatch) => {
-        dispatch(change_modal_agency_name(event.target.value))
-    }
-}
-
-export const changeModalAgencyCode = (event) => {
-    return (dispatch) => {
-        dispatch(change_modal_agency_code(event.target.value))
-    }
-}
-
-export const changeModalDbType = (event) => {
-    return (dispatch) => {
-        dispatch(change_modal_db_type(event.target.value))
-    }
-}
-
-export const changeModalInterviewMethod = (event) => {
-    return (dispatch) => {
-        dispatch(change_modal_interview_method(event.target.value))
-    }
-}
-
-export const changeModalJndiName = (event) => {
-    return (dispatch) => {
-        dispatch(change_modal_jndi_name(event.target.value))
-    }
-}
-
-export const changeModalConnectionString = (event) => {
-    return (dispatch) => {
-        dispatch(change_modal_connection_string(event.target.value))
+        let ids = [];
+        selectRows.map(row => ids.push(row.id));
+        axios({
+            method: 'post',
+            url: DELETE_DATABASES_BY_IDS,
+            data: ids,
+        }).then((res) => {
+            return res.data;
+        }).then((deleteIds) => {
+            dispatch(delete_databases_by_ids(deleteIds));
+        })
     }
 }

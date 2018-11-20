@@ -1,24 +1,14 @@
-import {FIND_MENUS, 
+import {FIND_MENUS, FIND_PARENTS, 
         ADD_MENU_MODAL_SHOW, ADD_MENU_MODAL_CANCEL, ADD_MENU_MODAL_SURE, 
-        UPDATE_MENU_MODAL_SHOW, UPDATE_MENU_MODAL_CANCEL, UPDATE_MENU_MODAL_SURE, 
-        CHANGE_MODAL_NAME, CHANGE_MODAL_TYPE, CHANGE_MODAL_CODE, CHANGE_MODAL_LEVEL, CHANGE_MODAL_PARENT_ID, 
-        CHANGE_MODAL_ICON, CHANGE_MODAL_DIRECTION, CHANGE_MODAL_COMPONENT, CHANGE_MODAL_FILTER_CONDITION, CHANGE_MODAL_CUSTOM_FUNC, } from '../actions/menu_manager'
+        UPDATE_MENU_MODAL_SHOW, UPDATE_MENU_MODAL_CANCEL, UPDATE_MENU_MODAL_SURE,
+        DELETE_MENUS_BY_IDS, } from '../actions/menu_manager'
 
 const initState = {
     list:[],
+    parents: [],
     addVisible: false,
     updateVisible: false,
-    id: '',
-    name: '',
-    type: '',
-    code: '',
-    level: '',
-    parentId: '',
-    icon: '',
-    direction: '',
-    component: '',
-    filterCondition: '',
-    customFunc: ''
+    updateId: '',
 }
 
 export default function reducers(state = initState, action){
@@ -27,6 +17,12 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 list:action.list
+            }
+        }
+        case FIND_PARENTS:{
+            return {
+                ...state,
+                parents: action.parents,
             }
         }
         case ADD_MENU_MODAL_SHOW:{
@@ -62,17 +58,7 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 updateVisible: true,
-                id: action.menu.id,
-                name: action.menu.name,
-                type: action.menu.type,
-                code: action.menu.code,
-                level: action.menu.level,
-                parentId: action.menu.parentId,
-                icon: action.menu.icon,
-                direction: action.menu.direction,
-                component: action.menu.component,
-                filterCondition: action.menu.filterCondition,
-                customFunc: action.menu.customFunc
+                updateId: action.menu.id,
             }
         }
         case UPDATE_MENU_MODAL_CANCEL:{
@@ -82,7 +68,7 @@ export default function reducers(state = initState, action){
             }
         }
         case UPDATE_MENU_MODAL_SURE:{
-            let newList = state.list.map(menu => {
+            state.list.map(menu => {
                 if(menu.id == action.menu.id){
                     return action.menu
                 }else {
@@ -92,67 +78,26 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 updateVisible: false,
-                list: newList,
             }
         }
-        case CHANGE_MODAL_NAME:{
-            return {
-                ...state,
-                name: action.name
+        case DELETE_MENUS_BY_IDS:{
+            let newDeleList = [];
+            let deleteIds = action.deleteIds;
+            for(let i = 0; i < state.list.length; i++){
+                let newChildren = [];
+                if(deleteIds.indexOf(state.list[i].id) == -1){
+                    for(let j = 0; j < state.list[i].children.length; j++){
+                        if(deleteIds.indexOf(state.list[i].children[j].id) == -1){
+                            newChildren.push(state.list[i].children[j]);
+                        }
+                    }
+                    state.list[i].children = newChildren;
+                    newDeleList.push(state.list[i]);
+                }
             }
-        }
-        case CHANGE_MODAL_TYPE:{
             return {
                 ...state,
-                type: action.menuType
-            }
-        }
-        case CHANGE_MODAL_CODE:{
-            return {
-                ...state,
-                code: action.code
-            }
-        }
-        case CHANGE_MODAL_LEVEL:{
-            return {
-                ...state,
-                level: action.level
-            }
-        }
-        case CHANGE_MODAL_PARENT_ID:{
-            return {
-                ...state,
-                parentId: action.parentId
-            }
-        }
-        case CHANGE_MODAL_ICON:{
-            return {
-                ...state,
-                icon: action.icon
-            }
-        }
-        case CHANGE_MODAL_DIRECTION:{
-            return {
-                ...state,
-                direction: action.direction
-            }
-        }
-        case CHANGE_MODAL_COMPONENT:{
-            return {
-                ...state,
-                component: action.component
-            }
-        }
-        case CHANGE_MODAL_FILTER_CONDITION:{
-            return {
-                ...state,
-                filterCondition: action.filterCondition
-            }
-        }
-        case CHANGE_MODAL_CUSTOM_FUNC:{
-            return {
-                ...state,
-                customFunc: action.customFunc
+                list: newDeleList,
             }
         }
         default : {

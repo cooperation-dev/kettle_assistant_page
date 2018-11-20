@@ -1,16 +1,13 @@
 import {FIND_USERS, 
         ADD_USER_MODAL_SHOW, ADD_USER_MODAL_CANCEL, ADD_USER_MODAL_SURE, 
         UPDATE_USER_MODAL_SHOW, UPDATE_USER_MODAL_CANCEL, UPDATE_USER_MODAL_SURE, 
-        CHANGE_MODAL_NICKNAME, CHANGE_MODAL_ROLE} from '../actions/user_manager'
+        DELETE_USERS_BY_IDS, } from '../actions/user_manager'
 
 const initState = {
     list: [],
     addVisible: false,
     updateVisible: false,
     id: '',
-    nickName: '',
-    loginAccount: '',
-    role: ''
 }
 
 export default function reducers(state = initState, action){
@@ -45,8 +42,6 @@ export default function reducers(state = initState, action){
                 ...state,
                 updateVisible: true,
                 id: action.user.id,
-                nickName: action.user.nickName,
-                role: action.user.role
             }
         }
         case UPDATE_USER_MODAL_CANCEL:{
@@ -56,7 +51,7 @@ export default function reducers(state = initState, action){
             }
         }
         case UPDATE_USER_MODAL_SURE:{
-            let newList = state.list.map((ele) => {
+            state.list.map((ele) => {
                 if(ele.id == action.user.id){
                     return action.user
                 }else {
@@ -66,19 +61,19 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 updateVisible: false,
-                list: newList
             }
         }
-        case CHANGE_MODAL_NICKNAME:{
-            return {
-                ...state,
-                nickName: action.nickName
+        case DELETE_USERS_BY_IDS:{
+            let newList = [];
+            let deleteIds = action.deleteIds;
+            for(var i = 0; i < state.list.length; i++){
+                if(deleteIds.indexOf(state.list[i].id) == -1){
+                    newList.push(state.list[i]);
+                }
             }
-        }
-        case CHANGE_MODAL_ROLE:{
             return {
                 ...state,
-                role: action.role
+                list: newList,
             }
         }
         default:{

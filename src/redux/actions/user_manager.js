@@ -1,25 +1,22 @@
-// import '../../../mock/api';
 import axios from 'axios';
 import {message} from 'antd';
 
 //请求数据
 export const FIND_USERS = "userManager/findUsers";
 //新增显示
-export const ADD_USER_MODAL_SHOW = "userManager/addUserShow"
+export const ADD_USER_MODAL_SHOW = "userManager/addUserShow";
 //新增取消
-export const ADD_USER_MODAL_CANCEL = "userManager/addUserCancel"
+export const ADD_USER_MODAL_CANCEL = "userManager/addUserCancel";
 //新增确认
-export const ADD_USER_MODAL_SURE = "userManager/addUserSure"
+export const ADD_USER_MODAL_SURE = "userManager/addUserSure";
 //修改显示
-export const UPDATE_USER_MODAL_SHOW = "userManager/updateUserShow"
+export const UPDATE_USER_MODAL_SHOW = "userManager/updateUserShow";
 //修改取消
-export const UPDATE_USER_MODAL_CANCEL = "userManager/updateUserCancel"
+export const UPDATE_USER_MODAL_CANCEL = "userManager/updateUserCancel";
 //修改确认
-export const UPDATE_USER_MODAL_SURE = "userManager/updateUserSure"
-//修改Modal昵称
-export const CHANGE_MODAL_NICKNAME = "userManager/changeModalNickName"
-//修改Modal角色
-export const CHANGE_MODAL_ROLE = "userManager/changeModalRole"
+export const UPDATE_USER_MODAL_SURE = "userManager/updateUserSure";
+//删除行
+export const DELETE_USERS_BY_IDS = "userManager/deleteUsersByIds";
 
 export const find_users = (list) => {
     return {
@@ -67,17 +64,10 @@ export const update_user_modal_sure = (user) => {
     }
 }
 
-export const change_modal_nickname = (nickName) => {
+export const delete_users_by_ids = (deleteIds) => {
     return {
-        type: CHANGE_MODAL_NICKNAME,
-        nickName: nickName
-    }
-}
-
-export const change_modal_role = (role) => {
-    return {
-        type: CHANGE_MODAL_ROLE,
-        role: role
+        type: DELETE_USERS_BY_IDS,
+        deleteIds: deleteIds,
     }
 }
 
@@ -114,25 +104,9 @@ export const addUserSure = (user) => {
             url: ADD_USER_MODAL_SURE,
             data: user
         }).then((res) => {
-            return res.data.user
+            return res.data
         }).then((user) => {
             dispatch(add_user_modal_sure(user));
-        })
-    }
-}
-
-export const deleteUser = (selectRows) => {
-    return (dispatch) => {
-        let ids = [];
-        selectRows.map((row) => ids.push(row.id))
-        axios({
-            method: 'post',
-            url: 'userManager/deleteUserByIds',
-            data: ids
-        }).then((res) => {
-            return res.data.list
-        }).then((list) => {
-            dispatch(find_users(list))
         })
     }
 }
@@ -162,21 +136,25 @@ export const updateUserSure = (user) => {
             url: UPDATE_USER_MODAL_SURE,
             data: user
         }).then((res) => {
-            return res.data.user
+            return res.data
         }).then((user) => {
             dispatch(update_user_modal_sure(user));
         })
     }
 }
 
-export const changeModalNickName = (event) => {
+export const deleteUsersByIds = (selectRows) => {
     return (dispatch) => {
-        dispatch(change_modal_nickname(event.target.value));
-    }
-}
-
-export const changeModalRole = (event) => {
-    return (dispatch) => {
-        dispatch(change_modal_role(event.target.value))
+        let ids = [];
+        selectRows.map((row) => ids.push(row.id))
+        axios({
+            method: 'post',
+            url: DELETE_USERS_BY_IDS,
+            data: ids
+        }).then((res) => {
+            return res.data
+        }).then((deleteIds) => {
+            dispatch(delete_users_by_ids(deleteIds))
+        })
     }
 }

@@ -1,7 +1,7 @@
 import {FIND_PROJECTS,
         ADD_PROJECT_MODAL_SHOW, ADD_PROJECT_MODAL_CANCEL, ADD_PROJECT_MODAL_SURE, 
         UPDATE_PROJECT_MODAL_SHOW, UPDATE_PROJECT_MODAL_CANCEL, UPDATE_PROJECT_MODAL_SURE, 
-        CHANGE_MODAL_NAME, CHANGE_MODAL_PROJECT_URL, CHANGE_MODAL_SORT} from '../actions/project_manager'
+        DELETE_PROJECTS_BY_IDS, } from '../actions/project_manager'
 
 const initState = {
     list: [],
@@ -57,7 +57,7 @@ export default function reducers(state = initState, action){
             }
         }
         case UPDATE_PROJECT_MODAL_SURE:{
-            let newList = state.list.map((project) => {
+            state.list.map((project) => {
                 if(project.id == action.project.id){
                     return action.project
                 }else {
@@ -67,25 +67,19 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 updateVisible: false,
-                list: newList
             }
         }
-        case CHANGE_MODAL_NAME:{
-            return {
-                ...state,
-                name:action.name
+        case DELETE_PROJECTS_BY_IDS:{
+            let newList = [];
+            let deleteIds = action.deleteIds;
+            for(var i = 0; i < state.list.length; i++){
+                if(deleteIds.indexOf(state.list[i].id) == -1){
+                    newList.push(state.list[i]);
+                }
             }
-        }
-        case CHANGE_MODAL_PROJECT_URL:{
             return {
                 ...state,
-                projectUrl: action.projectUrl
-            }
-        }
-        case CHANGE_MODAL_SORT:{
-            return {
-                ...state,
-                sort: action.sort
+                list: newList,
             }
         }
         default:{

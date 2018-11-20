@@ -4,23 +4,19 @@ import {message} from 'antd';
 //请求数据
 export const FIND_PROJECTS = "projectManager/findProjects";
 //新增显示
-export const ADD_PROJECT_MODAL_SHOW = "projectManager/addProjectShow"
+export const ADD_PROJECT_MODAL_SHOW = 'projectManager/addProjectShow';
 //新增取消
-export const ADD_PROJECT_MODAL_CANCEL = "projectManager/addProjectCancel"
+export const ADD_PROJECT_MODAL_CANCEL = 'projectManager/addProjectCancel';
 //新增确认
-export const ADD_PROJECT_MODAL_SURE = "projectManager/addProjectSure"
+export const ADD_PROJECT_MODAL_SURE = 'projectManager/addProjectSure';
 //修改显示
-export const UPDATE_PROJECT_MODAL_SHOW = "projectManager/updateProjectShow"
+export const UPDATE_PROJECT_MODAL_SHOW = 'projectManager/updateProjectShow';
 //修改取消
-export const UPDATE_PROJECT_MODAL_CANCEL = "projectManager/updateProjectCancel"
+export const UPDATE_PROJECT_MODAL_CANCEL = 'projectManager/updateProjectCancel';
 //修改确认
-export const UPDATE_PROJECT_MODAL_SURE = "projectManager/updateProjectSure"
-//修改Modal名称
-export const CHANGE_MODAL_NAME = "projectManager/changeModalName"
-//修改Modal Url
-export const CHANGE_MODAL_PROJECT_URL = "projectManager/changeModalProjectUrl"
-//修改Modal排序
-export const CHANGE_MODAL_SORT = "projectManager/changeModalSort"
+export const UPDATE_PROJECT_MODAL_SURE = 'projectManager/updateProjectSure';
+//删除行
+export const DELETE_PROJECTS_BY_IDS = 'projectManager/deleteProjectsByIds';
 
 export const find_projects = (list) => {
     return {
@@ -68,24 +64,10 @@ export const update_project_modal_sure = (project) => {
     }
 }
 
-export const change_modal_name = (name) => {
+export const delete_projects_by_ids = (deleteIds) => {
     return {
-        type: CHANGE_MODAL_NAME,
-        name: name
-    }
-}
-
-export const change_modal_project_url = (projectUrl) => {
-    return {
-        type: CHANGE_MODAL_PROJECT_URL,
-        projectUrl: projectUrl
-    }
-}
-
-export const change_modal_sort = (sort) => {
-    return {
-        type: CHANGE_MODAL_SORT,
-        sort: sort
+        type: DELETE_PROJECTS_BY_IDS,
+        deleteIds: deleteIds,
     }
 }
 
@@ -122,25 +104,9 @@ export const addProjectSure = (project) => {
             url: ADD_PROJECT_MODAL_SURE,
             data: project
         }).then((res) => {
-            return res.data.project
+            return res.data
         }).then((project) => {
             dispatch(add_project_modal_sure(project));
-        })
-    }
-}
-
-export const deleteProject = (selectRows) => {
-    return (dispatch) => {
-        let ids = [];
-        selectRows.map((row) => ids.push(row.id))
-        axios({
-            method: 'post',
-            url: 'projectManager/deleteProjectByIds',
-            data: ids
-        }).then((res) => {
-            return res.data.list
-        }).then((list) => {
-            dispatch(find_projects(list))
         })
     }
 }
@@ -170,27 +136,25 @@ export const updateProjectSure = (project) => {
             url: UPDATE_PROJECT_MODAL_SURE,
             data: project
         }).then((res) => {
-            return res.data.project
+            return res.data
         }).then((project) => {
             dispatch(update_project_modal_sure(project));  
         })
     }
 }
 
-export const changeModalName = (event) => {
+export const deleteProjectsByIds = (selectRows) => {
     return (dispatch) => {
-        dispatch(change_modal_name(event.target.value))
-    }
-}
-
-export const changeModalProjectUrl = (event) => {
-    return (dispatch) => {
-        dispatch(change_modal_project_url(event.target.value))
-    }
-}
-
-export const changeModalSort = (event) => {
-    return (dispatch) => {
-        dispatch(change_modal_sort(event.target.value))
+        let ids = [];
+        selectRows.map((row) => ids.push(row.id))
+        axios({
+            method: 'post',
+            url: DELETE_PROJECTS_BY_IDS,
+            data: ids
+        }).then((res) => {
+            return res.data
+        }).then((deleteIds) => {
+            dispatch(delete_projects_by_ids(deleteIds))
+        })
     }
 }

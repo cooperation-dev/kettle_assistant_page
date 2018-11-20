@@ -383,8 +383,8 @@ for(let i=0; i<=10; i++){
     role_manager.push(Mock.mock({
         id: i + 1,
         key: i + 1,
-        roleName: 'Name' + (i + 1),
-        roleDescription: 'Description' + (i + 1)
+        name: 'Name' + (i + 1),
+        description: 'Description' + (i + 1)
     }))
 }
 

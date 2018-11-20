@@ -168,34 +168,17 @@ mock.onPost('/api/sumDicController/changeDisabled')
                 connectionString: connectionString,
             })
             setTimeout(() => {
-                resolve([200, {
-                    database: newDatabase
-                }]);
+                resolve([200, newDatabase]);
             }, 500);
         })
     })
     
-    mock.onPost('databaseManager/deleteDatabaseByIds')
+    mock.onPost('databaseManager/deleteDatabasesByIds')
     .reply(config => {
         let ids = JSON.parse(config.data)
         return new Promise((resolve, reject) => {
-            let newDatabase = []
-            for(let i=0; i<database_manager.length; i++){
-                let flag = true
-                for(let j=0; j<ids.length; j++){
-                    if(ids[j] == database_manager[i].id){
-                        flag = false
-                        break;
-                    }
-                }
-                if(flag){
-                    newDatabase.push(database_manager[i])
-                }
-            }
             setTimeout(() => {
-                resolve([200, {
-                    list: newDatabase
-                }]);
+                resolve([200, ids]);
             }, 500);
         })
     })
@@ -267,9 +250,13 @@ mock.onPost('databaseManager/findList')
             resolve(['200',newDatabase])
         }, 500);
     })
+})
+
+for(let i = 0; i < database_manager.length; i++){
+    let database = database_manager[i];
+    mock.onGet('databaseManager/findDatabaseById/'+database.id)
+    .reply(200, database);
 }
-    
-)
 
 mock.onPost('menuManager/addMenuSure')
 .reply(config => {
@@ -300,34 +287,17 @@ mock.onPost('menuManager/addMenuSure')
             newMenuChildren = newMenu;
         }
         setTimeout(() => {
-            resolve([200, {
-                menu: newMenuChildren
-            }]);
+            resolve([200, newMenuChildren]);
         }, 500);
     })
 })
 
-mock.onPost('menuManager/deleteMenuByIds')
+mock.onPost('menuManager/deleteMenusByIds')
 .reply(config => {
     let ids = JSON.parse(config.data)
     return new Promise((resolve, reject) => {
-        let newMenu = []
-        for(let i=0; i<menu.length; i++){
-            let flag = true
-            for(let j=0; j<ids.length; j++){
-                if(ids[j] == menu[i].id){
-                    flag = false
-                    break;
-                }
-            }
-            if(flag){
-                newMenu.push(menu[i])
-            }
-        }
         setTimeout(() => {
-            resolve([200, {
-                list: newMenu
-            }]);
+            resolve([200, ids]);
         }, 500);
     })
 })
@@ -368,18 +338,28 @@ mock.onPost('menuManager/updateMenuSure')
             newMenu.customFunc = customFunc
         }
         setTimeout(() => {
-            resolve([200, {
-                menu: newMenu
-            }]);
+            resolve([200, newMenu]);
         }, 500);
     })
 })
 
 mock.onPost('menuManager/findList').reply(
-    '200', {
-        list: menu
-    }
+    '200', menu
 )
+let list = [];
+for(let i = 0; i<menu.length; i++){
+    list = list.concat(menu[i].children);
+    list.push(menu[i]);
+}
+
+for(let i=0; i<list.length; i++){
+    let m = list[i]
+    mock.onGet('menuManager/findMenuById/'+m.id)
+    .reply('200', m)
+}
+
+mock.onPost('menuManager/findParents')
+.reply('200', menu)
 
 mock.onPost('systemLog/findLogs', {
     operator: '',
@@ -417,80 +397,67 @@ mock.onPost('/api/systemLogController/findLogs')
 
 mock.onPost('roleManager/addRoleSure')
 .reply(config => {
-    let {roleName, roleDescription} = JSON.parse(config.data)
+    let {name, description} = JSON.parse(config.data)
     return new Promise((resolve, reject) => {
         let max_key = role_manager[role_manager.length-1].key+1
         let newRole = Mock.mock({
             key: "" + (max_key),
             id: ""+(max_key),
-            roleName: roleName,
-            roleDescription: roleDescription
+            name: name,
+            description: description
         })
         setTimeout(() => {
-            resolve([200, {
-                role: newRole
-            }]);
+            resolve([200, newRole]);
         }, 500);
     })
 })
 
-mock.onPost('roleManager/deleteRoleByIds')
+mock.onPost('roleManager/deleteRolesByIds')
 .reply(config => {
     let ids = JSON.parse(config.data)
     return new Promise((resolve, reject) => {
-        let newRole = []
-        for(let i=0; i<role_manager.length; i++){
-            let flag = true
-            for(let j=0; j<ids.length; j++){
-                if(ids[j] == role_manager[i].id){
-                    flag = false
-                    break;
-                }
-            }
-            if(flag){
-                newRole.push(role_manager[i])
-            }
-        }
         setTimeout(() => {
-            resolve([200, {
-                list: newRole
-            }]);
+            resolve([200, ids]);
         }, 500);
     })
 })
 
 mock.onPost('roleManager/updateRoleSure')
 .reply(config => {
-    let {roleId, roleName, roleDescription} = JSON.parse(config.data)
+    let {id, name, description} = JSON.parse(config.data)
     return new Promise((resolve, reject) => {
-        let newRole = role_manager.filter(role => role.id==roleId)[0]
-        if(roleName!=undefined && roleName!=''){
-            newRole.roleName = roleName
+        let newRole = role_manager.filter(role => role.id==id)[0]
+        if(name!=undefined && name!=''){
+            newRole.name = name
         }
-        if(roleDescription!=undefined && roleDescription!=''){
-            newRole.roleDescription = roleDescription
+        if(description!=undefined && description!=''){
+            newRole.description = description
         }
         setTimeout(() => {
-            resolve([200, {
-                role: newRole
-            }]);
+            resolve([200, newRole]);
         }, 500);
     })
 })
 
 mock.onPost('roleManager/findRoles')
 .reply(config => {
-    let {roleName} = JSON.parse(config.data);
+    let {name} = JSON.parse(config.data);
     return new Promise((resolve, reject) => {
         let newRole = role_manager;
-        if(roleName != undefined && roleName != ''){
-            newRole = newRole.filter(role => role.roleName == roleName)
+        if(name != undefined && name != ''){
+            newRole = newRole.filter(role => role.name == name)
         }
         setTimeout(() => {
             resolve(['200', newRole])
         }, 500);
     })
 })
+
+for(let i=0; i<role_manager.length; i++){
+    let role = role_manager[i]
+    mock.onGet('roleManager/findRoleById/'+role.id)
+    .reply('200', role)
+}
 
 mock.onPost('userManager/addUserSure')
 .reply(config => {
@@ -505,34 +472,17 @@ mock.onPost('userManager/addUserSure')
             role: role
         })
         setTimeout(() => {
-            resolve([200, {
-                user: newUser
-            }]);
+            resolve([200, newUser]);
         }, 500);
     })
 })
 
-mock.onPost('userManager/deleteUserByIds')
+mock.onPost('userManager/deleteUsersByIds')
 .reply(config => {
     let ids = JSON.parse(config.data)
     return new Promise((resolve, reject) => {
-        let newUser = []
-        for(let i=0; i<user_manager.length; i++){
-            let flag = true
-            for(let j=0; j<ids.length; j++){
-                if(ids[j] == user_manager[i].id){
-                    flag = false
-                    break;
-                }
-            }
-            if(flag){
-                newUser.push(user_manager[i])
-            }
-        }
         setTimeout(() => {
-            resolve([200, {
-                list: newUser
-            }]);
+            resolve([200, ids]);
         }, 500);
     })
 })
@@ -549,9 +499,7 @@ mock.onPost('userManager/updateUserSure')
             newUser.role = role
         }
         setTimeout(() => {
-            resolve([200, {
-                user: newUser
-            }]);
+            resolve([200, newUser]);
         }, 500);
     })
 })
@@ -562,7 +510,7 @@ mock.onPost('userManager/findUsers')
     return new Promise((resolve, reject) => {
         let newUser = user_manager;
         if(nickName != undefined && nickName != ''){
-            newUser = newUser.filter(user => user.name == name)
+            newUser = newUser.filter(user => user.nickName == nickName)
         }
         if(loginAccount != undefined && loginAccount != ''){
             newUser = newUser.filter(user => user.loginAccount == loginAccount)
@@ -575,6 +523,13 @@ mock.onPost('userManager/findUsers')
         }, 500);
     })
 })
+
+
+for(let i=0; i<user_manager.length; i++){
+    let user = user_manager[i]
+    mock.onGet('userManager/findUserById/'+user.id)
+    .reply('200', user)
+}
 
 mock.onPost('projectManager/addProjectSure')
 .reply(config => {
@@ -593,34 +548,17 @@ mock.onPost('projectManager/addProjectSure')
             status: Mock.Random.integer(0,1)==0?'成功':'失败'
         })
         setTimeout(() => {
-            resolve([200, {
-                project: newProject
-            }]);
+            resolve([200, newProject]);
         }, 500);
     })
 })
 
-mock.onPost('projectManager/deleteProjectByIds')
+mock.onPost('projectManager/deleteProjectsByIds')
 .reply(config => {
     let ids = JSON.parse(config.data)
     return new Promise((resolve, reject) => {
-        let newProject = []
-        for(let i=0; i<project_manager.length; i++){
-            let flag = true
-            for(let j=0; j<ids.length; j++){
-                if(ids[j] == project_manager[i].id){
-                    flag = false
-                    break;
-                }
-            }
-            if(flag){
-                newProject.push(project_manager[i])
-            }
-        }
         setTimeout(() => {
-            resolve([200, {
-                list: newProject
-            }]);
+            resolve([200, ids]);
         }, 500);
     })
 })
@@ -640,9 +578,7 @@ mock.onPost('projectManager/updateProjectSure')
             newProject.sort = sort
         }
         setTimeout(() => {
-            resolve([200, {
-                project: newProject
-            }]);
+            resolve([200, newProject]);
         }, 500);
     })
 })
@@ -669,6 +605,12 @@ mock.onPost('projectManager/findProjects')
         }, 500);
     })
 })
+
+for(let i=0; i<project_manager.length; i++){
+    let project = project_manager[i]
+    mock.onGet('projectManager/findProjectById/'+project.id)
+    .reply('200', project)
+}
 
 mock.onGet('/api/homeController/loadMenu')
     .reply(config => {

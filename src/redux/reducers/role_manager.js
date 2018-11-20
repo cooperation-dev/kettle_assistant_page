@@ -1,15 +1,13 @@
 import {FIND_ROLES, 
         ADD_ROLE_MODAL_SHOW, ADD_ROLE_MODAL_CANCEL, ADD_ROLE_MODAL_SURE, 
-        UPDATE_ROLE_MODAL_SHOW, UPDATE_ROLE_MODAL_CANCEL, UPDATE_ROLE_MODAL_SURE, 
-        CHANGE_MODAL_NAME, CHANGE_MODAL_DESCRIPTION} from '../actions/role_manager'
+        UPDATE_ROLE_MODAL_SHOW, UPDATE_ROLE_MODAL_CANCEL, UPDATE_ROLE_MODAL_SURE,
+        DELETE_ROLES_BY_IDS, } from '../actions/role_manager'
 
 const initState = {
     list:[],
     addVisible: false,
     updateVisible: false,
-    modalRoleId: '',
-    modalRoleName: '',
-    modalRoleDescription: ''
+    updateId: '',
 }
 
 export default function reducers(state = initState, action){
@@ -43,9 +41,7 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 updateVisible: true,
-                modalRoleId: action.role.id,
-                modalRoleName: action.role.roleName,
-                modalRoleDescription: action.role.roleDescription,
+                updateId: action.role.id,
             }
         }
         case UPDATE_ROLE_MODAL_CANCEL:{
@@ -55,7 +51,7 @@ export default function reducers(state = initState, action){
             }
         }
         case UPDATE_ROLE_MODAL_SURE:{
-            let newlist = state.list.map(ele => {
+            state.list.map(ele => {
                 if(ele.id == action.role.id)
                     return action.role
                 else
@@ -64,19 +60,19 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 updateVisible: false,
-                list: newlist
             }
         }
-        case CHANGE_MODAL_NAME:{
-            return {
-                ...state,
-                modalRoleName: action.roleName
+        case DELETE_ROLES_BY_IDS:{
+            let newList = [];
+            let deleteIds = action.deleteIds;
+            for(var i = 0; i < state.list.length; i++){
+                if(deleteIds.indexOf(state.list[i].id) == -1){
+                    newList.push(state.list[i]);
+                }
             }
-        }
-        case CHANGE_MODAL_DESCRIPTION:{
             return {
                 ...state,
-                modalRoleDescription: action.roleDescription
+                list: newList,
             }
         }
         default:{

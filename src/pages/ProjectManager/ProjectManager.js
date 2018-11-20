@@ -3,10 +3,11 @@ import {Form, Input, Checkbox, Button, Row, Col, Table, Modal, message} from 'an
 
 import {findProjects, 
         addProjectShow, addProjectCancel, addProjectSure, 
-        deleteProject, 
-        updateProjectShow, updateProjectCancel, updateProjectSure, 
-        changeModalName, changeModalProjectUrl, changeModalSort} from '../../redux/actions/project_manager'
+        deleteProjectsByIds, 
+        updateProjectShow, updateProjectCancel, updateProjectSure,} from '../../redux/actions/project_manager'
 import {connect} from 'react-redux';
+
+import axios from 'axios'
 
 import './ProjectManager.css'
 
@@ -56,9 +57,9 @@ class ProjectManager extends Component{
         }
         this.props.findProjects(project)
     }
-    change = (event, attributes) => {
+    change = (event, attribute) => {
         let newState = {};
-        newState[attributes] = event.target.value;
+        newState[attribute] = event.target.value;
         this.setState(newState);
     }
     changeValid = (event) => {
@@ -165,8 +166,7 @@ class ProjectManager extends Component{
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.addProjectShow()}>新增</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateProjectShow(this.state.selectRows)}>修改</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteProject, this.state.selectRows)}>删除</Button>
-                        {/* <Button type="default" size="default" className="btn">查看</Button> */}
+                        <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteProjectsByIds, this.state.selectRows)}>删除</Button>
                         <Table rowSelection={rowSelection} dataSource={this.props.projectManager.list} columns={columns} />
                     </Form>
                 </Row>
@@ -178,13 +178,7 @@ class ProjectManager extends Component{
                 visible={this.props.projectManager.updateVisible} 
                 onOk={(project) => this.props.updateProjectSure(project)} 
                 onCancel={() => this.props.updateProjectCancel()} 
-                id={this.props.projectManager.id} 
-                name={this.props.projectManager.name} 
-                sort={this.props.projectManager.sort} 
-                projectUrl={this.props.projectManager.projectUrl} 
-                changeName={(event) => this.props.changeModalName(event)} 
-                changeProjectUrl={(event) => this.props.changeModalProjectUrl(event)} 
-                changeSort={(event) => this.props.changeModalSort(event)}></UpdateModal>
+                id={this.props.projectManager.id}></UpdateModal>
             </div>
         )
     }
@@ -206,9 +200,9 @@ class AddModal extends Component{
             valid: '',
         }
     }
-    change = (event, attributes) => {
+    change = (event, attribute) => {
         let newState = {};
-        newState[attributes] = event.target.value;
+        newState[attribute] = event.target.value;
         this.setState(newState);
     }
     changeValid = (event) => {
@@ -228,6 +222,9 @@ class AddModal extends Component{
                 visible={this.props.visible}
                 onOk={() => this.props.onOk(project)}
                 onCancel={() => this.props.onCancel()}
+                okText='确定'
+                cancelText='取消'
+                destroyOnClose={true}
                 >
                 <Form.Item label="对象名称">
                     <Input placeholder="对象名称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
@@ -250,34 +247,89 @@ class AddModal extends Component{
 }
 
 class UpdateModal extends Component{
-    render(){
-        let project = {
-            id: this.props.id,
-            name: this.props.name,
-            projectUrl: this.props.projectUrl,
-            sort: this.props.sort
+    constructor(){
+        super();
+
+        this.state = {
+            id: '',
+            name: '',
+            projectUrl: '',
+            sort: '',
         }
+    }
+    componentWillReceiveProps = (nextProps) => {
+        if(this.props.id == nextProps.id){
+            return 
+        }
+        let id = nextProps.id;
+        if(id != undefined && id != ''){
+            this.findProjectById(id);
+        }
+    }
+    findProjectById = (id) => {
+        axios.get('projectManager/findProjectById/'+id)
+            .then((res) => {
+                let data = res.data;
+                this.setState({
+                    id: data.id,
+                    name: data.name,
+                    projectUrl: data.projectUrl,
+                    sort: data.sort,
+                })
+            })
+    }
+    change = (event, attribute) => {
+        let newState = {};
+        newState[attribute] = event.target.value;
+        this.setState(newState);
+    } 
+    ok = () => {
+        let project = {
+            id: this.state.id,
+            name: this.state.name,
+            projectUrl: this.state.projectUrl,
+            sort: this.state.sort,
+        }
+        this.setState({
+            name: '',
+            projectUrl: '',
+            sort: '',
+        })
+        this.props.onOk(project);
+    }
+    cancel = () => {
+        this.setState({
+            name: '',
+            projectUrl: '',
+            sort: '',
+        })
+        this.props.onCancel();
+    }
+    render(){
         return (
-            <Modal title="修改项目"
+            <Modal title='修改项目'
                 visible={this.props.visible}
-                onOk={() => this.props.onOk(project)}
-                onCancel={() => this.props.onCancel()}
+                onOk={this.ok}
+                onCancel={this.cancel}
+                okText='确定'
+                cancelText='取消'
+                destroyOnClose={true}
                 >
-                <Form.Item label="对象名称">
-                    <Input placeholder="对象名称" onChange={(event) => this.props.changeName(event)} value={this.props.name}/>
+                <Form.Item label='对象名称'>
+                    <Input placeholder='对象名称' onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
-                <Form.Item label="项目URL">
-                    <Input placeholder="项目URL" onChange={(event) => this.props.changeProjectUrl(event)} value={this.props.projectUrl}/>
+                <Form.Item label='项目URL'>
+                    <Input placeholder='项目URL' onChange={(event) => this.change(event, 'projectUrl')} value={this.state.projectUrl}/>
                 </Form.Item>
-                <Form.Item label="排序">
-                    <Input placeholder="排序" onChange={(event) => this.props.changeSort(event)} value={this.props.sort}/>
+                <Form.Item label='排序'>
+                    <Input placeholder='排序' onChange={(event) => this.change(event, 'sort')} value={this.state.sort}/>
                 </Form.Item>
             </Modal>
         )
     }
 }
 
-function showDeleteConfirm(deleteProject, selectRows) {
+function showDeleteConfirm(deleteProjectsByIds, selectRows) {
     if(selectRows.length == 0){
         message.error('请选择行!')
     }else {
@@ -288,8 +340,7 @@ function showDeleteConfirm(deleteProject, selectRows) {
             okType: 'danger',
             cancelText: '取消',
             onOk() {
-                deleteProject(selectRows);
-              console.log('OK');
+                deleteProjectsByIds(selectRows);
             },
             onCancel() {
               console.log('Cancel');
@@ -301,7 +352,6 @@ function showDeleteConfirm(deleteProject, selectRows) {
 export default connect((state) => ({projectManager: state.projectManager}), {
     findProjects, 
     addProjectShow, addProjectCancel, addProjectSure, 
-    deleteProject, 
-    updateProjectShow, updateProjectCancel, updateProjectSure, 
-    changeModalName, changeModalProjectUrl, changeModalSort
+    deleteProjectsByIds, 
+    updateProjectShow, updateProjectCancel, updateProjectSure,
 })(ProjectManager)

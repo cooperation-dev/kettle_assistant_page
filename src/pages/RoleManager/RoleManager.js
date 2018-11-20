@@ -3,10 +3,11 @@ import {Form, Input, Button, Row, Col, Table, Modal, message} from 'antd'
 
 import {findRoles, 
         addRoleShow, addRoleCancel, addRoleSure, 
-        deleteRole, 
-        updateRoleShow, updateRoleCancel, updateRoleSure, 
-        changeModalName, changeModalDescription} from '../../redux/actions/role_manager'
+        deleteRolesByIds, 
+        updateRoleShow, updateRoleCancel, updateRoleSure,} from '../../redux/actions/role_manager'
 import {connect} from 'react-redux';
+
+import axios from 'axios';
 
 import './RoleManager.css'
 
@@ -16,34 +17,34 @@ class RoleManager extends Component{
 
         this.state = {
             selectRows:[],
-            roleName: '',
+            name: '',
         }
     }
     componentDidMount = () => {
         let role = {
-            roleName: this.state.roleName,
+            name: this.state.name,
         }
         this.props.findRoles(role);
     }
     search = () => {
         let role = {
-            roleName: this.state.roleName,
+            name: this.state.name,
         }
         this.props.findRoles(role);
     }
     reset = () => {
         this.setState({
             selectRows:[],
-            roleName: '',
+            name: '',
         })
         let role = {
-            roleName: '',
+            name: '',
         }
         this.props.findRoles(role);
     }
-    change = (event, attributes) => {
+    change = (event, attribute) => {
         let newState = {};
-        newState[attributes] = event.target.value;
+        newState[attribute] = event.target.value;
         this.setState(newState);
     }
     render(){
@@ -55,13 +56,13 @@ class RoleManager extends Component{
             },
             {
                 title: '角色名',
-                dataIndex: 'roleName',
-                key: 'roleName'
+                dataIndex: 'name',
+                key: 'name'
             },
             {
                 title: '角色描述',
-                dataIndex: 'roleDescription',
-                key: 'roleDescription'
+                dataIndex: 'description',
+                key: 'description'
             }
         ];
         const rowSelection = {
@@ -82,7 +83,7 @@ class RoleManager extends Component{
                         <Row gutter={24}>
                             <Col span={6} key={1}>
                                 <Form.Item label="角色名称:">
-                                    <Input placeholder="角色名称" onChange={(event) => this.change(event, 'roleName')} value={this.state.roleName}/>
+                                    <Input placeholder="角色名称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -98,7 +99,7 @@ class RoleManager extends Component{
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.addRoleShow()}>新增</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateRoleShow(this.state.selectRows)}>修改</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteRole, this.state.selectRows)}>删除</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteRolesByIds, this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Button type="default" size="default" className="btn">权限分配</Button>
                         <Table rowSelection={rowSelection} dataSource={this.props.roleManager.list} columns={columns} />
@@ -112,11 +113,7 @@ class RoleManager extends Component{
                 visible={this.props.roleManager.updateVisible} 
                 onOk={(role) => this.props.updateRoleSure(role)} 
                 onCancel={() => this.props.updateRoleCancel()} 
-                roleId={this.props.roleManager.modalRoleId} 
-                roleName={this.props.roleManager.modalRoleName} 
-                roleDescription={this.props.roleManager.modalRoleDescription} 
-                changeName={(event) => this.props.changeModalName(event)} 
-                changeDescription={(event) => this.props.changeModalDescription(event)}></UpdateModal>
+                id={this.props.roleManager.updateId}></UpdateModal>
             </div>
         )
     }
@@ -127,31 +124,34 @@ class AddModal extends Component{
         super()
 
         this.state = {
-            roleName: '',
-            roleDescription: ''
+            name: '',
+            description: ''
         }
     }
-    change = (event, attributes) => {
+    change = (event, attribute) => {
         let newState = {};
-        newState[attributes] = event.target.value;
+        newState[attribute] = event.target.value;
         this.setState(newState);
     }
     render(){
         let role = {
-            roleName: this.state.roleName,
-            roleDescription: this.state.roleDescription
+            name: this.state.name,
+            description: this.state.description,
         }
         return (
             <Modal title="新增角色"
                 visible={this.props.visible}
                 onOk={() => this.props.onOk(role)}
                 onCancel={() => this.props.onCancel()}
+                okText='确定'
+                cancelText='取消'
+                destroyOnClose={true}
                 >
                 <Form.Item label="角色名">
-                    <Input placeholder="角色名" onChange={(event) => this.change(event, 'roleName')} value={this.state.roleName}/>
+                    <Input placeholder="角色名" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="角色描述">
-                    <Input placeholder="角色描述" onChange={(event) => this.change(event, 'roleDescription')} value={this.state.roleDescription}/>
+                    <Input placeholder="角色描述" onChange={(event) => this.change(event, 'description')} value={this.state.description}/>
                 </Form.Item>
             </Modal>
         )
@@ -159,30 +159,81 @@ class AddModal extends Component{
 }
 
 class UpdateModal extends Component{
-    render(){
-        let role = {
-            roleId: this.props.roleId,
-            roleName: this.props.roleName,
-            roleDescription: this.props.roleDescription
+    constructor(){
+        super();
+
+        this.state = {
+            id: '',
+            name: '',
+            description: '',
         }
+    }
+    componentWillReceiveProps = (nextProps) => {
+        if(this.props.id == nextProps.id){
+            return
+        }
+        let id = nextProps.id
+        if(id!=undefined && id!=""){
+            this.findRoleById(id)
+        }
+    }
+    findRoleById = (id) => {
+        axios.get('roleManager/findRoleById/'+id)
+            .then(r => {
+                let data = r.data
+                this.setState({
+                    id: data.id,
+                    name: data.name,
+                    description: data.description,
+                })
+            })
+    }
+    change = (event, attribute) => {
+        let newState = {};
+        newState[attribute] = event.target.value;
+        this.setState(newState);
+    }
+    ok = () => {
+        let role = {
+            id: this.state.id,
+            name: this.state.name,
+            description: this.state.description,
+        }
+        this.setState({
+            name: '',
+            description: '',
+        })
+        this.props.onOk(role);
+    }
+    cancel = () => {
+        this.setState({
+            name: '',
+            description: '',
+        })
+        this.props.onCancel();
+    } 
+    render(){
         return (
             <Modal title="修改角色"
                 visible={this.props.visible}
-                onOk={() => this.props.onOk(role)}
-                onCancel={() => this.props.onCancel()}
+                onOk={this.ok}
+                onCancel={this.cancel}
+                okText="确认"
+                cancelText="取消"
+                destroyOnClose={true} 
                 >
                 <Form.Item label="角色名">
-                    <Input placeholder="角色名" onChange={(event) => this.props.changeName(event)} value={this.props.roleName}/>
+                    <Input placeholder="角色名" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="角色描述">
-                    <Input placeholder="角色描述" onChange={(event) => this.props.changeDescription(event)} value={this.props.roleDescription}/>
+                    <Input placeholder="角色描述" onChange={(event) => this.change(event, 'description')} value={this.state.description}/>
                 </Form.Item>
             </Modal>
         )
     }
 }
 
-function showDeleteConfirm(deleteRole, selectRows) {
+function showDeleteConfirm(deleteRolesByIds, selectRows) {
     if(selectRows.length == 0){
         message.error('请选择行!')
     } else {
@@ -193,7 +244,7 @@ function showDeleteConfirm(deleteRole, selectRows) {
             okType: 'danger',
             cancelText: '取消',
             onOk() {
-                deleteRole(selectRows);
+                deleteRolesByIds(selectRows);
             },
             onCancel() {
               console.log('Cancel');
@@ -205,7 +256,6 @@ function showDeleteConfirm(deleteRole, selectRows) {
 export default connect((state) => ({roleManager: state.roleManager}), {
     findRoles, 
     addRoleShow, addRoleCancel, addRoleSure, 
-    deleteRole, 
+    deleteRolesByIds, 
     updateRoleShow, updateRoleCancel, updateRoleSure, 
-    changeModalName, changeModalDescription
 })(RoleManager)

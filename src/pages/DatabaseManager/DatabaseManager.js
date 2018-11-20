@@ -3,11 +3,11 @@ import {Form, Input, Checkbox, Button, Row, Col, Table, Modal, message} from 'an
 
 import {findDatabases, 
         addDatabaseShow, addDatabaseCancel, addDatabaseSure, 
-        deleteDatabase, 
-        updateDatabaseShow, updateDatabaseCancel, updateDatabaseSure, 
-        changeModalName, changeModalSort, changeModalAgencyName, changeModalAgencyCode, 
-        changeModalDbType, changeModalInterviewMethod, changeModalJndiName, changeModalConnectionString} from '../../redux/actions/database_manager'
+        deleteDatabasesByIds, 
+        updateDatabaseShow, updateDatabaseCancel, updateDatabaseSure,} from '../../redux/actions/database_manager'
 import {connect} from 'react-redux';
+
+import axios from 'axios'
 
 import './DatabaseManager.css'
 
@@ -116,7 +116,7 @@ class DatabaseManager extends Component{
                 dataIndex: 'valid',
                 key: 'valid',
                 render: (text, record) => (
-                    <Checkbox checked={record.valid=='Y'?false:true}></Checkbox>
+                    <Checkbox checked={record.valid=='Y'}></Checkbox>
                 )
             },
             {
@@ -224,7 +224,7 @@ class DatabaseManager extends Component{
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.addDatabaseShow()}>新增</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateDatabaseShow(this.state.selectRows)}>修改</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteDatabase, this.state.selectRows)}>删除</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteDatabasesByIds, this.state.selectRows)}>删除</Button>
                         <Table rowSelection={rowSelection} dataSource={this.props.databaseManager.list} columns={columns} scroll={{x: 1300}}/>
                     </Form>
                 </Row>
@@ -236,23 +236,7 @@ class DatabaseManager extends Component{
                 visible={this.props.databaseManager.updateVisible} 
                 onOk={(database) => this.props.updateDatabaseSure(database)} 
                 onCancel={() => this.props.updateDatabaseCancel()} 
-                id={this.props.databaseManager.id}
-                name={this.props.databaseManager.name}
-                sort={this.props.databaseManager.sort}
-                agencyName={this.props.databaseManager.agencyName}
-                agencyCode={this.props.databaseManager.agencyCode}
-                dbType={this.props.databaseManager.dbType}
-                interviewMethod={this.props.databaseManager.interviewMethod}
-                jndiName={this.props.databaseManager.jndiName}
-                connectionString={this.props.databaseManager.connectionString}
-                changeName={(event) => this.props.changeModalName(event)}
-                changeSort={(event) => this.props.changeModalSort(event)}
-                changeAgencyName={(event) => this.props.changeModalAgencyName(event)}
-                changeAgencyCode={(event) => this.props.changeModalAgencyCode(event)}
-                changeDbType={(event) => this.props.changeModalDbType(event)}
-                changeInterviewMethod={(event) => this.props.changeModalInterviewMethod(event)}
-                changeJndiName={(event) => this.props.changeModalJndiName(event)}
-                changeConnectionString={(event) => this.props.changeModalConnectionString(event)}></UpdateModal>
+                id={this.props.databaseManager.id}></UpdateModal>
             </div>
         )
     }
@@ -343,54 +327,129 @@ class AddModal extends Component{
 }
 
 class UpdateModal extends Component{
-    render(){
-        let database = {
-            id: this.props.id,
-            name: this.props.name,
-            sort: this.props.sort,
-            agencyName: this.props.agencyName,
-            agencyCode: this.props.agencyCode,
-            dbType: this.props.dbType,
-            interviewMethod: this.props.interviewMethod,
-            jndiName: this.props.jndiName,
-            connectionString: this.props.connectionString,
+    constructor(){
+        super();
+
+        this.state = {
+            id: '',
+            name: '',
+            sort: '',
+            agencyName: '',
+            agencyCode: '',
+            dbType: '',
+            interviewMethod: '',
+            jndiName: '',
+            connectionString: '',
         }
+    }
+    componentWillReceiveProps = (nextProps) => {
+        if(this.props.id == nextProps.id){
+            return 
+        }
+        let id = nextProps.id
+        if(id != undefined && id != ''){
+            this.findDatabaseById(id);
+        }
+    }
+    findDatabaseById = (id) => {
+        axios.get('databaseManager/findDatabaseById/'+id)
+            .then((res) => {
+                let data = res.data;
+                this.setState({
+                    id: data.id,
+                    name: data.name,
+                    sort: data.sort,
+                    agencyName: data.agencyName,
+                    agencyCode: data.agencyCode,
+                    dbType: data.dbType,
+                    interviewMethod: data.interviewMethod,
+                    jndiName: data.jndiName,
+                    connectionString: data.connectionString,
+                })
+            })
+    }
+    change = (event, attribute) => {
+        let newState = {};
+        newState[attribute] = event.target.value;
+        this.setState(newState);
+    }
+    ok = () => {
+        let database = {
+            id: this.state.id,
+            name: this.state.name,
+            sort: this.state.sort,
+            agencyName: this.state.agencyName,
+            agencyCode: this.state.agencyCode,
+            dbType: this.state.dbType,
+            interviewMethod: this.state.interviewMethod,
+            jndiName: this.state.jndiName,
+            connectionString: this.state.connectionString,
+        }
+        this.setState({
+            name: '',
+            sort: '',
+            agencyName: '',
+            agencyCode: '',
+            dbType: '',
+            interviewMethod: '',
+            jndiName: '',
+            connectionString: '',
+        })
+        this.props.onOk(database);
+    }
+    cancel = () => {
+        this.setState({
+            name: '',
+            sort: '',
+            agencyName: '',
+            agencyCode: '',
+            dbType: '',
+            interviewMethod: '',
+            jndiName: '',
+            connectionString: '',
+        })
+        this.props.onCancel();
+    }
+    render(){
         return (
             <Modal title="修改数据库"
                 visible={this.props.visible}
-                onOk={() => this.props.onOk(database)}
-                onCancel={() => this.props.onCancel()}
+                onOk={this.ok}
+                onCancel={this.cancel}
+                okText='确定'
+                cancelText='取消'
+                destroyOnClose={true}
                 >
                 <Form.Item label="名称">
-                    <Input placeholder="名称" onChange={(event) => this.props.changeName(event)} value={this.props.name}/>
+                    <Input placeholder="名称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="排序">
-                    <Input placeholder="排序" onChange={(event) => this.props.changeSort(event)} value={this.props.sort}/>
+                    <Input placeholder="排序" onChange={(event) => this.change(event, 'sort')} value={this.state.sort}/>
                 </Form.Item>
                 <Form.Item label="机构名称">
-                    <Input placeholder="机构名称" onChange={(event) => this.props.changeAgencyName(event)} value={this.props.agencyName}/>
+                    <Input placeholder="机构名称" onChange={(event) => this.change(event, 'agencyName')} value={this.state.agencyName}/>
                 </Form.Item>
                 <Form.Item label="机构代码">
-                    <Input placeholder="机构代码" onChange={(event) => this.props.changeAgencyCode(event)} value={this.props.agencyCode}/>
+                    <Input placeholder="机构代码" onChange={(event) => this.change(event, 'agencyCode')} value={this.state.agencyCode}/>
                 </Form.Item>
                 <Form.Item label="数据库类型">
-                    <Input placeholder="数据库类型" onChange={(event) => this.props.changeDbType(event)} value={this.props.dbType}/>
+                    <Input placeholder="数据库类型" onChange={(event) => this.change(event, 'dbType')} value={this.state.dbType}/>
                 </Form.Item>
                 <Form.Item label="访问方式">
-                    <Input placeholder="访问方式" onChange={(event) => this.props.changeInterviewMethod(event)} value={this.props.interviewMethod}/>
+                    <Input placeholder="访问方式" onChange={(event) => this.change(event, 'interviewMethod')} value={this.state.interviewMethod}/>
                 </Form.Item>
                 <Form.Item label="JNDI名称">
-                    <Input placeholder="JNDI名称" onChange={(event) => this.props.changeJndiName(event)} value={this.props.jndiName}/>
+                    <Input placeholder="JNDI名称" onChange={(event) => this.change(event, 'jndiName')} value={this.state.jndiName}/>
                 </Form.Item>
                 <Form.Item label="连接串">
-                    <Input placeholder="连接串" onChange={(event) => this.props.changeConnectionString(event)} value={this.props.connectionString}/>
+                    <Input placeholder="连接串" onChange={(event) => this.change(event, 'connectionString')} value={this.state.connectionString}/>
                 </Form.Item>
             </Modal>
         )
     }
 }
 
-function showDeleteConfirm(deleteDatabase, selectRows) {
+function showDeleteConfirm(deleteDatabasesByIds, selectRows) {
     if(selectRows.length == 0){
         message.error('请选择行!')
     }else{
@@ -401,7 +460,7 @@ function showDeleteConfirm(deleteDatabase, selectRows) {
             okType: 'danger',
             cancelText: '取消',
             onOk() {
-                deleteDatabase(selectRows)
+                deleteDatabasesByIds(selectRows)
             },
             onCancel() {
               console.log('Cancel');
@@ -413,8 +472,6 @@ function showDeleteConfirm(deleteDatabase, selectRows) {
 export default connect((state) => ({databaseManager: state.databaseManager}), {
     findDatabases, 
     addDatabaseShow, addDatabaseCancel, addDatabaseSure, 
-    deleteDatabase, 
+    deleteDatabasesByIds, 
     updateDatabaseShow, updateDatabaseCancel, updateDatabaseSure, 
-    changeModalName, changeModalSort, changeModalAgencyName, changeModalAgencyCode, 
-    changeModalDbType, changeModalInterviewMethod, changeModalJndiName, changeModalConnectionString, 
 })(DatabaseManager)

@@ -1,37 +1,6 @@
 import React, {Component} from 'react';
 import echarts from 'echarts';
 
-const dic_tree = [
-    {
-        title: '字典类型',
-        key: 'dic_type',
-        value: 'dic_type',
-        children: [
-            {
-                title: '有效性',
-                key: 'valid', 
-                value: 'valid',
-                children: [
-                    {
-                        title: '有效',
-                        key: 'Y',
-                        value: 'Y'
-                    },{
-                        title: '无效',
-                        key: 'N',
-                        value: 'N'
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        title: '数据库类型',
-        key: 'database_type', 
-        value: 'database_type', 
-    }
-]
-
 class TreeCharts extends Component{
     
     componentDidMount = () => {

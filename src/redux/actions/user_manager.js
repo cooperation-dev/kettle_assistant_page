@@ -2,13 +2,13 @@ import axios from 'axios';
 import {message} from 'antd';
 
 //请求数据
-export const FIND_USERS = "userManager/findUsers";
+export const FIND_USERS = "api/userController/findList";
 //新增显示
 export const ADD_USER_MODAL_SHOW = "userManager/addUserShow";
 //新增取消
 export const ADD_USER_MODAL_CANCEL = "userManager/addUserCancel";
 //新增确认
-export const ADD_USER_MODAL_SURE = "userManager/addUserSure";
+export const ADD_USER_MODAL_SURE = "api/userController/saveUser";
 //修改显示
 export const UPDATE_USER_MODAL_SHOW = "userManager/updateUserShow";
 //修改取消
@@ -78,7 +78,7 @@ export const findUsers = (user) => {
             url: FIND_USERS,
             data: user,
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((list) => {
             dispatch(find_users(list))
         })
@@ -104,7 +104,7 @@ export const addUserSure = (user) => {
             url: ADD_USER_MODAL_SURE,
             data: user
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((user) => {
             dispatch(add_user_modal_sure(user));
         })

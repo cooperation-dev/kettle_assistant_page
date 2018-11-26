@@ -17,23 +17,23 @@ class UserManager extends Component{
 
         this.state = {
             selectRows:[],
-            nickName: '',
-            loginAccount: '',
+            name: '',
+            description: '',
             role: '',
         }
     }
     componentDidMount = () => {
         let user = {
-            nickName: this.state.nickName,
-            loginAccount: this.state.loginAccount,
+            name: this.state.name,
+            description: this.state.description,
             role: this.state.role,
         }
         this.props.findUsers(user)
     }
     search = () => {
         let user = {
-            nickName: this.state.nickName,
-            loginAccount: this.state.loginAccount,
+            name: this.state.name,
+            description: this.state.description,
             role: this.state.role,
         }
         this.props.findUsers(user)
@@ -41,13 +41,13 @@ class UserManager extends Component{
     reset = () => {
         this.setState({
             selectRows:[],
-            nickName: '',
-            loginAccount: '',
+            name: '',
+            description: '',
             role: '',
         })
         let user = {
-            nickName: '',
-            loginAccount: '',
+            name: '',
+            description: '',
             role: '',
         }
         this.props.findUsers(user)
@@ -66,19 +66,19 @@ class UserManager extends Component{
             },
             {
                 title: '昵称',
-                dataIndex: 'nickName',
-                key: 'nickName'
-            },
-            {
-                title: '登陆账号',
-                dataIndex: 'loginAccount',
-                key: 'loginAccount',
+                dataIndex: 'name',
+                key: 'name'
             },
             {
                 title: '角色',
                 dataIndex: 'role',
                 key: 'role'
-            }
+            },
+            {
+                title: '描述',
+                dataIndex: 'description',
+                key: 'desctiption',
+            },
         ];
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
@@ -98,17 +98,17 @@ class UserManager extends Component{
                         <Row gutter={24}>
                             <Col span={6} key={1}>
                                 <Form.Item label="昵称:">
-                                    <Input placeholder="昵称" onChange={(event) => this.change(event, 'nickName')} value={this.state.nickName}/>
+                                    <Input placeholder="昵称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={2}>
-                                <Form.Item label="登陆账号:">
-                                    <Input placeholder="登陆账号" onChange={(event) => this.change(event, 'loginAccount')} value={this.state.loginAccount}/>
+                                <Form.Item label="角色:">
+                                    <Input placeholder="角色" onChange={(event) => this.change(event, 'role')} value={this.state.role}/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key={3}>
-                                <Form.Item label="角色:">
-                                    <Input placeholder="角色" onChange={(event) => this.change(event, 'role')} value={this.state.role}/>
+                                <Form.Item label="描述:">
+                                    <Input placeholder="描述" onChange={(event) => this.change(event, 'description')} value={this.state.description}/>
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -147,8 +147,8 @@ class AddModal extends Component{
     constructor(){
         super()
         this.state = {
-            nickName: '',
-            loginAccount: '',
+            name: '',
+            description: '',
             role: ''
         }
     }
@@ -159,8 +159,8 @@ class AddModal extends Component{
     }
     render(){
         let user = {
-            nickName: this.state.nickName,
-            loginAccount: this.state.loginAccount,
+            name: this.state.name,
+            description: this.state.description,
             role: this.state.role
         }
         return (
@@ -173,10 +173,7 @@ class AddModal extends Component{
                 destroyOnClose={true}
                 >
                 <Form.Item label="昵称">
-                    <Input placeholder="昵称" onChange={(event) => this.change(event, 'nickName')} value={this.state.nickName}/>
-                </Form.Item>
-                <Form.Item label="登陆账号">
-                    <Input placeholder="登陆账号" onChange={(event) => this.change(event, 'loginAccount')} value={this.state.loginAccount}/>
+                    <Input placeholder="昵称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="角色">
                     {/* <Input placeholder="角色" onChange={(event) => this.change(event, 'role')} value={this.state.role}/> */}
@@ -187,6 +184,9 @@ class AddModal extends Component{
                         <Select.Option value="role4">role4</Select.Option>
                         <Select.Option value="role5">role5</Select.Option>
                     </Select>
+                </Form.Item>
+                <Form.Item label="描述">
+                    <Input placeholder="描述" onChange={(event) => this.change(event, 'description')} value={this.state.description}/>
                 </Form.Item>
             </Modal>
         )
@@ -199,7 +199,7 @@ class UpdateModal extends Component{
 
         this.state = {
             id: '',
-            nickName: '',
+            name: '',
             role: '',
         }
     }
@@ -218,7 +218,7 @@ class UpdateModal extends Component{
                 let data = r.data
                 this.setState({
                     id: data.id,
-                    nickName: data.nickName,
+                    name: data.name,
                     role: data.role,
                 })
             })
@@ -231,18 +231,18 @@ class UpdateModal extends Component{
     ok = () => {
         let user = {
             id: this.state.id,
-            nickName: this.state.nickName,
+            name: this.state.name,
             role: this.state.role
         }
         this.setState({
-            nickName: '',
+            name: '',
             role: '',
         })
         this.props.onOk(user);
     }
     cancel = () => {
         this.setState({
-            nickName: '',
+            name: '',
             role: '',
         })
         this.props.onCancel();
@@ -258,7 +258,7 @@ class UpdateModal extends Component{
                 destroyOnClose={true} 
                 >
                 <Form.Item label="昵称">
-                    <Input placeholder="昵称" onChange={(event) => this.change(event, 'nickName')} value={this.state.nickName}/>
+                    <Input placeholder="昵称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="角色">
                     {/* <Input placeholder="角色" onChange={(event) => this.props.changeRole(event)} value={this.props.role}/> */}

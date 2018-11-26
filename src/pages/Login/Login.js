@@ -2,9 +2,12 @@ import React, {Component} from 'react';
 
 import {connect} from 'react-redux';
 
-import {Input, Button, Layout, Form, Col} from 'antd';
+import {Input, Button, Layout, Form} from 'antd';
 
 import axios from 'axios';
+// axios.defaults.withCredentials=true;
+
+import Captcha from 'components/Captcha/Captcha';
 
 const querystring = require('querystring')
 
@@ -15,16 +18,7 @@ class Login extends Component{
         this.state = {
             username: '',
             password: '',
-            validateCode: '',
-            captcha: ''
         }
-    }
-
-    componentDidMount = () => {
-        axios.get('/api/loginController/produceValidateCode?d='+new Date()*1)
-                .then((r) => {
-                    this.setState({captcha: r.data})
-                })
     }
 
     change = (event, attribute) => {
@@ -37,7 +31,7 @@ class Login extends Component{
         let data = {
             username: this.state.username,
             password: this.state.password,
-            validateCode: this.state.validateCode
+            validateCode: this.props.login.captcha
         }
 
         axios({
@@ -50,15 +44,6 @@ class Login extends Component{
         })
     }
 
-    handleValidateCode = () => {
-        /* axios({
-            method: 'get',
-            url: '/api/loginController/produceValidateCode'
-        }) */
-        this.src='/api/loginController/produceValidateCode'
-        // this.src='/api/loginController/produceValidateCode?d='+new Date()*1
-    }
-
     render(){
         return (
             <Layout style={{width: 500, marginLeft: 'auto', marginRight: 'auto', padding: 20}}>
@@ -68,15 +53,7 @@ class Login extends Component{
                 <Form.Item label="密码">        
                     <Input value={this.state.password} onChange={(event) => this.change(event, 'password')}></Input>
                 </Form.Item>
-                <Form.Item label="验证码">        
-                    <Col span={12}>
-                        <Input value={this.state.validateCode} onChange={(event) => this.change(event, 'validateCode')}></Input>
-                    </Col>
-                    <Col span={12} style={{textAlign: 'center'}}>
-                        <img alt="验证码" style={{cursor: "pointer"}} src={this.state.captcha} />
-                        {/* <img alt="验证码" style={{cursor: "pointer"}} onClick = {() => {this.src='/api/loginController/produceValidateCode?d='+new Date()*1}} src="/api/loginController/produceValidateCode" /> */}
-                    </Col>
-                </Form.Item>
+                <Captcha></Captcha>
                 <Button type="primary" onClick={this.handleClick} >登录</Button>
             </Layout>
         )

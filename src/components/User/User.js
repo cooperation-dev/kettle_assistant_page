@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Route} from 'react-router-dom';
+import {Route, Redirect} from 'react-router-dom';
 
 import {Layout} from 'antd';
 import {connect} from 'react-redux';
@@ -11,6 +11,7 @@ class User extends React.Component {
         return (
             <Layout>
                 <Route exact path="/user/login" component={Login}></Route>
+                <Redirect exact from="/user" to="/user/login"></Redirect>
             </Layout>
         )
     }

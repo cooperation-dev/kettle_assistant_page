@@ -13,7 +13,6 @@ import axios from 'axios';
 
 import './SumDic.css';
 
-import {withRouter} from 'react-router-dom';
 
 const {Column} = Table
 
@@ -123,6 +122,7 @@ class SumDic extends Component{
                         </Row>
                         <Row>
                             <Col span={24} style={{ textAlign: 'center' }}>
+                                <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>

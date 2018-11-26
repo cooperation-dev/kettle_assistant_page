@@ -13,6 +13,8 @@ import axios from 'axios';
 
 import './SumDic.css';
 
+import {withRouter} from 'react-router-dom';
+
 const {Column} = Table
 
 class SumDic extends Component{

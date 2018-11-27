@@ -2,21 +2,21 @@ import axios from 'axios';
 import {message} from 'antd';
 
 //请求数据
-export const FIND_ROLES = "roleManager/findRoles";
+export const FIND_ROLES = "api/roleController/findList";
 //新增显示
 export const ADD_ROLE_MODAL_SHOW = "roleManager/addRoleShow";
 //新增取消
 export const ADD_ROLE_MODAL_CANCEL = "roleManager/addRoleCancel";
 //新增确认
-export const ADD_ROLE_MODAL_SURE = "roleManager/addRoleSure";
+export const ADD_ROLE_MODAL_SURE = "api/roleController/saveRole";
 //修改显示
 export const UPDATE_ROLE_MODAL_SHOW = "roleManager/updateRoleShow";
 //修改取消
 export const UPDATE_ROLE_MODAL_CANCEL = "roleManager/updateRoleCancel";
 //修改确认
-export const UPDATE_ROLE_MODAL_SURE = "roleManager/updateRoleSure";
+export const UPDATE_ROLE_MODAL_SURE = "api/roleController/updateRole";
 //删除行
-export const DELETE_ROLES_BY_IDS = "roleManager/deleteRolesByIds";
+export const DELETE_ROLES_BY_IDS = "api/roleController/deleteRoleByIds";
 
 export const find_roles = (list) => {
     return {
@@ -78,7 +78,7 @@ export const findRoles = (role) => {
             url: FIND_ROLES,
             data: role,
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((list) => {
             dispatch(find_roles(list))
         })
@@ -104,7 +104,7 @@ export const addRoleSure = (role) => {
             url: ADD_ROLE_MODAL_SURE,
             data:role
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((role) => {
             dispatch(add_role_modal_sure(role));
         })
@@ -136,7 +136,7 @@ export const updateRoleSure = (role) => {
             url: UPDATE_ROLE_MODAL_SURE,
             data: role
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((role) => {
             dispatch(update_role_modal_sure(role));
         })
@@ -152,7 +152,7 @@ export const deleteRolesByIds = (selectRows) => {
             url: DELETE_ROLES_BY_IDS,
             data:ids
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((deleteIds) => {
             dispatch(delete_roles_by_ids(deleteIds))
         })

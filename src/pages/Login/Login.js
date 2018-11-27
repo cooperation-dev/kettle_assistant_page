@@ -5,9 +5,11 @@ import {connect} from 'react-redux';
 import {Input, Button, Layout, Form} from 'antd';
 
 import axios from 'axios';
-// axios.defaults.withCredentials=true;
 
 import Captcha from 'components/Captcha/Captcha';
+
+import browserCookie from 'browser-cookies'
+import {Redirect, withRouter} from 'react-router-dom';
 
 const querystring = require('querystring')
 
@@ -28,6 +30,7 @@ class Login extends Component{
     }
 
     handleClick = () => {
+        
         let data = {
             username: this.state.username,
             password: this.state.password,
@@ -40,7 +43,9 @@ class Login extends Component{
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data: querystring.stringify(data)
         }).then((r) => {
-            return r.data.data
+            if(r.data.code=='200' && r.data.data=='SUCCESS'){
+                this.props.history.push("/app/sum_dic");
+            }
         })
     }
 
@@ -60,4 +65,4 @@ class Login extends Component{
     }
 }
 
-export default connect((state) => ({login: state.login}), {})(Login)
+export default withRouter(connect((state) => ({login: state.login}), {})(Login))

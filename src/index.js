@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {AppContainer} from 'react-hot-loader';
 import {Provider} from 'react-redux';
 import store from './redux/store';
+// import {HashRouter as Router} from 'react-router-dom';
 import {BrowserRouter as Router} from 'react-router-dom';
 
 import MainFrame from 'components/MainFrame/MainFrame';

@@ -211,7 +211,7 @@ export const changeDisabled = (row) => {
 
 export const detailsModalShow = () => {
     return (dispatch) => {
-        axios.get('/api/sumDicController/findDicTree')
+        axios.get('/api/sumDicController/findDicTypes')
                 .then(r => 
                     {
                         let children = []

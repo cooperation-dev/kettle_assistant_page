@@ -1,17 +1,13 @@
-import React, {Component} from 'react';
-import {Table, Row, Col, Input, Form, Button, Checkbox, Modal, TreeSelect, Switch, message} from 'antd';
-import {connect} from 'react-redux';
-import {showList,
-        addModalShow, addModalSure, addModalCancel,
-        updateModalShow, updateModalSure, updateModalCancel,
-        deleteDicByIds, changeDisabled,
-        detailsModalShow, detailsModalSure, detailsModalCancel} from '../../redux/actions/sum_dic';
-
-import {TreeCharts} from 'components/Echarts/TreeCharts';
-
+import { Button, Checkbox, Col, Form, Input, message, Modal, Row, Switch, Table, TreeSelect } from 'antd';
 import axios from 'axios';
-
+import { TreeCharts } from 'components/Echarts/TreeCharts';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { addModalCancel, addModalShow, addModalSure, changeDisabled, deleteDicByIds, detailsModalCancel, detailsModalShow, detailsModalSure, showList, updateModalCancel, updateModalShow, updateModalSure } from '../../redux/actions/sum_dic';
 import './SumDic.css';
+
+
+
 
 
 const {Column} = Table

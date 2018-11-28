@@ -2,23 +2,23 @@ import axios from 'axios';
 import {message} from 'antd';
 
 //请求数据
-export const FIND_ROLES = "api/roleController/findList";
+export const FIND_ROLES = "/api/roleController/findList";
 //新增显示
 export const ADD_ROLE_MODAL_SHOW = "roleManager/addRoleShow";
 //新增取消
 export const ADD_ROLE_MODAL_CANCEL = "roleManager/addRoleCancel";
 //新增确认
-export const ADD_ROLE_MODAL_SURE = "api/roleController/saveRole";
+export const ADD_ROLE_MODAL_SURE = "/api/roleController/saveRole";
 //修改显示
 export const UPDATE_ROLE_MODAL_SHOW = "roleManager/updateRoleShow";
 //修改取消
 export const UPDATE_ROLE_MODAL_CANCEL = "roleManager/updateRoleCancel";
 //修改确认
-export const UPDATE_ROLE_MODAL_SURE = "api/roleController/updateRole";
+export const UPDATE_ROLE_MODAL_SURE = "/api/roleController/updateRole";
 //删除行
-export const DELETE_ROLES_BY_IDS = "api/roleController/deleteRoleByIds";
+export const DELETE_ROLES_BY_IDS = "/api/roleController/deleteRoleByIds";
 //角色菜單權限
-export const FIND_PRIVILEGES_BY_ROLE = "api/roleController/findPrivilegesByRole";
+export const FIND_PRIVILEGES_BY_ROLE = "/api/roleController/findPrivilegesByRole";
 
 export const find_roles = (list) => {
     return {

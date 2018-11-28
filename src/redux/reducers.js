@@ -8,6 +8,7 @@ import systemLog from './reducers/system_log';
 import userManager from './reducers/user_manager'
 import roleManager from './reducers/role_manager'
 import projectManager from './reducers/project_manager'
+import captcha from './reducers/captcha';
 
 export default function combineReducers(state={}, action){
     const obj_app = app(state.app, action);
@@ -20,6 +21,7 @@ export default function combineReducers(state={}, action){
     const obj_userManager = userManager(state.userManager, action);
     const obj_roleManager = roleManager(state.roleManager, action);
     const obj_projectManager = projectManager(state.projectManager, action);
+    const obj_captcha = captcha(state.captcha, action);
     return {
         app: obj_app,
         jobManager: obj_jobManager,
@@ -31,5 +33,7 @@ export default function combineReducers(state={}, action){
         userManager: obj_userManager,
         roleManager: obj_roleManager,
         projectManager: obj_projectManager,
+        captcha: obj_captcha,
+        login: captcha(state.captcha, action)
     }
 }

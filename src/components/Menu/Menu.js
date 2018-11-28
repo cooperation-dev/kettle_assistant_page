@@ -13,6 +13,13 @@ const {SubMenu} = Menu;
 const {Sider} = Layout
 
 class LeftMenu extends Component{
+    constructor(props){
+        super(props)
+    }
+
+    handleClickMenuItem = ({ item, key, keyPath }) => {
+        this.props.selectMenu(item)
+    }
 
     render(){
         return (
@@ -28,7 +35,8 @@ class LeftMenu extends Component{
                     mode="inline"
                     theme="dark"
                     inlineCollapsed={this.props.app.collapsed}
-                    onClick={(e) => this.props.selectMenu(e)}
+                    onClick={this.handleClickMenuItem}
+                    // onClick={(e) => this.props.selectMenu(e)}
                 >
                     {
                         this.props.menu_list.map(menu => {

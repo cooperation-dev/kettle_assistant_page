@@ -9,9 +9,9 @@ const columns = [
         title: 'id',
         dataIndex: 'id'
     },{
-        key: 'operator',
+        key: 'operateUser',
         title: '操作用户',
-        dataIndex: 'operator'
+        dataIndex: 'operateUser'
     },{
         key: 'logType',
         title: '日志类型',
@@ -161,7 +161,7 @@ class SystemLog extends Component{
                 </Row>
                 <Row style={{marginTop:"15px"}}>
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
-                        <Table columns={columns} dataSource={this.props.systemLog.list} />
+                        <Table rowKey={(record) => record.id} columns={columns} dataSource={this.props.systemLog.list} />
                     </Form>
                 </Row>
             </div>

@@ -1,6 +1,6 @@
 // import '../../../mock/api';
-// import axios from 'axios';
-import axios from '../../router/Adapter'
+import axios from 'axios';
+// import axios from '../../router/Adapter'
 
 export const TOGGLE_MENU = "toggle/menu";
 export const CHANGE_MENU = "change/menu";

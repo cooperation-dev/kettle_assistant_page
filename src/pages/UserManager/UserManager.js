@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Form, Input, Button, Row, Col, Table, Modal, message, Select} from 'antd'
 
-import {findUsers, 
+import {findUsers, findRoles,
         addUserShow, addUserCancel, addUserSure, 
         deleteUsersByIds, 
         updateUserShow, updateUserCancel, updateUserSure,} from '../../redux/actions/user_manager'
@@ -29,6 +29,10 @@ class UserManager extends Component{
             role: this.state.role,
         }
         this.props.findUsers(user)
+        let role = {
+            name: '',
+        }
+        this.props.findRoles(role);
     }
     search = () => {
         let user = {
@@ -132,11 +136,13 @@ class UserManager extends Component{
                 <AddModal 
                 visible={this.props.userManager.addVisible} 
                 onOk={(user) => this.props.addUserSure(user)} 
-                onCancel={() => this.props.addUserCancel()}></AddModal>
+                onCancel={() => this.props.addUserCancel()} 
+                roles={this.props.userManager.roles}></AddModal>
                 <UpdateModal 
                 visible={this.props.userManager.updateVisible} 
                 onOk={(user) => this.props.updateUserSure(user)} 
                 onCancel={() => this.props.updateUserCancel()} 
+                roles={this.props.userManager.roles} 
                 id={this.props.userManager.id}></UpdateModal>
             </div>
         )
@@ -177,12 +183,13 @@ class AddModal extends Component{
                 </Form.Item>
                 <Form.Item label="角色">
                     {/* <Input placeholder="角色" onChange={(event) => this.change(event, 'role')} value={this.state.role}/> */}
-                    <Select style={{width: 150 }}>
-                        <Select.Option value="role1">role1</Select.Option>
-                        <Select.Option value="role2">role2</Select.Option>
-                        <Select.Option value="role3">role3</Select.Option>
-                        <Select.Option value="role4">role4</Select.Option>
-                        <Select.Option value="role5">role5</Select.Option>
+                    <Select mode="multiple" style={{width: '100%' }}>
+                        {/* <Select.Option value="role5">role5</Select.Option> */}
+                        {this.props.roles.map(role => {
+                            return (
+                                <Select.Option key={role.id} value={role.id}>{role.name}</Select.Option>
+                            )
+                        })}
                     </Select>
                 </Form.Item>
                 <Form.Item label="描述">
@@ -213,9 +220,9 @@ class UpdateModal extends Component{
         }
     }
     findUserById = (id) => {
-        axios.get('userManager/findUserById/'+id)
+        axios.get('api/userController/findUserById/'+id)
             .then(r => {
-                let data = r.data
+                let data = r.data.data
                 this.setState({
                     id: data.id,
                     name: data.name,
@@ -296,7 +303,7 @@ function showDeleteConfirm(deleteUsersByIds, selectRows) {
   }
 
 export default connect((state) => ({userManager: state.userManager}), {
-    findUsers, 
+    findUsers, findRoles, 
     addUserShow, addUserCancel, addUserSure, 
     deleteUsersByIds, 
     updateUserShow, updateUserCancel, updateUserSure, 

@@ -17,6 +17,8 @@ export const UPDATE_ROLE_MODAL_CANCEL = "roleManager/updateRoleCancel";
 export const UPDATE_ROLE_MODAL_SURE = "api/roleController/updateRole";
 //删除行
 export const DELETE_ROLES_BY_IDS = "api/roleController/deleteRoleByIds";
+//角色菜單權限
+export const FIND_PRIVILEGES_BY_ROLE = "api/roleController/findPrivilegesByRole";
 
 export const find_roles = (list) => {
     return {
@@ -68,6 +70,13 @@ export const delete_roles_by_ids = (deleteIds) => {
     return {
         type: DELETE_ROLES_BY_IDS,
         deleteIds: deleteIds,
+    }
+}
+
+export const find_privileges_by_role = (privileges) => {
+    return {
+        type: FIND_PRIVILEGES_BY_ROLE,
+        privileges: privileges
     }
 }
 
@@ -156,5 +165,27 @@ export const deleteRolesByIds = (selectRows) => {
         }).then((deleteIds) => {
             dispatch(delete_roles_by_ids(deleteIds))
         })
+    }
+}
+
+export const findPrivilegesByRole = (selectRows) => {
+    return (dispatch) => {
+        if(selectRows.length == 0){
+            message.error("请选择行!")
+        }else if(selectRows.length > 1){
+            message.error('选中纪录超过一行!')
+        }else {
+            axios({
+                method: 'get',
+                url: FIND_PRIVILEGES_BY_ROLE + "?id=" + selectRows[0].id,
+                // data: {
+                //     id: selectRows[0].id
+                // }
+            }).then((res) => {
+                return res.data.data
+            }).then((privileges) => {
+                dispatch(find_privileges_by_role(privileges));
+            })
+        }
     }
 }

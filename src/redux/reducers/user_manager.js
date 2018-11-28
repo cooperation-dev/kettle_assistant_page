@@ -1,10 +1,11 @@
-import {FIND_USERS, 
+import {FIND_USERS, FIND_ROLES, 
         ADD_USER_MODAL_SHOW, ADD_USER_MODAL_CANCEL, ADD_USER_MODAL_SURE, 
         UPDATE_USER_MODAL_SHOW, UPDATE_USER_MODAL_CANCEL, UPDATE_USER_MODAL_SURE, 
         DELETE_USERS_BY_IDS, } from '../actions/user_manager'
 
 const initState = {
     list: [],
+    roles: [],
     addVisible: false,
     updateVisible: false,
     id: '',
@@ -16,6 +17,12 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 list: action.list
+            }
+        }
+        case FIND_ROLES:{
+            return {
+                ...state,
+                roles: action.roles,
             }
         }
         case ADD_USER_MODAL_SHOW:{

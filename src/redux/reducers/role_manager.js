@@ -1,13 +1,15 @@
 import {FIND_ROLES, 
         ADD_ROLE_MODAL_SHOW, ADD_ROLE_MODAL_CANCEL, ADD_ROLE_MODAL_SURE, 
         UPDATE_ROLE_MODAL_SHOW, UPDATE_ROLE_MODAL_CANCEL, UPDATE_ROLE_MODAL_SURE,
-        DELETE_ROLES_BY_IDS, } from '../actions/role_manager'
+        DELETE_ROLES_BY_IDS, FIND_PRIVILEGES_BY_ROLE} from '../actions/role_manager'
 
 const initState = {
     list:[],
     addVisible: false,
     updateVisible: false,
     updateId: '',
+    privilegeVisible: false,
+    privileges: [],
 }
 
 export default function reducers(state = initState, action){
@@ -51,15 +53,17 @@ export default function reducers(state = initState, action){
             }
         }
         case UPDATE_ROLE_MODAL_SURE:{
-            state.list.map(ele => {
-                if(ele.id == action.role.id)
-                    return action.role
+            let role = action.role;
+            let newList = state.list.map(ele => {
+                if(ele.id == role.id)
+                    return role
                 else
                     return ele
             })
             return {
                 ...state,
                 updateVisible: false,
+                list: newList,
             }
         }
         case DELETE_ROLES_BY_IDS:{
@@ -73,6 +77,13 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 list: newList,
+            }
+        }
+        case FIND_PRIVILEGES_BY_ROLE:{
+            return {
+                ...state,
+                privilegeVisible: true,
+                privileges: action.privileges,
             }
         }
         default:{

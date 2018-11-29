@@ -1,7 +1,7 @@
 import { Layout } from 'antd';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Redirect } from 'react-router-dom';
 import App from '../../components/App/App';
 import User from '../../components/User/User';
 

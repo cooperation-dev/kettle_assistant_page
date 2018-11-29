@@ -2,21 +2,23 @@ import axios from 'axios';
 import {message} from 'antd';
 
 //请求数据
-export const FIND_ROLES = "roleManager/findRoles";
+export const FIND_ROLES = "/api/roleController/findList";
 //新增显示
 export const ADD_ROLE_MODAL_SHOW = "roleManager/addRoleShow";
 //新增取消
 export const ADD_ROLE_MODAL_CANCEL = "roleManager/addRoleCancel";
 //新增确认
-export const ADD_ROLE_MODAL_SURE = "roleManager/addRoleSure";
+export const ADD_ROLE_MODAL_SURE = "/api/roleController/saveRole";
 //修改显示
 export const UPDATE_ROLE_MODAL_SHOW = "roleManager/updateRoleShow";
 //修改取消
 export const UPDATE_ROLE_MODAL_CANCEL = "roleManager/updateRoleCancel";
 //修改确认
-export const UPDATE_ROLE_MODAL_SURE = "roleManager/updateRoleSure";
+export const UPDATE_ROLE_MODAL_SURE = "/api/roleController/updateRole";
 //删除行
-export const DELETE_ROLES_BY_IDS = "roleManager/deleteRolesByIds";
+export const DELETE_ROLES_BY_IDS = "/api/roleController/deleteRoleByIds";
+//角色菜單權限
+export const FIND_PRIVILEGES_BY_ROLE = "/api/roleController/findPrivilegesByRole";
 
 export const find_roles = (list) => {
     return {
@@ -71,6 +73,13 @@ export const delete_roles_by_ids = (deleteIds) => {
     }
 }
 
+export const find_privileges_by_role = (privileges) => {
+    return {
+        type: FIND_PRIVILEGES_BY_ROLE,
+        privileges: privileges
+    }
+}
+
 export const findRoles = (role) => {
     return(dispatch) => {
         axios({
@@ -78,7 +87,7 @@ export const findRoles = (role) => {
             url: FIND_ROLES,
             data: role,
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((list) => {
             dispatch(find_roles(list))
         })
@@ -104,7 +113,7 @@ export const addRoleSure = (role) => {
             url: ADD_ROLE_MODAL_SURE,
             data:role
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((role) => {
             dispatch(add_role_modal_sure(role));
         })
@@ -136,7 +145,7 @@ export const updateRoleSure = (role) => {
             url: UPDATE_ROLE_MODAL_SURE,
             data: role
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((role) => {
             dispatch(update_role_modal_sure(role));
         })
@@ -152,9 +161,31 @@ export const deleteRolesByIds = (selectRows) => {
             url: DELETE_ROLES_BY_IDS,
             data:ids
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((deleteIds) => {
             dispatch(delete_roles_by_ids(deleteIds))
         })
+    }
+}
+
+export const findPrivilegesByRole = (selectRows) => {
+    return (dispatch) => {
+        if(selectRows.length == 0){
+            message.error("请选择行!")
+        }else if(selectRows.length > 1){
+            message.error('选中纪录超过一行!')
+        }else {
+            axios({
+                method: 'get',
+                url: FIND_PRIVILEGES_BY_ROLE + "?id=" + selectRows[0].id,
+                // data: {
+                //     id: selectRows[0].id
+                // }
+            }).then((res) => {
+                return res.data.data
+            }).then((privileges) => {
+                dispatch(find_privileges_by_role(privileges));
+            })
+        }
     }
 }

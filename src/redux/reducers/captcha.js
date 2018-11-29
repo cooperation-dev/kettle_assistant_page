@@ -2,7 +2,7 @@ import {CHANGE_CAPTCHA, CLICK_CAPTCHA} from '../actions/captcha';
 
 const initState = {
     captcha: '',
-    source: '/api/loginController/produceValidateCode?d='+new Date()*1
+    source: '/api/loginController/produceValidateCode'
 }
 
 export default function reducers(state=initState, action){
@@ -16,7 +16,7 @@ export default function reducers(state=initState, action){
         case CLICK_CAPTCHA: {
             return {
                 ...state,
-                source: '/api/loginController/produceValidateCode?d='+new Date()*1
+                source: '/api/loginController/produceValidateCode'
             }
         }
         default: 

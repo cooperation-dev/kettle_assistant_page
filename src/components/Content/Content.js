@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Switch, Route, withRouter} from 'react-router-dom';
+import {Switch, Route, Redirect} from 'react-router-dom';
 
 import {connect} from 'react-redux';
 import {toggleCollapsed} from '../../redux/actions/app';
@@ -47,6 +47,7 @@ class Content extends Component{
                             )
                         })
                     }
+                    <Redirect exact from="/app" to="/app/sum_dic"></Redirect>
                 </Switch>
             </Layout>
         )

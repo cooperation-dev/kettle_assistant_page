@@ -9,7 +9,7 @@ import axios from 'axios';
 import Captcha from 'components/Captcha/Captcha';
 
 import browserCookie from 'browser-cookies'
-import {Redirect, withRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 const querystring = require('querystring')
 
@@ -44,7 +44,9 @@ class Login extends Component{
             data: querystring.stringify(data)
         }).then((r) => {
             if(r.data.code=='200' && r.data.data=='SUCCESS'){
-                this.props.history.push("/app/sum_dic");
+                this.props.history.push("/app");
+            }else if(r.data.code == '401'){
+                this.props.history.push("/user/login")
             }
         })
     }

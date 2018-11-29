@@ -130,7 +130,7 @@ class UserManager extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateUserShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteUsersByIds, this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
-                        <Table rowSelection={rowSelection} dataSource={this.props.userManager.list} columns={columns} />
+                        <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.userManager.list} columns={columns} />
                     </Form>
                 </Row>
                 <AddModal 

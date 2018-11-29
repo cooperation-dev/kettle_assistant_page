@@ -5,7 +5,7 @@ import {findRoles,
         addRoleShow, addRoleCancel, addRoleSure, 
         deleteRolesByIds, 
         updateRoleShow, updateRoleCancel, updateRoleSure,
-        findPrivilegesByRole, } from '../../redux/actions/role_manager'
+        findPrivilegesByRole, closePrivilegeModal, } from '../../redux/actions/role_manager'
 import {connect} from 'react-redux';
 
 import axios from 'axios';
@@ -103,7 +103,7 @@ class RoleManager extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteRolesByIds, this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.findPrivilegesByRole(this.state.selectRows)}>权限分配</Button>
-                        <Table rowSelection={rowSelection} dataSource={this.props.roleManager.list} columns={columns} />
+                        <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.roleManager.list} columns={columns} />
                     </Form>
                 </Row>
                 <AddModal 
@@ -116,7 +116,9 @@ class RoleManager extends Component{
                 onCancel={() => this.props.updateRoleCancel()} 
                 id={this.props.roleManager.updateId}></UpdateModal>
                 <Privilege
-                visible={this.props.roleManager.privilegeVisible}></Privilege>
+                onCancel={() => this.props.closePrivilegeModal()}
+                visible={this.props.roleManager.privilegeVisible}
+                privileges={this.props.roleManager.privileges}></Privilege>
             </div>
         )
     }
@@ -262,28 +264,36 @@ function showDeleteConfirm(deleteRolesByIds, selectRows) {
             <Modal title="分配權限"
             visible={this.props.visible}
             // onOk={}
-            // onCancel={}
+            onCancel={this.props.onCancel}
             okText='确定'
             cancelText='取消'
             destroyOnClose={true}
             >
                 <Tree
                 checkable
-                defaultExpandedKeys={['0-0-0', '0-0-1']}
-                defaultSelectedKeys={['0-0-0', '0-0-1']}
-                defaultCheckedKeys={['0-0-0', '0-0-1']}
+                defaultExpandAll={true}
+                checkedKeys={['1','2']}
                 onSelect={this.onSelect}
                 onCheck={this.onCheck}
                 >
-                    <Tree.TreeNode title="parent 1" key="0-0">
-                    <Tree.TreeNode title="parent 1-0" key="0-0-0" disabled>
+                {this.props.privileges.map(privilege => {
+                    return (
+                        <Tree.TreeNode title={privilege.name} key={privilege.id}>
+                        {privilege.children.map(children => {
+                            return (
+                                <Tree.TreeNode title={children.name} key={children.id}/>
+                            )
+                        })}
+                        </Tree.TreeNode>
+                    )
+                })}
+                    {/* <Tree.TreeNode title="parent 1-0" key="0-0-0" disabled>
                         <Tree.TreeNode title="leaf" key="0-0-0-0" disableCheckbox />
                         <Tree.TreeNode title="leaf" key="0-0-0-1" />
                     </Tree.TreeNode>
                     <Tree.TreeNode title="parent 1-1" key="0-0-1">
                         <Tree.TreeNode title={<span style={{ color: '#1890ff' }}>sss</span>} key="0-0-1-0" />
-                    </Tree.TreeNode>
-                    </Tree.TreeNode>
+                    </Tree.TreeNode> */}
                 </Tree>
             </Modal>
           )
@@ -295,5 +305,5 @@ export default connect((state) => ({roleManager: state.roleManager}), {
     addRoleShow, addRoleCancel, addRoleSure, 
     deleteRolesByIds, 
     updateRoleShow, updateRoleCancel, updateRoleSure, 
-    findPrivilegesByRole, 
+    findPrivilegesByRole, closePrivilegeModal, 
 })(RoleManager)

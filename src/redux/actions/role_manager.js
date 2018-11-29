@@ -19,6 +19,8 @@ export const UPDATE_ROLE_MODAL_SURE = "/api/roleController/updateRole";
 export const DELETE_ROLES_BY_IDS = "/api/roleController/deleteRoleByIds";
 //角色菜單權限
 export const FIND_PRIVILEGES_BY_ROLE = "/api/roleController/findPrivilegesByRole";
+//关闭权限窗口
+export const CLOSE_PRIVILEGE_MODAL = "roleManager/closePrivilegeModal"
 
 export const find_roles = (list) => {
     return {
@@ -77,6 +79,12 @@ export const find_privileges_by_role = (privileges) => {
     return {
         type: FIND_PRIVILEGES_BY_ROLE,
         privileges: privileges
+    }
+}
+
+export const close_privilege_modal = () => {
+    return {
+        type: CLOSE_PRIVILEGE_MODAL,
     }
 }
 
@@ -178,14 +186,17 @@ export const findPrivilegesByRole = (selectRows) => {
             axios({
                 method: 'get',
                 url: FIND_PRIVILEGES_BY_ROLE + "?id=" + selectRows[0].id,
-                // data: {
-                //     id: selectRows[0].id
-                // }
             }).then((res) => {
                 return res.data.data
             }).then((privileges) => {
                 dispatch(find_privileges_by_role(privileges));
             })
         }
+    }
+}
+
+export const closePrivilegeModal = () => {
+    return (dispatch) => {
+        dispatch(close_privilege_modal())
     }
 }

@@ -389,8 +389,15 @@ mock.onPost('/api/systemLogController/findLogs')
             if(createTime!=undefined && createTime!=""){
                 newlog = newlog.filter(log => log.createTime==createTime)
             }
+
+            let data = {
+                code: "200",
+                msg: '',
+                data: newlog
+            }
+
             setTimeout(() => {
-                resolve([200, newlog]);
+                resolve([200, data]);
             }, 500);
         })
     })

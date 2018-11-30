@@ -184,7 +184,7 @@ class UpdateModal extends Component{
         }
     }
     findRoleById = (id) => {
-        axios.get('api/roleController/findRoleById/'+id)
+        axios.get('/api/roleController/findRoleById/'+id)
             .then(r => {
                 let data = r.data.data
                 this.setState({

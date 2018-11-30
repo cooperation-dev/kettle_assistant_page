@@ -220,7 +220,7 @@ class UpdateModal extends Component{
         }
     }
     findUserById = (id) => {
-        axios.get('api/userController/findUserById/'+id)
+        axios.get('/api/userController/findUserById/'+id)
             .then(r => {
                 let data = r.data.data
                 this.setState({

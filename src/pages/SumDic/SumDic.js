@@ -67,8 +67,14 @@ class SumDic extends Component{
         let dic = {
             code: '',
             name: '',
-            valid: '',
+            valid: 'Y',
         }
+
+        this.setState({
+            code: '',
+            name: '',
+            valid: 'Y'
+        })
 
         this.props.showList(dic)
     }

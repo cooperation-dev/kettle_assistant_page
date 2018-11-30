@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {connect} from 'react-redux';
 
-import {Input, Button, Layout, Form} from 'antd';
+import {Input, Button, Layout, Form, Icon} from 'antd';
 
 import axios from 'axios';
 
@@ -10,6 +10,9 @@ import Captcha from 'components/Captcha/Captcha';
 
 import browserCookie from 'browser-cookies'
 import {withRouter} from 'react-router-dom';
+
+import './Login.css';
+import 'antd/dist/antd.css';
 
 const querystring = require('querystring')
 
@@ -52,17 +55,22 @@ class Login extends Component{
     }
 
     render(){
+
         return (
-            <Layout style={{width: 500, marginLeft: 'auto', marginRight: 'auto', padding: 20}}>
-                <Form.Item label="用户名">        
-                    <Input value={this.state.username} onChange={(event) => this.change(event, 'username')}></Input>
-                </Form.Item>
-                <Form.Item label="密码">        
-                    <Input value={this.state.password} onChange={(event) => this.change(event, 'password')}></Input>
-                </Form.Item>
-                <Captcha></Captcha>
-                <Button type="primary" onClick={this.handleClick} >登录</Button>
-            </Layout>
+            <Layout.Content className="layout-style">
+                <div style={{textAlign: "center"}}>用户登录</div>
+                <Form className="login-form" >
+                    <Form.Item>        
+                        <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" value={this.state.username} onChange={(event) => this.change(event, 'username')}/>
+                    </Form.Item>
+                    <Form.Item >        
+                        <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" value={this.state.password} onChange={(event) => this.change(event, 'password')}/>
+                    </Form.Item>
+                    <Captcha></Captcha>
+                    <Button type="primary" onClick={this.handleClick} className="login-form-button">登录</Button>
+
+                </Form>
+            </Layout.Content>
         )
     }
 }

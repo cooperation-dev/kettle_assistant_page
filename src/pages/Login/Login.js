@@ -13,7 +13,6 @@ import {withRouter} from 'react-router-dom';
 
 import './Login.css';
 import 'antd/dist/antd.css';
-import { relative } from 'path';
 
 const querystring = require('querystring')
 
@@ -60,17 +59,11 @@ class Login extends Component{
         return (
             <Layout.Content className="layout-style">
                 <div style={{textAlign: "center"}}>用户登录</div>
-                <Form className="login-form">
-                    <Form.Item >        
-                        {/* <Input value={this.state.username} onChange={(event) => this.change(event, 'username')}></Input> */}
-                        {/* {getFieldDecorator('username', { */}
-                            {/* rules: [{ required: true, message: 'Please input your username!' }], */}
-                        {/* })( */}
+                <Form className="login-form" >
+                    <Form.Item>        
                         <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" value={this.state.username} onChange={(event) => this.change(event, 'username')}/>
-                        {/* )} */}
                     </Form.Item>
                     <Form.Item >        
-                        {/* <Input value={this.state.password} onChange={(event) => this.change(event, 'password')}></Input> */}
                         <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" value={this.state.password} onChange={(event) => this.change(event, 'password')}/>
                     </Form.Item>
                     <Captcha></Captcha>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Form, Col, Input} from 'antd'; 
+import {Form, Col, Input, Icon} from 'antd'; 
 
 import {connect} from 'react-redux';
 
@@ -9,9 +9,10 @@ import {changeCaptcha, clickCaptcha} from '../../redux/actions/captcha';
 class Captcha extends React.Component{
     render(){
         return (
-            <Form.Item label="验证码">        
+            <Form.Item>        
                 <Col span={12}>
-                    <Input value={this.props.captcha.captcha} onChange={(e)=>this.props.changeCaptcha(e)}></Input>
+                    {/* <Input value={this.props.captcha.captcha} onChange={(e)=>this.props.changeCaptcha(e)}></Input> */}
+                    <Input prefix={<Icon type="switcher" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Captcha" value={this.props.captcha.captcha} onChange={(e)=>this.props.changeCaptcha(e)}/>
                 </Col>
                 <Col span={12} style={{textAlign: 'center'}}>
                     <img alt="验证码" style={{cursor: "pointer"}} src={this.props.captcha.source} onClick={()=>this.props.clickCaptcha()}/>

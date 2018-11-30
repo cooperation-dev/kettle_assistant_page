@@ -9,7 +9,7 @@ class MainFrame extends React.Component {
 
     render() {
         return (
-            <Layout>
+            <Layout style={{height:"100%"}}>
                 <Route path="/user" component={User}></Route>
                 <Route path="/app" component={App}></Route>
             </Layout>

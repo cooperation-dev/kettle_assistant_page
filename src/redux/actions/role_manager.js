@@ -18,7 +18,7 @@ export const UPDATE_ROLE_MODAL_SURE = "/api/roleController/updateRole";
 //删除行
 export const DELETE_ROLES_BY_IDS = "/api/roleController/deleteRoleByIds";
 //角色菜單權限
-export const FIND_PRIVILEGES_BY_ROLE = "/api/roleController/findPrivilegesByRole";
+export const FIND_PRIVILEGES = "/api/roleController/findPrivileges";
 //关闭权限窗口
 export const CLOSE_PRIVILEGE_MODAL = "roleManager/closePrivilegeModal"
 
@@ -75,9 +75,9 @@ export const delete_roles_by_ids = (deleteIds) => {
     }
 }
 
-export const find_privileges_by_role = (privileges) => {
+export const find_privileges = (privileges) => {
     return {
-        type: FIND_PRIVILEGES_BY_ROLE,
+        type: FIND_PRIVILEGES,
         privileges: privileges
     }
 }
@@ -176,7 +176,7 @@ export const deleteRolesByIds = (selectRows) => {
     }
 }
 
-export const findPrivilegesByRole = (selectRows) => {
+export const findPrivileges = (selectRows) => {
     return (dispatch) => {
         if(selectRows.length == 0){
             message.error("请选择行!")
@@ -185,11 +185,11 @@ export const findPrivilegesByRole = (selectRows) => {
         }else {
             axios({
                 method: 'get',
-                url: FIND_PRIVILEGES_BY_ROLE + "?id=" + selectRows[0].id,
+                url: FIND_PRIVILEGES,
             }).then((res) => {
                 return res.data.data
             }).then((privileges) => {
-                dispatch(find_privileges_by_role(privileges));
+                dispatch(find_privileges(privileges));
             })
         }
     }

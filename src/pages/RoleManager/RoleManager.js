@@ -5,7 +5,7 @@ import {findRoles,
         addRoleShow, addRoleCancel, addRoleSure, 
         deleteRolesByIds, 
         updateRoleShow, updateRoleCancel, updateRoleSure,
-        findPrivilegesByRole, closePrivilegeModal, } from '../../redux/actions/role_manager'
+        findPrivileges, closePrivilegeModal, } from '../../redux/actions/role_manager'
 import {connect} from 'react-redux';
 
 import axios from 'axios';
@@ -102,7 +102,7 @@ class RoleManager extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => this.props.updateRoleShow(this.state.selectRows)}>修改</Button>
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteRolesByIds, this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => this.props.findPrivilegesByRole(this.state.selectRows)}>权限分配</Button>
+                        <Button type="default" size="default" className="btn" onClick={() => this.props.findPrivileges(this.state.selectRows)}>权限分配</Button>
                         <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.roleManager.list} columns={columns} />
                     </Form>
                 </Row>
@@ -116,6 +116,7 @@ class RoleManager extends Component{
                 onCancel={() => this.props.updateRoleCancel()} 
                 id={this.props.roleManager.updateId}></UpdateModal>
                 <Privilege
+                selectRows={this.state.selectRows} 
                 onCancel={() => this.props.closePrivilegeModal()}
                 visible={this.props.roleManager.privilegeVisible}
                 privileges={this.props.roleManager.privileges}></Privilege>
@@ -259,11 +260,32 @@ function showDeleteConfirm(deleteRolesByIds, selectRows) {
   }
 
   class Privilege extends Component{
+      constructor(){
+          super();
+
+          this.state = {
+              keys: [],
+          }
+      }
+      componentWillReceiveProps = (nextProps) => {
+          let keys = [];
+          nextProps.selectRows.map((privilege) => {
+              privilege.privileges.map(privileges => {
+                  keys.push(privileges.id);
+              })
+          })
+          this.setState({keys: keys})
+      }
+      ok = () => {
+          console.log(this.state.keys);
+      }
+      cancel = () => {
+      }
       render(){
           return (
             <Modal title="分配權限"
             visible={this.props.visible}
-            // onOk={}
+            onOk={this.ok}
             onCancel={this.props.onCancel}
             okText='确定'
             cancelText='取消'
@@ -272,9 +294,9 @@ function showDeleteConfirm(deleteRolesByIds, selectRows) {
                 <Tree
                 checkable
                 defaultExpandAll={true}
-                checkedKeys={['1','2']}
-                onSelect={this.onSelect}
-                onCheck={this.onCheck}
+                checkedKeys={this.state.keys}
+                // onSelect={this.onSelect}
+                // onCheck={this.onCheck}
                 >
                 {this.props.privileges.map(privilege => {
                     return (
@@ -287,13 +309,6 @@ function showDeleteConfirm(deleteRolesByIds, selectRows) {
                         </Tree.TreeNode>
                     )
                 })}
-                    {/* <Tree.TreeNode title="parent 1-0" key="0-0-0" disabled>
-                        <Tree.TreeNode title="leaf" key="0-0-0-0" disableCheckbox />
-                        <Tree.TreeNode title="leaf" key="0-0-0-1" />
-                    </Tree.TreeNode>
-                    <Tree.TreeNode title="parent 1-1" key="0-0-1">
-                        <Tree.TreeNode title={<span style={{ color: '#1890ff' }}>sss</span>} key="0-0-1-0" />
-                    </Tree.TreeNode> */}
                 </Tree>
             </Modal>
           )
@@ -305,5 +320,5 @@ export default connect((state) => ({roleManager: state.roleManager}), {
     addRoleShow, addRoleCancel, addRoleSure, 
     deleteRolesByIds, 
     updateRoleShow, updateRoleCancel, updateRoleSure, 
-    findPrivilegesByRole, closePrivilegeModal, 
+    findPrivileges, closePrivilegeModal, 
 })(RoleManager)

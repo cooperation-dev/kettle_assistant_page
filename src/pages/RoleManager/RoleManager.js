@@ -5,7 +5,7 @@ import {findRoles,
         addRoleShow, addRoleCancel, addRoleSure, 
         deleteRolesByIds, 
         updateRoleShow, updateRoleCancel, updateRoleSure,
-        findPrivileges, closePrivilegeModal, } from '../../redux/actions/role_manager'
+        findPrivileges, closePrivilegeModal, surePrivilegeModal, } from '../../redux/actions/role_manager'
 import {connect} from 'react-redux';
 
 import axios from 'axios';
@@ -117,6 +117,7 @@ class RoleManager extends Component{
                 id={this.props.roleManager.updateId}></UpdateModal>
                 <Privilege
                 selectRows={this.state.selectRows} 
+                onOk={(privilegeKeys) => {this.props.surePrivilegeModal(privilegeKeys)}}
                 onCancel={() => this.props.closePrivilegeModal()}
                 visible={this.props.roleManager.privilegeVisible}
                 privileges={this.props.roleManager.privileges}></Privilege>
@@ -264,29 +265,44 @@ function showDeleteConfirm(deleteRolesByIds, selectRows) {
           super();
 
           this.state = {
+              id: '',
               keys: [],
           }
       }
       componentWillReceiveProps = (nextProps) => {
           let keys = [];
-          nextProps.selectRows.map((privilege) => {
-              privilege.privileges.map(privileges => {
+          nextProps.selectRows.map((role) => {
+              this.setState({id: role.id});
+              role.privileges.map(privileges => {
                   keys.push(privileges.id);
               })
           })
           this.setState({keys: keys})
       }
       ok = () => {
-          console.log(this.state.keys);
+          let privilegs = {
+              roleId: this.state.id,
+              privilegeId: this.state.keys,
+          };
+          this.props.onOk(privilegs);
       }
       cancel = () => {
+          this.setState({keys: []});
+          this.props.onCancel();
+      }
+      onSelect = (selectedKeys, info) => {
+        console.log('selected', selectedKeys);
+      }
+      onCheck = (checkedKeys, info) => {
+        console.log('onCheck', checkedKeys);
+        this.setState({keys:checkedKeys})
       }
       render(){
           return (
             <Modal title="分配權限"
             visible={this.props.visible}
             onOk={this.ok}
-            onCancel={this.props.onCancel}
+            onCancel={this.cancel}
             okText='确定'
             cancelText='取消'
             destroyOnClose={true}
@@ -295,8 +311,8 @@ function showDeleteConfirm(deleteRolesByIds, selectRows) {
                 checkable
                 defaultExpandAll={true}
                 checkedKeys={this.state.keys}
-                // onSelect={this.onSelect}
-                // onCheck={this.onCheck}
+                onSelect={this.onSelect}
+                onCheck={this.onCheck}
                 >
                 {this.props.privileges.map(privilege => {
                     return (
@@ -320,5 +336,5 @@ export default connect((state) => ({roleManager: state.roleManager}), {
     addRoleShow, addRoleCancel, addRoleSure, 
     deleteRolesByIds, 
     updateRoleShow, updateRoleCancel, updateRoleSure, 
-    findPrivileges, closePrivilegeModal, 
+    findPrivileges, closePrivilegeModal, surePrivilegeModal, 
 })(RoleManager)

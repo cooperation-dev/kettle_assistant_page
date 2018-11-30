@@ -1,7 +1,7 @@
 import {FIND_ROLES, 
         ADD_ROLE_MODAL_SHOW, ADD_ROLE_MODAL_CANCEL, ADD_ROLE_MODAL_SURE, 
         UPDATE_ROLE_MODAL_SHOW, UPDATE_ROLE_MODAL_CANCEL, UPDATE_ROLE_MODAL_SURE,
-        DELETE_ROLES_BY_IDS, FIND_PRIVILEGES, CLOSE_PRIVILEGE_MODAL, } from '../actions/role_manager'
+        DELETE_ROLES_BY_IDS, FIND_PRIVILEGES, CLOSE_PRIVILEGE_MODAL, SURE_PRIVILEGE_MODAL} from '../actions/role_manager'
 
 const initState = {
     list:[],
@@ -87,6 +87,20 @@ export default function reducers(state = initState, action){
             }
         }
         case CLOSE_PRIVILEGE_MODAL:{
+            return {
+                ...state,
+                privilegeVisible: false,
+            }
+        }
+        case SURE_PRIVILEGE_MODAL:{
+            let newRole = action.role;
+            state.list.map(role => {
+                if(role.id == newRole.id){
+                    return newRole
+                }else {
+                    return role;
+                }
+            })
             return {
                 ...state,
                 privilegeVisible: false,

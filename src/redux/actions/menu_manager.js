@@ -2,9 +2,9 @@ import axios from 'axios';
 import {message} from 'antd';
 
 //请求数据
-export const FIND_MENUS = "menuManager/findList"
-//请求Select数据
-export const FIND_PARENTS = "menuManager/findParents"
+export const FIND_MENUS = "/api/privilegeController/findList"
+//请求父级菜单
+export const FIND_PARENTS = "/api/privilegeController/findParents"
 //新增显示
 export const ADD_MENU_MODAL_SHOW = "menuManager/addMenuShow"
 //新增取消
@@ -82,13 +82,15 @@ export const delete_menus_by_ids = (deleteIds) => {
 
 export const findMenus = () => {
     return (dispatch) => {
-        axios.post(FIND_MENUS)
-            .then((response) => {
-                return response.data
-            })
-            .then((list) => {
-                dispatch(find_menus(list))
-            })
+        axios({
+            method: 'post',
+            url: FIND_MENUS,
+        }).then((response) => {
+            return response.data.data
+        })
+        .then((list) => {
+            dispatch(find_menus(list))
+        })
     }
 }
 
@@ -98,7 +100,7 @@ export const findParents = () => {
             method: 'post',
             url: FIND_PARENTS,
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((parents) => {
             dispatch(find_parents(parents))
         })

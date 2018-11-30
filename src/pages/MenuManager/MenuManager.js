@@ -157,7 +157,7 @@ class MenuManager extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteMenusByIds, this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">基本功能设置</Button>
                         <Button type="default" size="default" className="btn">导出菜单脚本</Button>
-                        <Table rowSelection={rowSelection} dataSource={this.props.menuManager.list} columns={columns} scroll={{x: 1500}}/>
+                        <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.menuManager.list} columns={columns} scroll={{x: 1500}}/>
                     </Form>
                 </Row>
                 <AddModal 
@@ -249,7 +249,7 @@ class AddModal extends Component{
                     <Select style={{width: 150 }} defaultValue={this.state.parentId}>
                         {this.props.parents.map(parent => {
                             return (
-                                <Select.Option key={parent.id} value={parent.code}>{parent.name}</Select.Option>
+                                <Select.Option key={parent.id} value={parent.id}>{parent.name}</Select.Option>
                             )
                         })}
                     </Select>

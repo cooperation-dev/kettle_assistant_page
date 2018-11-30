@@ -27,17 +27,13 @@ const createComponent = (component) => (props) => (
     </Bundle>
 );
 
-
 class Content extends Component{
 
     logout = () => {
         axios.get("/api/loginController/logout")
-        // axios.get("/api/loginController/logout")
             .then(r => {
                 this.props.history.push("/user/login")
             })
-
-
     }
     
     render(){

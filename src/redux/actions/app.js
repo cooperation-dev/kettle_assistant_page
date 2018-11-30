@@ -46,6 +46,8 @@ export function loadMenu(){
             return reponse.data.data
         }).then((list) => {
             dispatch(load_menu(list))
+        }).catch((error) => {
+            this.history.push('/user/login')
         })
     }
 }

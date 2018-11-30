@@ -5,11 +5,13 @@ import Content from 'components/Content/Content';
 import {Layout} from 'antd';
 
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 import {loadMenu} from '../../redux/actions/app';
 
 class App extends Component{
     componentDidMount = () => {
         this.props.loadMenu()
+            
     }
 
     render() {
@@ -22,6 +24,6 @@ class App extends Component{
     }
 }
 
-export default connect(
+export default withRouter(connect(
     (state) => ({app: state.app}), {loadMenu}
-)(App)
+)(App))

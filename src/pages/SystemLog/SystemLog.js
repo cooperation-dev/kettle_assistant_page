@@ -4,11 +4,11 @@ import {findLogs} from '../../redux/actions/system_log';
 import {connect} from 'react-redux';
 
 const columns = [
-    {
+    /* {
         key: 'id',
         title: 'id',
         dataIndex: 'id'
-    },{
+    }, */{
         key: 'operateUser',
         title: '操作用户',
         dataIndex: 'operateUser'
@@ -21,14 +21,14 @@ const columns = [
         title: '操作ip',
         dataIndex: 'operateIp'
     },{
-        key: 'details',
-        title: '详情',
-        dataIndex: 'details'
-    },{
         key: 'createTime',
         title: '创建时间',
         dataIndex: 'createTime'
-    },
+    },{
+        key: 'details',
+        title: '详情',
+        dataIndex: 'details'
+    }
 ]
 
 class SystemLog extends Component{
@@ -36,7 +36,7 @@ class SystemLog extends Component{
         super(props)
 
         this.state = {
-            operator: '',
+            operateUser: '',
             logType: '',
             operateIp: '',
             details: '',
@@ -46,7 +46,7 @@ class SystemLog extends Component{
 
     componentDidMount = () => {
         let log = {
-            operator: this.state.operator,
+            operateUser: this.state.operateUser,
             logType: this.state.logType,
             operateIp: this.state.operateIp,
             details: this.state.details,
@@ -55,9 +55,9 @@ class SystemLog extends Component{
         this.props.findLogs(log)
     }
 
-    changeOperator = (e) => {
+    changeoperateUser = (e) => {
         this.setState({
-            operator: e.target.value
+            operateUser: e.target.value
         })
     }
 
@@ -87,7 +87,7 @@ class SystemLog extends Component{
 
     findLog = () => {
         let log = {
-            operator: this.state.operator,
+            operateUser: this.state.operateUser,
             logType: this.state.logType,
             operateIp: this.state.operateIp,
             details: this.state.details,
@@ -98,7 +98,7 @@ class SystemLog extends Component{
 
     reset = () => {
         this.setState({
-            operator: '',
+            operateUser: '',
             logType: '',
             operateIp: '',
             details: '',
@@ -106,7 +106,7 @@ class SystemLog extends Component{
         })
 
         let log = {
-            operator: '',
+            operateUser: '',
             logType: '',
             operateIp: '',
             details: '',
@@ -125,7 +125,7 @@ class SystemLog extends Component{
                         <Row gutter={24}>
                             <Col span={8} key={1}>
                                 <Form.Item label="操作用户">
-                                    <Input placeholder="操作用户" onChange={this.changeOperator} value={this.state.operator}/>
+                                    <Input placeholder="操作用户" onChange={this.changeoperateUser} value={this.state.operateUser}/>
                                 </Form.Item>
                             </Col>
                             <Col span={8} key={2}>

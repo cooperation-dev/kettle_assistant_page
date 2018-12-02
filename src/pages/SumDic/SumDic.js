@@ -169,6 +169,11 @@ class SumDic extends Component{
                             key = 'creator'
                         />
                         <Column 
+                            title = '修改人'
+                            dataIndex = 'modifier'
+                            key = 'modifier'
+                        />
+                        <Column 
                             title = '是否禁用'
                             dataIndex = 'valid'
                             key = 'valid'

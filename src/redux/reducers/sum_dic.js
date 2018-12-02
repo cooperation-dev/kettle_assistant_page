@@ -82,11 +82,12 @@ export default function reducers(state=initState, action){
             }
         }
         case CHANGE_DISABLED: {
-            let newlist = state.list.map(ele => {
+            let newlist = []
+            state.list.map(ele => {
                 if(ele.id == action.row.id){
-                    return action.row
+                    return 
                 }else{
-                    return ele
+                    return newlist.push(ele)
                 }
             })
             return {

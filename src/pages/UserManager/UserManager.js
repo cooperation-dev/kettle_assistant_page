@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Form, Input, Button, Row, Col, Table, Modal, message, Select} from 'antd'
+import {Form, Input, Button, Row, Col, Table, Modal, message, Select, Tag} from 'antd'
 
 import {findUsers, findRoles,
         addUserShow, addUserCancel, addUserSure, 
@@ -75,8 +75,13 @@ class UserManager extends Component{
             },
             {
                 title: '角色',
-                dataIndex: 'role',
-                key: 'role'
+                dataIndex: 'roles',
+                key: 'roles',
+                render:roles => (
+                    <span>
+                        {roles.map(role => <Tag>{role.name}</Tag>)}
+                    </span>
+                )
             },
             {
                 title: '描述',
@@ -155,7 +160,8 @@ class AddModal extends Component{
         this.state = {
             name: '',
             description: '',
-            role: ''
+            passWord: '',
+            roleList: [],
         }
     }
     change = (event, attribute) => {
@@ -163,11 +169,15 @@ class AddModal extends Component{
         newState[attribute] = event.target.value;
         this.setState(newState);
     }
+    roleListChange = (value) => {
+        this.setState({roleList: value});
+    }
     render(){
         let user = {
             name: this.state.name,
             description: this.state.description,
-            role: this.state.role
+            roleList: this.state.roleList,
+            passWord: this.state.passWord,
         }
         return (
             <Modal title="新增用户"
@@ -182,9 +192,7 @@ class AddModal extends Component{
                     <Input placeholder="昵称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="角色">
-                    {/* <Input placeholder="角色" onChange={(event) => this.change(event, 'role')} value={this.state.role}/> */}
-                    <Select mode="multiple" style={{width: '100%' }}>
-                        {/* <Select.Option value="role5">role5</Select.Option> */}
+                    <Select mode="multiple" style={{width: '100%' }} placeholder='角色' onChange={(value) => {this.roleListChange(value)}}>
                         {this.props.roles.map(role => {
                             return (
                                 <Select.Option key={role.id} value={role.id}>{role.name}</Select.Option>
@@ -192,8 +200,11 @@ class AddModal extends Component{
                         })}
                     </Select>
                 </Form.Item>
-                <Form.Item label="描述">
-                    <Input placeholder="描述" onChange={(event) => this.change(event, 'description')} value={this.state.description}/>
+                <Form.Item label='密码'>
+                    <Input placeholder='密码' type='password' onChange={(event) => this.change(event, 'passWord')} value={this.state.passWord}/>
+                </Form.Item>
+                <Form.Item label='描述'>
+                    <Input placeholder='描述' onChange={(event) => this.change(event, 'description')} value={this.state.description}/>
                 </Form.Item>
             </Modal>
         )

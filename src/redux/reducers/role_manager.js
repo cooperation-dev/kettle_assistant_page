@@ -94,7 +94,7 @@ export default function reducers(state = initState, action){
         }
         case SURE_PRIVILEGE_MODAL:{
             let newRole = action.role;
-            state.list.map(role => {
+            let newList = state.list.map(role => {
                 if(role.id == newRole.id){
                     return newRole
                 }else {
@@ -104,6 +104,7 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 privilegeVisible: false,
+                list:newList,
             }
         }
         default:{

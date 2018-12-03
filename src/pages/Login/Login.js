@@ -24,6 +24,7 @@ class Login extends Component{
             username: '',
             password: '',
         }
+
     }
 
     change = (event, attribute) => {

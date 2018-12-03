@@ -2,10 +2,13 @@ import axios from 'axios';
 
 export const FIND_LOGS = "systemLog/findLogs";
 
-export const find_logs = (list) => {
+export const find_logs = (data) => {
     return {
         type: FIND_LOGS, 
-        list: list
+        list: data.data,
+        pageNo: data.pageNo,
+        pageSize: data.pageSize,
+        total: data.total
     }
 }
 
@@ -17,8 +20,8 @@ export const findLogs = (log) => {//包含操作用户、日志类型、操作IP
             data: log
         }).then((response) => {
             return response.data.data
-        }).then((list) => {
-            dispatch(find_logs(list))
+        }).then((data) => {
+            dispatch(find_logs(data))
         })
     }
 }

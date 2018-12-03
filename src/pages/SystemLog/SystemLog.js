@@ -1,14 +1,9 @@
 import React, {Component} from 'react';
-import {Form, Table, Row, Col, Input, Button} from 'antd';
+import {Form, Table, Row, Col, Input, Button, Pagination} from 'antd';
 import {findLogs} from '../../redux/actions/system_log';
 import {connect} from 'react-redux';
 
-const columns = [
-    /* {
-        key: 'id',
-        title: 'id',
-        dataIndex: 'id'
-    }, */{
+const columns = [{
         key: 'operateUser',
         title: '操作用户',
         dataIndex: 'operateUser'
@@ -45,12 +40,18 @@ class SystemLog extends Component{
     }
 
     componentDidMount = () => {
-        let log = {
+        let data = {
             operateUser: this.state.operateUser,
             logType: this.state.logType,
             operateIp: this.state.operateIp,
             details: this.state.details,
             createTime: this.state.createTime
+
+        }
+        let log = {
+            pageSize: this.props.systemLog.pageSize,
+            pageNo: this.props.systemLog.pageNo,
+            data: data
         }
         this.props.findLogs(log)
     }
@@ -86,12 +87,18 @@ class SystemLog extends Component{
     }
 
     findLog = () => {
-        let log = {
+        let data = {
             operateUser: this.state.operateUser,
             logType: this.state.logType,
             operateIp: this.state.operateIp,
             details: this.state.details,
             createTime: this.state.createTime
+
+        }
+        let log = {
+            pageSize: this.props.systemLog.pageSize,
+            pageNo: 1,
+            data: data
         }
         this.props.findLogs(log)
     }
@@ -105,17 +112,50 @@ class SystemLog extends Component{
             createTime: '',
         })
 
-        let log = {
+        let data = {
             operateUser: '',
             logType: '',
             operateIp: '',
             details: '',
             createTime: '',
         }
+
+        let log = {
+            pageSize: this.props.systemLog.pageSize,
+            pageNo: 1,
+            data: data
+        }
+        this.props.findLogs(log)
+
+    }
+    
+    changePagination = (page) => {
+        let data = {
+            operateUser: this.state.operateUser,
+            logType: this.state.logType,
+            operateIp: this.state.operateIp,
+            details: this.state.details,
+            createTime: this.state.createTime
+
+        }
+        let log = {
+            pageSize: this.props.systemLog.pageSize,
+            pageNo: page,
+            data: data
+        }
         this.props.findLogs(log)
     }
 
     render(){
+        const pagination = {
+            pageSize: this.props.systemLog.pageSize,
+            total: this.props.systemLog.total,
+            current: this.props.systemLog.pageNo,
+            onChange:(page) => {
+                this.changePagination(page)
+            }
+        }
+
         return (
             <div style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto"}}>
                 <Row>
@@ -161,7 +201,12 @@ class SystemLog extends Component{
                 </Row>
                 <Row style={{marginTop:"15px"}}>
                     <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
-                        <Table rowKey={(record) => record.id} columns={columns} dataSource={this.props.systemLog.list} />
+                        <Table 
+                            rowKey={(record) => record.id} 
+                            columns={columns} 
+                            dataSource={this.props.systemLog.list} 
+                            pagination={pagination}
+                        />
                     </Form>
                 </Row>
             </div>

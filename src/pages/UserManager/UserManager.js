@@ -159,6 +159,7 @@ class AddModal extends Component{
         super()
         this.state = {
             name: '',
+            code: '',
             description: '',
             password: '',
             roles: [],
@@ -175,6 +176,7 @@ class AddModal extends Component{
     render(){
         let user = {
             name: this.state.name,
+            code: this.state.code,
             description: this.state.description,
             roleList: this.state.roles,
             password: this.state.password,
@@ -190,6 +192,9 @@ class AddModal extends Component{
                 >
                 <Form.Item label="昵称">
                     <Input placeholder="昵称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
+                </Form.Item>
+                <Form.Item label="登陆账号">
+                    <Input placeholder="登陆账号" onChange={(event) => this.change(event, 'code')} value={this.state.code}/>
                 </Form.Item>
                 <Form.Item label="角色">
                     <Select mode="multiple" style={{width: '100%' }} placeholder='角色' onChange={(value) => {this.rolesChange(value)}}>

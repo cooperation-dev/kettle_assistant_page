@@ -132,7 +132,8 @@ class AddModal extends Component{
 
         this.state = {
             name: '',
-            description: ''
+            code: '',
+            description: '',
         }
     }
     change = (event, attribute) => {
@@ -143,6 +144,7 @@ class AddModal extends Component{
     render(){
         let role = {
             name: this.state.name,
+            code: this.state.code,
             description: this.state.description,
         }
         return (
@@ -156,6 +158,9 @@ class AddModal extends Component{
                 >
                 <Form.Item label="角色名">
                     <Input placeholder="角色名" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
+                </Form.Item>
+                <Form.Item label="角色代码">
+                    <Input placeholder="角色代码" onChange={(event) => this.change(event, 'code')} value={this.state.code}/>
                 </Form.Item>
                 <Form.Item label="角色描述">
                     <Input placeholder="角色描述" onChange={(event) => this.change(event, 'description')} value={this.state.description}/>

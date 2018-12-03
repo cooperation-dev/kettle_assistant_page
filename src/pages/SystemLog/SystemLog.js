@@ -87,12 +87,18 @@ class SystemLog extends Component{
     }
 
     findLog = () => {
-        let log = {
+        let data = {
             operateUser: this.state.operateUser,
             logType: this.state.logType,
             operateIp: this.state.operateIp,
             details: this.state.details,
             createTime: this.state.createTime
+
+        }
+        let log = {
+            pageSize: this.props.systemLog.pageSize,
+            pageNo: 1,
+            data: data
         }
         this.props.findLogs(log)
     }
@@ -106,14 +112,21 @@ class SystemLog extends Component{
             createTime: '',
         })
 
-        let log = {
+        let data = {
             operateUser: '',
             logType: '',
             operateIp: '',
             details: '',
             createTime: '',
         }
+
+        let log = {
+            pageSize: this.props.systemLog.pageSize,
+            pageNo: 1,
+            data: data
+        }
         this.props.findLogs(log)
+
     }
     
     changePagination = (page) => {

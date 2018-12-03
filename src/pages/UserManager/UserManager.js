@@ -79,7 +79,7 @@ class UserManager extends Component{
                 key: 'roles',
                 render:roles => (
                     <span>
-                        {roles.map(role => <Tag>{role.name}</Tag>)}
+                        {roles.map(role => <Tag key={role.id}>{role.name}</Tag>)}
                     </span>
                 )
             },
@@ -160,8 +160,8 @@ class AddModal extends Component{
         this.state = {
             name: '',
             description: '',
-            passWord: '',
-            roleList: [],
+            password: '',
+            roles: [],
         }
     }
     change = (event, attribute) => {
@@ -169,15 +169,15 @@ class AddModal extends Component{
         newState[attribute] = event.target.value;
         this.setState(newState);
     }
-    roleListChange = (value) => {
-        this.setState({roleList: value});
+    rolesChange = (value) => {
+        this.setState({roles: value});
     }
     render(){
         let user = {
             name: this.state.name,
             description: this.state.description,
-            roleList: this.state.roleList,
-            passWord: this.state.passWord,
+            roleList: this.state.roles,
+            password: this.state.password,
         }
         return (
             <Modal title="新增用户"
@@ -192,7 +192,7 @@ class AddModal extends Component{
                     <Input placeholder="昵称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="角色">
-                    <Select mode="multiple" style={{width: '100%' }} placeholder='角色' onChange={(value) => {this.roleListChange(value)}}>
+                    <Select mode="multiple" style={{width: '100%' }} placeholder='角色' onChange={(value) => {this.rolesChange(value)}}>
                         {this.props.roles.map(role => {
                             return (
                                 <Select.Option key={role.id} value={role.id}>{role.name}</Select.Option>
@@ -201,7 +201,7 @@ class AddModal extends Component{
                     </Select>
                 </Form.Item>
                 <Form.Item label='密码'>
-                    <Input placeholder='密码' type='password' onChange={(event) => this.change(event, 'passWord')} value={this.state.passWord}/>
+                    <Input placeholder='密码' type='password' onChange={(event) => this.change(event, 'password')} value={this.state.password}/>
                 </Form.Item>
                 <Form.Item label='描述'>
                     <Input placeholder='描述' onChange={(event) => this.change(event, 'description')} value={this.state.description}/>
@@ -218,7 +218,8 @@ class UpdateModal extends Component{
         this.state = {
             id: '',
             name: '',
-            role: '',
+            roles: [],
+            description: '',
         }
     }
     componentWillReceiveProps = (nextProps) => {
@@ -234,10 +235,15 @@ class UpdateModal extends Component{
         axios.get('/api/userController/findUserById/'+id)
             .then(r => {
                 let data = r.data.data
+                let rolesStr = [];
+                data.roles.map(role => {
+                    rolesStr.push(role.id);
+                })
                 this.setState({
                     id: data.id,
                     name: data.name,
-                    role: data.role,
+                    roles: rolesStr,
+                    description: data.description,
                 })
             })
     }
@@ -246,22 +252,28 @@ class UpdateModal extends Component{
         newState[attribute] = event.target.value;
         this.setState(newState);
     }
+    rolesChange = (value) => {
+        this.setState({roles: value});
+    }
     ok = () => {
         let user = {
             id: this.state.id,
             name: this.state.name,
-            role: this.state.role
+            roleList: this.state.roles,
+            description: this.state.description,
         }
         this.setState({
             name: '',
-            role: '',
+            roles: [],
+            description: '',
         })
         this.props.onOk(user);
     }
     cancel = () => {
         this.setState({
             name: '',
-            role: '',
+            roles: '',
+            description: '',
         })
         this.props.onCancel();
     }
@@ -279,14 +291,16 @@ class UpdateModal extends Component{
                     <Input placeholder="昵称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="角色">
-                    {/* <Input placeholder="角色" onChange={(event) => this.props.changeRole(event)} value={this.props.role}/> */}
-                    <Select style={{width: 150 }} value={this.state.role}>
-                        <Select.Option value="role1">role1</Select.Option>
-                        <Select.Option value="role2">role2</Select.Option>
-                        <Select.Option value="role3">role3</Select.Option>
-                        <Select.Option value="role4">role4</Select.Option>
-                        <Select.Option value="role5">role5</Select.Option>
+                    <Select mode="multiple" style={{width: '100%' }} placeholder='角色' value={this.state.roles} onChange={(value) => this.rolesChange(value)}>
+                        {this.props.roles.map(role => {
+                            return (
+                                <Select.Option key={role.id} value={role.id}>{role.name}</Select.Option>
+                            )
+                        })}
                     </Select>
+                </Form.Item>
+                <Form.Item label='描述'>
+                    <Input placeholder='描述' onChange={(event) => this.change(event, 'description')} value={this.state.description}/>
                 </Form.Item>
             </Modal>
         )

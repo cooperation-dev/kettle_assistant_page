@@ -58,7 +58,7 @@ export default function reducers(state = initState, action){
             }
         }
         case UPDATE_USER_MODAL_SURE:{
-            state.list.map((ele) => {
+            let newList = state.list.map((ele) => {
                 if(ele.id == action.user.id){
                     return action.user
                 }else {
@@ -68,6 +68,7 @@ export default function reducers(state = initState, action){
             return {
                 ...state,
                 updateVisible: false,
+                list: newList,
             }
         }
         case DELETE_USERS_BY_IDS:{

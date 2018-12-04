@@ -11,7 +11,11 @@ const initState = {
     updateModalVisible: false,
     detailsModalVisible: false,
     updateId: '',
-    dicTree: {}
+    dicTree: {},
+    //分页
+    total: 0,
+    pageNo: 1,
+    pageSize: 10,
 }
 
 export default function reducers(state=initState, action){
@@ -19,7 +23,10 @@ export default function reducers(state=initState, action){
         case SHOW_LIST: {
             return {
                 ...state,
-                list: action.list
+                list: action.list,
+                total: action.total,
+                pageNo: action.pageNo,
+                pageSize: action.pageSize
             }
         }
         case ADD_MODAL_SHOW: {

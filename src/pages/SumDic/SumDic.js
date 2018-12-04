@@ -59,8 +59,13 @@ class SumDic extends Component{
             name: this.state.name,
             valid: this.state.valid,
         }
-
-        this.props.showList(dic)
+        
+        let data = {
+            pageNo: this.props.sumDic.pageNo,
+            pageSize: this.props.sumDic.pageSize,
+            data: dic
+        }
+        this.props.showList(data)
     }
 
     reset = () => {
@@ -69,6 +74,11 @@ class SumDic extends Component{
             name: '',
             valid: 'Y',
         }
+        let data = {
+            pageNo: 1,
+            pageSize: this.props.sumDic.pageSize,
+            data: dic
+        }
 
         this.setState({
             code: '',
@@ -76,7 +86,21 @@ class SumDic extends Component{
             valid: 'Y'
         })
 
-        this.props.showList(dic)
+        this.props.showList(data)
+    }
+
+    changePagination = (page) => {
+        let dic = {
+            code: this.state.code,
+            name: this.state.name,
+            valid: this.state.valid,
+        }
+        let data = {
+            pageSize: this.props.sumDic.pageSize,
+            pageNo: page,
+            data: dic
+        }
+        this.props.showList(data)
     }
 
     render(){
@@ -93,6 +117,14 @@ class SumDic extends Component{
             }),
         };
 
+        const pagination = {
+            pageSize: this.props.sumDic.pageSize,
+            total: this.props.sumDic.total,
+            current: this.props.sumDic.pageNo,
+            onChange:(page) => {
+                this.changePagination(page)
+            }
+        }
 
         return (
             <div style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto"}}>
@@ -137,7 +169,7 @@ class SumDic extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteDicByIds, this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">导入</Button>
                         <Button type="default" size="default" className="btn" onClick={() => this.props.detailsModalShow()} >显示关系</Button>
-                        <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.sumDic.list} >
+                        <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.sumDic.list} pagination={pagination}>
                         <Column 
                             title = '排序'
                             dataIndex = 'sort'

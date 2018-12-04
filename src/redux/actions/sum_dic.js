@@ -26,10 +26,13 @@ export const DETAILS_MODAL_SURE = "sumDic/detailsModalSure"
 //细节窗口取消
 export const DETAILS_MODAL_CANCEL = "sumDic/detailsModalCancel"
 
-export const show_list = (list) => {
+export const show_list = (data) => {
     return {
         type: SHOW_LIST,
-        list: list
+        list: data.data,
+        pageNo: data.pageNo,
+        pageSize: data.pageSize,
+        total: data.total
     }
 }
 
@@ -113,8 +116,8 @@ export const showList = (dic) => {
             data: dic
         }).then((r) => {
             return r.data.data
-        }).then((l) => {
-            dispatch(show_list(l))
+        }).then((data) => {
+            dispatch(show_list(data))
         })
     }
 }

@@ -8,7 +8,6 @@ import axios from 'axios';
 
 import Captcha from 'components/Captcha/Captcha';
 
-import browserCookie from 'browser-cookies'
 import {withRouter} from 'react-router-dom';
 
 import './Login.css';
@@ -68,7 +67,7 @@ class Login extends Component{
                         <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" value={this.state.password} onChange={(event) => this.change(event, 'password')}/>
                     </Form.Item>
                     <Captcha></Captcha>
-                    <Button type="primary" onClick={this.handleClick} className="login-form-button">登录</Button>
+                    <Button type="primary" onClick={this.handleClick} className="login-form-button" >登录</Button>
 
                 </Form>
             </Layout.Content>

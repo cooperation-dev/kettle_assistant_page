@@ -1,4 +1,4 @@
-import {FIND_MENUS, FIND_PARENTS, 
+import {FIND_MENUS, FIND_PARENTS, FIND_ICONS, FIND_TYPES, 
         ADD_MENU_MODAL_SHOW, ADD_MENU_MODAL_CANCEL, ADD_MENU_MODAL_SURE, 
         UPDATE_MENU_MODAL_SHOW, UPDATE_MENU_MODAL_CANCEL, UPDATE_MENU_MODAL_SURE,
         DELETE_MENUS_BY_IDS, } from '../actions/menu_manager'
@@ -6,6 +6,8 @@ import {FIND_MENUS, FIND_PARENTS,
 const initState = {
     list:[],
     parents: [],
+    icons: [],
+    types: [],
     addVisible: false,
     updateVisible: false,
     updateId: '',
@@ -25,6 +27,18 @@ export default function reducers(state = initState, action){
                 parents: action.parents,
             }
         }
+        case FIND_ICONS:{
+            return {
+                ...state,
+                icons: action.icons,
+            }
+        }
+        case FIND_TYPES:{
+            return {
+                ...state,
+                types: action.types,
+            }
+        }
         case ADD_MENU_MODAL_SHOW:{
             return {
                 ...state,
@@ -40,11 +54,12 @@ export default function reducers(state = initState, action){
         case ADD_MENU_MODAL_SURE:{
             let flag = true;
             let newList = state.list.map((menu) => {
-                if(menu.id == action.menu.id){
+                if(menu.id == action.menu.parentId){
                     flag = false;
-                    return action.menu
+                    menu.children.push(action.menu);
+                    return menu;
                 }else {
-                    return menu
+                    return menu;
                 }
             })
             if(flag) newList.push(action.menu)
@@ -68,16 +83,32 @@ export default function reducers(state = initState, action){
             }
         }
         case UPDATE_MENU_MODAL_SURE:{
-            state.list.map(menu => {
+            let flag = true;
+            let testList = state.list.map(menu => {
                 if(menu.id == action.menu.id){
+                    flag = false;
                     return action.menu
                 }else {
-                    return menu
+                    return menu;
                 }
             })
+            if(flag){
+                testList.map(menu => {
+                    let newChildren = menu.children.map(children => {
+                        if(children.id == action.menu.id){
+                            return action.menu;
+                        }else {
+                            return children;
+                        }
+                    })
+                    menu.children.push(newChildren);
+                    return menu;
+                })
+            }
             return {
                 ...state,
                 updateVisible: false,
+                list: testList,
             }
         }
         case DELETE_MENUS_BY_IDS:{

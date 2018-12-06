@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Form, Input, Checkbox, Button, Row, Col, Table, Modal, message, Select} from 'antd'
 
-import {findMenus, findParents, 
+import {findMenus, findParents, findIcons, findTypes, 
         addMenuShow, addMenuCancel, addMenuSure, 
         deleteMenusByIds, 
         updateMenuShow, updateMenuCancel, updateMenuSure, } from '../../redux/actions/menu_manager'
@@ -24,6 +24,8 @@ class MenuManager extends Component{
     componentDidMount = () => {
         this.props.findMenus();
         this.props.findParents();
+        this.props.findIcons();
+        this.props.findTypes();
     }
     search = () => {
         let menu = {
@@ -63,8 +65,11 @@ class MenuManager extends Component{
             },
             {
                 title: '类型',
-                dataIndex: 'type',
-                key: 'type'
+                dataIndex: 'privilegeType',
+                key: 'privilegeType',
+                render:privilegeType=>(
+                    <span>{privilegeType.name}</span>
+                )
             },
             {
                 title: '编码',
@@ -79,12 +84,18 @@ class MenuManager extends Component{
             {
                 title: '父节点',
                 dataIndex: 'parentId',
-                key: 'parentId'
+                key: 'parentId',
+                // render:text => (
+                //     console.log(text)
+                // )
             },
             {
                 title: '图标',
-                dataIndex: 'icon',
-                key: 'icon'
+                dataIndex: 'privilegeStyle',
+                key: 'privilegeStyle',
+                render: privilegeStyle => (
+                    <span>{privilegeStyle.icon}</span>
+                )
             },
             {
                 title: 'URL',
@@ -157,19 +168,23 @@ class MenuManager extends Component{
                         <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteMenusByIds, this.state.selectRows)}>删除</Button>
                         <Button type="default" size="default" className="btn">基本功能设置</Button>
                         <Button type="default" size="default" className="btn">导出菜单脚本</Button>
-                        <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.menuManager.list} columns={columns} scroll={{x: 1500}}/>
+                        <Table pagination={false} rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.menuManager.list} columns={columns} scroll={{x: 1500}}/>
                     </Form>
                 </Row>
                 <AddModal 
                 visible={this.props.menuManager.addVisible} 
                 onOk={(menu) => this.props.addMenuSure(menu)} 
                 onCancel={() => this.props.addMenuCancel()} 
-                parents={this.props.menuManager.parents}></AddModal>
+                parents={this.props.menuManager.parents} 
+                icons={this.props.menuManager.icons} 
+                types={this.props.menuManager.types}></AddModal>
                 <UpdateModal 
                 visible={this.props.menuManager.updateVisible} 
                 onOk={(menu) => this.props.updateMenuSure(menu)} 
                 onCancel={() => this.props.updateMenuCancel()} 
                 parents={this.props.menuManager.parents}
+                icons={this.props.menuManager.icons} 
+                types={this.props.menuManager.types}
                 id={this.props.menuManager.updateId}></UpdateModal>
             </div>
         )
@@ -188,40 +203,47 @@ class AddModal extends Component{
         this.state = {
             name: '',
             type: '',
-            code: '',
-            level: '',
             parentId: '',
             icon: '',
+            level: '',
             direction: '',
+            code: '',
             component: '',
             filterCondition: '',
             customFunc: '',
-            valid: 'N',
         }
     }
-    changeValid = (event) => {
+    /* changeValid = (event) => {
         this.setState({
             valid: event.target.checked?'Y':'N',
         })
-    }
+    } */
     change = (event, attribute) => {
         const newState = {};
         newState[attribute] = event.target.value;
         this.setState(newState);
     }
+    changeValue = (value, attribute) => {
+        const newState = {};
+        newState[attribute] = value;
+        this.setState(newState)
+    }
     render(){
         let menu = {
             name: this.state.name,
-            type: this.state.type,
-            code: this.state.code,
-            level: this.state.level,
+            privilegeType: {
+                id: this.state.type
+            },
             parentId: this.state.parentId,
-            icon: this.state.icon,
+            privilegeStyle: {
+                id: this.state.icon
+            },
+            level: this.state.level,
             direction: this.state.direction,
+            code: this.state.code,
             component: this.state.component,
             filterCondition: this.state.filterCondition,
             customFunc: this.state.customFunc,
-            valid: this.state.valid,
         }
         return (
             <Modal title="新增菜单"
@@ -235,30 +257,55 @@ class AddModal extends Component{
                 <Form.Item label="名称">
                     <Input placeholder="名称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
-                <Form.Item label="类型">
-                    <Input placeholder="类型" onChange={(event) => this.change(event, 'type')} value={this.state.type}/>
+                <Form>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item label="类型">
+                                <Select style={{width: '98%'}} onChange={(value) => {this.changeValue(value, 'type')}} value={this.state.type}>
+                                    {this.props.types.map(type => {
+                                        return (
+                                            <Select.Option key={type.id} value={type.id}>{type.name}</Select.Option>
+                                        )
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item label="父节点">
+                                <Select style={{width: '100%'}} onChange={(value) => {this.changeValue(value, 'parentId')}} value={this.state.parentId}>
+                                    {this.props.parents.map(parent => {
+                                        return (
+                                            <Select.Option key={parent.id} value={parent.id}>{parent.name}</Select.Option>
+                                        )
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item label="图标">
+                                <Select style={{width: '98%'}} onChange={(value) => {this.changeValue(value, 'icon')}} value={this.state.icon}>
+                                    {this.props.icons.map(icon => {
+                                        return (
+                                            <Select.Option key={icon.id} value={icon.id}>{icon.icon}</Select.Option>
+                                        )
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item label="序号">
+                                <Input placeholder="序号" onChange={(event) => this.change(event, 'level')} value={this.state.level}/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
+                <Form.Item label="URL">
+                    <Input placeholder="URL" onChange={(event) => this.change(event, 'direction')} value={this.state.direction}/>
                 </Form.Item>
                 <Form.Item label="编码">
                     <Input placeholder="编码" onChange={(event) => this.change(event, 'code')} value={this.state.code}/>
-                </Form.Item>
-                <Form.Item label="序号">
-                    <Input placeholder="序号" onChange={(event) => this.change(event, 'level')} value={this.state.level}/>
-                </Form.Item>
-                <Form.Item label="父节点">
-                    {/* <Input placeholder="父节点" onChange={(event) => this.change(event, 'parentId')} value={this.state.parentId}/> */}
-                    <Select style={{width: 150 }} defaultValue={this.state.parentId}>
-                        {this.props.parents.map(parent => {
-                            return (
-                                <Select.Option key={parent.id} value={parent.id}>{parent.name}</Select.Option>
-                            )
-                        })}
-                    </Select>
-                </Form.Item>
-                <Form.Item label="图标">
-                    <Input placeholder="图标" onChange={(event) => this.change(event, 'icon')} value={this.state.icon}/>
-                </Form.Item>
-                <Form.Item label="URL">
-                    <Input placeholder="URL" onChange={(event) => this.change(event, 'direction')} value={this.state.direction}/>
                 </Form.Item>
                 <Form.Item label="组件">
                     <Input placeholder="组件" onChange={(event) => this.change(event, 'component')} value={this.state.component}/>
@@ -269,12 +316,12 @@ class AddModal extends Component{
                 <Form.Item label="自定义功能">
                     <Input placeholder="自定义功能" onChange={(event) => this.change(event, 'customFunc')} value={this.state.customFunc}/>
                 </Form.Item>
-                <Form.Item {...formItemLayout} label="是否隐藏">
+                {/* <Form.Item {...formItemLayout} label="是否隐藏">
                     <Checkbox
                         onChange={(event) => this.changeValid(event)}
                         checked={this.state.valid=='Y'}
                     ></Checkbox>
-                </Form.Item>
+                </Form.Item> */}
             </Modal>
         )
     }
@@ -288,11 +335,11 @@ class UpdateModal extends Component{
             id: '',
             name: '',
             type: '',
-            code: '',
-            level: '',
             parentId: '',
             icon: '',
+            level: '',
             direction: '',
+            code: '',
             component: '',
             filterCondition: '',
             customFunc: '',
@@ -308,18 +355,20 @@ class UpdateModal extends Component{
         }
     }
     findMenuById = (id) => {
-        axios.get('menuManager/findMenuById/'+id)
+        axios.get('/api/privilegeController/findPrivilegeById/'+id)
         .then((res) => {
-            let data = res.data;
+            let data = res.data.data;
+            let icon = data.privilegeStyle != null?data.privilegeStyle.id:'';
+            let type = data.privilegeType != null?data.privilegeType.id:'';
             this.setState({
                 id: data.id,
                 name: data.name,
-                type: data.type,
-                code: data.code,
-                level: data.level,
+                type: type,
                 parentId: data.parentId,
-                icon: data.icon,
+                icon: icon,
+                level: data.level,
                 direction: data.direction,
+                code: data.code,
                 component: data.component,
                 filterCondition: data.filterCondition,
                 customFunc: data.customFunc,
@@ -335,12 +384,16 @@ class UpdateModal extends Component{
         let menu = {
             id: this.state.id,
             name: this.state.name,
-            type: this.state.type,
-            code: this.state.code,
-            level: this.state.level,
+            privilegeType: {
+                id: this.state.type
+            },
             parentId: this.state.parentId,
-            icon: this.state.icon,
+            privilegeStyle: {
+                id: this.state.icon
+            },
+            level: this.state.level,
             direction: this.state.direction,
+            code: this.state.code,
             component: this.state.component,
             filterCondition: this.state.filterCondition,
             customFunc: this.state.customFunc,
@@ -348,11 +401,11 @@ class UpdateModal extends Component{
         this.setState({
             name: '',
             type: '',
-            code: '',
-            level: '',
             parentId: '',
             icon: '',
+            level: '',
             direction: '',
+            code: '',
             component: '',
             filterCondition: '',
             customFunc: '',
@@ -363,11 +416,11 @@ class UpdateModal extends Component{
         this.setState({
             name: '',
             type: '',
-            code: '',
-            level: '',
             parentId: '',
             icon: '',
+            level: '',
             direction: '',
+            code: '',
             component: '',
             filterCondition: '',
             customFunc: '',
@@ -387,30 +440,55 @@ class UpdateModal extends Component{
                 <Form.Item label="名称">
                     <Input placeholder="名称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
-                <Form.Item label="类型">
-                    <Input placeholder="类型" onChange={(event) => this.change(event, 'type')} value={this.state.type}/>
+                <Form>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item label="类型">
+                                <Select style={{width: '98%'}} onChange={(value) => {this.changeValue(value, 'type')}} value={this.state.type}>
+                                    {this.props.types.map(type => {
+                                        return (
+                                            <Select.Option key={type.id} value={type.id}>{type.name}</Select.Option>
+                                        )
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item label="父节点">
+                                <Select style={{width: '100%'}} onChange={(value) => {this.changeValue(value, 'parentId')}} value={this.state.parentId}>
+                                    {this.props.parents.map(parent => {
+                                        return (
+                                            <Select.Option key={parent.id} value={parent.id}>{parent.name}</Select.Option>
+                                        )
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item label="图标">
+                                <Select style={{width: '98%'}} onChange={(value) => {this.changeValue(value, 'icon')}} value={this.state.icon}>
+                                    {this.props.icons.map(icon => {
+                                        return (
+                                            <Select.Option key={icon.id} value={icon.id}>{icon.icon}</Select.Option>
+                                        )
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item label="序号">
+                                <Input placeholder="序号" onChange={(event) => this.change(event, 'level')} value={this.state.level}/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
+                <Form.Item label="URL">
+                    <Input placeholder="URL" onChange={(event) => this.change(event, 'direction')} value={this.state.direction}/>
                 </Form.Item>
                 <Form.Item label="编码">
                     <Input placeholder="编码" onChange={(event) => this.change(event, 'code')} value={this.state.code}/>
-                </Form.Item>
-                <Form.Item label="序号">
-                    <Input placeholder="序号" onChange={(event) => this.change(event, 'level')} value={this.state.level}/>
-                </Form.Item>
-                <Form.Item label="父节点">
-                    {/* <Input placeholder="父节点" onChange={(event) => this.props.changeParentId(event)} value={this.props.parentKey}/> */}
-                    <Select style={{width: 150 }} value={this.state.parentId}>
-                        {this.props.parents.map(parent => {
-                            return (
-                                <Select.Option key={parent.id} value={parent.code}>{parent.name}</Select.Option>
-                            )
-                        })}
-                    </Select>
-                </Form.Item>
-                <Form.Item label="图标">
-                    <Input placeholder="图标" onChange={(event) => this.change(event, 'icon')} value={this.state.icon}/>
-                </Form.Item>
-                <Form.Item label="URL">
-                    <Input placeholder="URL" onChange={(event) => this.change(event, 'direction')} value={this.state.direction}/>
                 </Form.Item>
                 <Form.Item label="组件">
                     <Input placeholder="组件" onChange={(event) => this.change(event, 'component')} value={this.state.component}/>
@@ -447,7 +525,7 @@ function showDeleteConfirm(deleteMenusByIds, selectRows) {
   }
 
 export default connect((state) => ({menuManager: state.menuManager}),{
-    findMenus, findParents, 
+    findMenus, findParents, findIcons, findTypes, 
     addMenuShow, addMenuCancel, addMenuSure, 
     deleteMenusByIds, 
     updateMenuShow, updateMenuCancel, updateMenuSure,

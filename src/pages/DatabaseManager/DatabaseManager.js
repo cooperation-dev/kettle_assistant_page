@@ -95,60 +95,38 @@ class DatabaseManager extends Component{
                 key: 'name'
             },
             {
-                title: '排序',
-                dataIndex: 'sort',
-                key: 'sort',
-                // defaultSortOrder: 'descend',
-                sorter: (a, b) => a.sort - b.sort
-            },
-            {
-                title: '创建时间',
-                dataIndex: 'createTime',
-                key: 'createTime'
-            },
-            {
-                title: '创建人',
-                dataIndex: 'createName',
-                key: 'createName'
-            },
-            {
-                title: '是否禁用',
-                dataIndex: 'valid',
-                key: 'valid',
-                render: (text, record) => (
-                    <Checkbox checked={record.valid=='Y'}></Checkbox>
-                )
-            },
-            {
-                title: '机构名称',
-                dataIndex: 'agencyName',
-                key: 'agencyName'
-            },
-            {
-                title: '机构代码',
-                dataIndex: 'agencyCode',
-                key: 'agencyCode'
-            },
-            {
-                title: '数据库类型',
-                dataIndex: 'dbType',
-                key: 'dbType'
+                title: '类型',
+                dataIndex: 'type',
+                key: 'type',
             },
             {
                 title: '访问方式',
-                dataIndex: 'interviewMethod',
-                key: 'interviewMethod'
+                dataIndex: 'accessMode',
+                key: 'accessMode',
             },
             {
                 title: 'JNDI名称',
                 dataIndex: 'jndiName',
-                key: 'jndiName'
+                key: 'jndiName',
             },
             {
                 title: '连接串',
                 dataIndex: 'connectionString',
-                key: 'connectionString'
-            }
+                key: 'connectionString',
+            },
+            {
+                title: '描述',
+                dataIndex: 'description',
+                key: 'description',
+            },
+            // {
+            //     title: '是否禁用',
+            //     dataIndex: 'valid',
+            //     key: 'valid',
+            //     render: (text, record) => (
+            //         <Checkbox checked={record.valid=='Y'}></Checkbox>
+            //     )
+            // },
         ];
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
@@ -253,14 +231,12 @@ class AddModal extends Component{
 
         this.state = {
             name: '',
+            code: '',
+            type: '',
             sort: '',
-            agencyName: '',
-            agencyCode: '',
-            dbType: '',
-            interviewMethod: '',
+            accessMode: '',
             jndiName: '',
             connectionString: '',
-            valid: 'N',
         }
     }
     change = (event, attributes) => {
@@ -268,22 +244,20 @@ class AddModal extends Component{
         newState[attributes] = event.target.value;
         this.setState(newState);
     }
-    changeValid = (event) => {
-        this.setState({
-            valid: event.target.checked?'Y':'N'
-        })
-    }
+    // changeValid = (event) => {
+    //     this.setState({
+    //         valid: event.target.checked?'Y':'N'
+    //     })
+    // }
     render(){
         let database = {
             name: this.state.name,
+            code: this.state.code,
+            type: this.state.type,
             sort: this.state.sort,
-            agencyName: this.state.agencyName,
-            agencyCode: this.state.agencyCode,
-            dbType: this.state.dbType,
-            interviewMethod: this.state.interviewMethod,
+            accessMode: this.state.accessMode,
             jndiName: this.state.jndiName,
             connectionString: this.state.connectionString,
-            valid: this.state.valid,
         }
         return (
             <Modal title="新增数据库"
@@ -294,20 +268,17 @@ class AddModal extends Component{
                 <Form.Item label="名称">
                     <Input placeholder="名称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
+                <Form.Item label="编码">
+                    <Input placeholder="编码" onChange={(event) => this.change(event, 'code')} value={this.state.code}/>
+                </Form.Item>
+                <Form.Item label="类型">
+                    <Input placeholder="类型" onChange={(event) => this.change(event, 'dbType')} value={this.state.dbType}/>
+                </Form.Item>
                 <Form.Item label="排序">
                     <Input placeholder="排序" onChange={(event) => this.change(event, 'sort')} value={this.state.sort}/>
                 </Form.Item>
-                <Form.Item label="机构名称">
-                    <Input placeholder="机构名称" onChange={(event) => this.change(event, 'agencyName')} value={this.state.agencyName}/>
-                </Form.Item>
-                <Form.Item label="机构代码">
-                    <Input placeholder="机构代码" onChange={(event) => this.change(event, 'agencyCode')} value={this.state.agencyCode}/>
-                </Form.Item>
-                <Form.Item label="数据库类型">
-                    <Input placeholder="数据库类型" onChange={(event) => this.change(event, 'dbType')} value={this.state.dbType}/>
-                </Form.Item>
                 <Form.Item label="访问方式">
-                    <Input placeholder="访问方式" onChange={(event) => this.change(event, 'interviewMethod')} value={this.state.interviewMethod}/>
+                    <Input placeholder="访问方式" onChange={(event) => this.change(event, 'accessMode')} value={this.state.accessMode}/>
                 </Form.Item>
                 <Form.Item label="JNDI名称">
                     <Input placeholder="JNDI名称" onChange={(event) => this.change(event, 'jndiName')} value={this.state.jndiName}/>
@@ -315,12 +286,12 @@ class AddModal extends Component{
                 <Form.Item label="连接串">
                     <Input placeholder="连接串" onChange={(event) => this.change(event, 'connectionString')} value={this.state.connectionString}/>
                 </Form.Item>
-                <Form.Item {...formItemLayout} label="是否禁用">
+                {/* <Form.Item {...formItemLayout} label="是否禁用">
                     <Checkbox
                         onChange={(event) => this.changeValid(event)}
                         checked={this.state.valid=='Y'}
                     ></Checkbox>
-                </Form.Item>
+                </Form.Item> */}
             </Modal>
         )
     }
@@ -333,11 +304,10 @@ class UpdateModal extends Component{
         this.state = {
             id: '',
             name: '',
+            code: '',
+            type: '',
             sort: '',
-            agencyName: '',
-            agencyCode: '',
-            dbType: '',
-            interviewMethod: '',
+            accessMode: '',
             jndiName: '',
             connectionString: '',
         }
@@ -352,17 +322,16 @@ class UpdateModal extends Component{
         }
     }
     findDatabaseById = (id) => {
-        axios.get('databaseManager/findDatabaseById/'+id)
+        axios.get('/api/databaseController/findDatabaseById/'+id)
             .then((res) => {
-                let data = res.data;
+                let data = res.data.data;
                 this.setState({
                     id: data.id,
                     name: data.name,
+                    code: data.code,
+                    type: data.type,
                     sort: data.sort,
-                    agencyName: data.agencyName,
-                    agencyCode: data.agencyCode,
-                    dbType: data.dbType,
-                    interviewMethod: data.interviewMethod,
+                    accessMode: data.accessMode,
                     jndiName: data.jndiName,
                     connectionString: data.connectionString,
                 })
@@ -377,21 +346,19 @@ class UpdateModal extends Component{
         let database = {
             id: this.state.id,
             name: this.state.name,
+            code: this.state.code,
+            type: this.state.type,
             sort: this.state.sort,
-            agencyName: this.state.agencyName,
-            agencyCode: this.state.agencyCode,
-            dbType: this.state.dbType,
-            interviewMethod: this.state.interviewMethod,
+            accessMode: this.state.accessMode,
             jndiName: this.state.jndiName,
             connectionString: this.state.connectionString,
         }
         this.setState({
             name: '',
+            code: '',
+            type: '',
             sort: '',
-            agencyName: '',
-            agencyCode: '',
-            dbType: '',
-            interviewMethod: '',
+            accessMode: '',
             jndiName: '',
             connectionString: '',
         })
@@ -400,11 +367,10 @@ class UpdateModal extends Component{
     cancel = () => {
         this.setState({
             name: '',
+            code: '',
+            type: '',
             sort: '',
-            agencyName: '',
-            agencyCode: '',
-            dbType: '',
-            interviewMethod: '',
+            accessMode: '',
             jndiName: '',
             connectionString: '',
         })
@@ -423,20 +389,17 @@ class UpdateModal extends Component{
                 <Form.Item label="名称">
                     <Input placeholder="名称" onChange={(event) => this.change(event, 'name')} value={this.state.name}/>
                 </Form.Item>
+                <Form.Item label="数据库代码">
+                    <Input placeholder="数据库代码" onChange={(event) => this.change(event, 'code')} value={this.state.code}/>
+                </Form.Item>
+                <Form.Item label="数据库类型">
+                    <Input placeholder="数据库类型" onChange={(event) => this.change(event, 'type')} value={this.state.type}/>
+                </Form.Item>
                 <Form.Item label="排序">
                     <Input placeholder="排序" onChange={(event) => this.change(event, 'sort')} value={this.state.sort}/>
                 </Form.Item>
-                <Form.Item label="机构名称">
-                    <Input placeholder="机构名称" onChange={(event) => this.change(event, 'agencyName')} value={this.state.agencyName}/>
-                </Form.Item>
-                <Form.Item label="机构代码">
-                    <Input placeholder="机构代码" onChange={(event) => this.change(event, 'agencyCode')} value={this.state.agencyCode}/>
-                </Form.Item>
-                <Form.Item label="数据库类型">
-                    <Input placeholder="数据库类型" onChange={(event) => this.change(event, 'dbType')} value={this.state.dbType}/>
-                </Form.Item>
                 <Form.Item label="访问方式">
-                    <Input placeholder="访问方式" onChange={(event) => this.change(event, 'interviewMethod')} value={this.state.interviewMethod}/>
+                    <Input placeholder="访问方式" onChange={(event) => this.change(event, 'accessMode')} value={this.state.accessMode}/>
                 </Form.Item>
                 <Form.Item label="JNDI名称">
                     <Input placeholder="JNDI名称" onChange={(event) => this.change(event, 'jndiName')} value={this.state.jndiName}/>

@@ -2,21 +2,21 @@ import axios from 'axios';
 import {message} from 'antd';
 
 //请求数据
-export const FIND_DATABASES = "databaseManager/findList";
+export const FIND_DATABASES = "/api/databaseController/findList";
 //新增显示
 export const ADD_DATABASE_MODAL_SHOW = "databaseManager/addDatabaseShow"
 //新增取消
 export const ADD_DATABASE_MODAL_CANCEL = "databaseManager/addDatabaseCancel"
 //新增确认
-export const ADD_DATABASE_MODAL_SURE = "databaseManager/addDatabasetSure"
+export const ADD_DATABASE_MODAL_SURE = "/api/databaseController/saveDatabase"
 //修改显示
 export const UPDATE_DATABASE_MODAL_SHOW = "databaseManager/updateDatabaseShow"
 //修改取消
 export const UPDATE_DATABASE_MODAL_CANCEL = "databaseManager/updateDatabaseCancel"
 //修改确认
-export const UPDATE_DATABASE_MODAL_SURE = "databaseManager/updateDatabasetSure"
+export const UPDATE_DATABASE_MODAL_SURE = "/api/databaseController/updateDatabase"
 //删除行
-export const DELETE_DATABASES_BY_IDS = 'databaseManager/deleteDatabasesByIds';
+export const DELETE_DATABASES_BY_IDS = '/api/databaseController/deleteDatabaseByIds';
 
 export const find_databases = (list) => {
     return {
@@ -78,7 +78,7 @@ export const findDatabases = (database) => {
             url: FIND_DATABASES,
             data: database,
         }).then((res) => {
-            return res.data
+            return res.data.data
         }).then((list) => {
             dispatch(find_databases(list))
         })
@@ -104,7 +104,7 @@ export const addDatabaseSure = (database) => {
             url: ADD_DATABASE_MODAL_SURE,
             data: database,
         }).then((res) => {
-            return res.data;
+            return res.data.data;
         }).then((database) => {
             dispatch(add_database_modal_sure(database));  
         })
@@ -136,7 +136,7 @@ export const updateDatabaseSure = (database) => {
             url: UPDATE_DATABASE_MODAL_SURE,
             data: database,
         }).then((res) => {
-            return res.data;
+            return res.data.data;
         }).then((database) => {
             dispatch(update_database_modal_sure(database));
         })
@@ -152,7 +152,7 @@ export const deleteDatabasesByIds = (selectRows) => {
             url: DELETE_DATABASES_BY_IDS,
             data: ids,
         }).then((res) => {
-            return res.data;
+            return res.data.data;
         }).then((deleteIds) => {
             dispatch(delete_databases_by_ids(deleteIds));
         })

@@ -1,21 +1,20 @@
-import axios from 'axios'
-import {message} from 'antd'
-import {Redirect} from 'react-router-dom'
+import axios from 'axios';
 
+import history from './history';
+
+import {message} from 'antd';
 
 axios.interceptors.response.use(
-    error => {
-        if(error.data){
-            switch(error.status){
-                case 200:{
-                    window.location = 'http://localhost:8081/kab'
-                    return error;
+    response => {
+        if(response.data){
+            switch(response.data.code){
+                case "500":{
+                    // message.error('服务器内部错误!');
+                    history.push('/app/error');
+                    return Promise.reject(response);
                 }
-                case 404:{
-                    message.error('找不到页面!');
-                }
-                case 500:{
-                    message.error('服务器内部错误!');
+                default:{
+                    return response;
                 }
             }
         }

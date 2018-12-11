@@ -4,7 +4,10 @@ import {AppContainer} from 'react-hot-loader';
 import {Provider} from 'react-redux';
 import store from './redux/store';
 // import {HashRouter as Router} from 'react-router-dom';
-import {BrowserRouter as Router} from 'react-router-dom';
+// import {BrowserRouter as Router} from 'react-router-dom';
+import {Router} from 'react-router-dom';
+
+import history from './router/history';
 
 import MainFrame from 'components/MainFrame/MainFrame';
 
@@ -24,7 +27,7 @@ function renderWithHotReload(RootElement){
     ReactDOM.render(
         <AppContainer>
             <Provider store={store}>
-                <Router>
+                <Router history={history}>
                     <RootElement/>
                 </Router>
             </Provider>

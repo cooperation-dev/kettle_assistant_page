@@ -66,6 +66,7 @@ class Content extends Component{
                         })
                     }
                     <Redirect exact from="/app" to="/app/sum_dic"></Redirect>
+                    <Route key="error" exact path="/app/error" component={createComponent(require(`bundle-loader?lazy&name=[name]!pages/Exception/500`))} />
                     <Route path="*" component={createComponent(require(`bundle-loader?lazy&name=[name]!pages/Exception/404`))} />
                 </Switch>
             </Layout>

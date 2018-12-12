@@ -380,6 +380,11 @@ class UpdateModal extends Component{
         newState[attribute] = event.target.value;
         this.setState(newState);
     }
+    changeValue = (value, attribute) => {
+        const newState = {};
+        newState[attribute] = value;
+        this.setState(newState)
+    }
     ok = () => {
         let menu = {
             id: this.state.id,
@@ -398,33 +403,9 @@ class UpdateModal extends Component{
             filterCondition: this.state.filterCondition,
             customFunc: this.state.customFunc,
         }
-        this.setState({
-            name: '',
-            type: '',
-            parentId: '',
-            icon: '',
-            level: '',
-            direction: '',
-            code: '',
-            component: '',
-            filterCondition: '',
-            customFunc: '',
-        })
         this.props.onOk(menu);
     }
     cancel = () => {
-        this.setState({
-            name: '',
-            type: '',
-            parentId: '',
-            icon: '',
-            level: '',
-            direction: '',
-            code: '',
-            component: '',
-            filterCondition: '',
-            customFunc: '',
-        })
         this.props.onCancel();
     }
     render(){

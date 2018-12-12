@@ -267,19 +267,9 @@ class UpdateModal extends Component{
             roleList: this.state.roles,
             description: this.state.description,
         }
-        this.setState({
-            name: '',
-            roles: [],
-            description: '',
-        })
         this.props.onOk(user);
     }
     cancel = () => {
-        this.setState({
-            name: '',
-            roles: '',
-            description: '',
-        })
         this.props.onCancel();
     }
     render(){

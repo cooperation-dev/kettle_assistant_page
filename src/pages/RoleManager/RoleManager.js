@@ -211,17 +211,9 @@ class UpdateModal extends Component{
             name: this.state.name,
             description: this.state.description,
         }
-        this.setState({
-            name: '',
-            description: '',
-        })
         this.props.onOk(role);
     }
     cancel = () => {
-        this.setState({
-            name: '',
-            description: '',
-        })
         this.props.onCancel();
     } 
     render(){

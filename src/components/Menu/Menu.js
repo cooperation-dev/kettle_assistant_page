@@ -27,6 +27,7 @@ class LeftMenu extends Component{
                 trigger={null}
                 collapsible
                 collapsed={this.props.app.collapsed}
+                style={{overflow:'auto'}}
             >
                 <div className="logo" />
                 <Menu

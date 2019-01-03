@@ -142,13 +142,13 @@ class JobManager extends Component{
         return (
 
             <div className="ant-advanced-search-form" style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto", marginBottom:"15px"}}>
-                <Row className="toolbar">
-                    <Button type="default" size="default" className="custom-btn" onClick={() => this.props.addJobModalShow()}>新增</Button>
-                    <Button type="default" size="default" className="custom-btn" onClick={() => showDeleteConfirm(this.props.deleteJob, this.state.selectRows)}>全部删除</Button>
+                <Row>
+                    <Button type="default" size="default" className="custom-toolbar-btn" onClick={() => this.props.addJobModalShow()}><Icon type="plus" />新增</Button>
+                    <Button type="default" size="default" className="custom-toolbar-btn" onClick={() => showDeleteConfirm(this.props.deleteJob, this.state.selectRows)}><Icon type="delete" />全部删除</Button>
                 </Row>
                 <Divider />
                 <Row>
-                    <Form>
+                    <Form layout="vertical">
                         <Row gutter={24}>
                             <Col span={5} key={1}>
                                 <Form.Item label="作业名称 ">
@@ -170,7 +170,7 @@ class JobManager extends Component{
                                     <Input placeholder="更新时间" value={this.state.jobType} onChange={(e) => this.change(e, 'jobType')}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={4} style={{ textAlign: 'right' }}>
+                            <Col span={4} key={5} className="custom-sr-btn">
                                 <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>

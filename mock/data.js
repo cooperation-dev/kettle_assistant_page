@@ -424,6 +424,20 @@ const menu = []
         valid: 'Y',
         children: [
             {
+                key: 10,
+                id: 10,
+                code: 'job_manager_detail',
+                name: "爬虫作业",
+                icon: "",
+                parentId: "reptile_job",
+                direction: "/app/reptile_job",
+                level: 1,
+                type: '功能菜单',
+                component: 'ReptileJob',
+                valid: 'Y',
+                // component: 'bundle-loader?lazy&name=[name]!pages/JobManager/JobManager',
+                // component: 'pages/JobManager/JobManager',
+            },{
                 key: 11,
                 id: 11,
                 code: 'job_manager_detail',

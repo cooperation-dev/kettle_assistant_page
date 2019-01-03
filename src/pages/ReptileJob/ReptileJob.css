@@ -15,6 +15,9 @@
   .ant-input {
     border-radius: 0px !important;
   }
+  .ant-btn {
+    border-radius: 0px !important;
+  }
 
   .custom-toolbar-btn {
       border: 0px;

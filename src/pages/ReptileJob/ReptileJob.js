@@ -152,22 +152,22 @@ class JobManager extends Component{
                         <Row gutter={24}>
                             <Col span={5} key={1}>
                                 <Form.Item label="作业名称 ">
-                                    <Input placeholder="作业名称" value={this.state.id} onChange={(e) => this.change(e, 'id')}/>
+                                    <Input placeholder="请输入作业名称" value={this.state.id} onChange={(e) => this.change(e, 'id')}/>
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={2}>
                                 <Form.Item label="运行状态">
-                                    <Input placeholder="运行状态" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                                    <Input placeholder="请选择运行状态" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={3}>
                                 <Form.Item label="平台">
-                                    <Input placeholder="平台" value={this.state.description} onChange={(e) => this.change(e, 'description')}/>
+                                    <Input placeholder="请选择平台" value={this.state.description} onChange={(e) => this.change(e, 'description')}/>
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={4}>
                                 <Form.Item label="更新时间">
-                                    <Input placeholder="更新时间" value={this.state.jobType} onChange={(e) => this.change(e, 'jobType')}/>
+                                    <Input placeholder="请输入更新时间" value={this.state.jobType} onChange={(e) => this.change(e, 'jobType')}/>
                                 </Form.Item>
                             </Col>
                             <Col span={4} key={5} className="custom-sr-btn">

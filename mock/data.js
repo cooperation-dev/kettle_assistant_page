@@ -426,7 +426,7 @@ const menu = []
             {
                 key: 10,
                 id: 10,
-                code: 'job_manager_detail',
+                code: 'reptile_job',
                 name: "爬虫作业",
                 icon: "",
                 parentId: "reptile_job",
@@ -464,6 +464,35 @@ const menu = []
                 component: 'JobMonitor',
                 valid: 'Y',
                 // component: 'pages/JobMonitor/JobMonitor',
+            },
+        ]
+    }))
+    menu.push(Mock.mock({
+        key: 6,
+        id: 6,
+        code: 'result_page',
+        name: '结果页',
+        icon: 'tablet',
+        parentId: '',
+        direction: '',
+        level: 0,
+        type: '功能菜单',
+        component: '',
+        valid: 'Y',
+        children: [
+            {
+                key: 61,
+                id: 61,
+                code: 'product',
+                name: '产品页面',
+                icon: '',
+                parentId: 'product',
+                direction: '/app/product',
+                level: 1,
+                type: '功能菜单',
+                component: 'Product',
+                valid: 'Y',
+                // component: 'pages/SumDic/SumDic',
             },
         ]
     }))

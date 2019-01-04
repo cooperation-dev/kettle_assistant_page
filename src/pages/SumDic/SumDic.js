@@ -1,14 +1,13 @@
-import { Button, Checkbox, Col, Form, Input, message, Modal, Row, Switch, Table, TreeSelect } from 'antd';
+import { Button, Checkbox, Col, Form, Input, message, Modal, Row, Switch, Table, TreeSelect, Icon, Divider} from 'antd';
 import axios from 'axios';
 import { TreeCharts } from 'components/Echarts/TreeCharts';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addModalCancel, addModalShow, addModalSure, changeDisabled, deleteDicByIds, detailsModalCancel, detailsModalShow, detailsModalSure, showList, updateModalCancel, updateModalShow, updateModalSure } from '../../redux/actions/sum_dic';
+import { addModalCancel, addModalShow, addModalSure, 
+    changeDisabled, deleteDicByIds, 
+    detailsModalCancel, detailsModalShow, detailsModalSure, 
+    showList, updateModalCancel, updateModalShow, updateModalSure } from '../../redux/actions/sum_dic';
 import './SumDic.css';
-
-
-
-
 
 const {Column} = Table
 
@@ -127,51 +126,44 @@ class SumDic extends Component{
         }
 
         return (
-            <div style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto"}}>
+            <div className="ant-advanced-search-form" style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto", marginBottom:"15px"}}>
                 <Row>
-                    <Form
-                        className="ant-advanced-search-form"
-                    >
+                    <Button type="default" size="default" className="custom-toolbar-btn" onClick={()=>this.props.addModalShow()}><Icon type="plus" />新增</Button>
+                    <Button type="default" size="default" className="custom-toolbar-btn" onClick={() => showDeleteConfirm(this.props.deleteDicByIds, this.state.selectRows)}><Icon type="delete" />全部删除</Button>
+                    <Button type="default" size="default" className="custom-toolbar-btn" onClick={() => this.props.detailsModalShow()} >显示关系</Button>
+                </Row>
+                <Divider />
+                <Row>
+                    <Form layout="vertical">
                         <Row gutter={24}>
-                            <Col span={6} key={1}>
-                                <Form.Item label="代码">
-                                    <Input placeholder="代码" onChange={this.changeDicCode} value={this.state.code}/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={6} key={2}>
+                            <Col span={5} key={1}>
                                 <Form.Item label="名称">
                                     <Input placeholder="名称" onChange={this.changeDicName} value={this.state.name}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={6} key={3}>
-                                <Form.Item label="是否禁用">
-                                    <Checkbox checked={this.state.valid=='N'?true:false} onClick={this.changeValid}></Checkbox>
+                            <Col span={5} key={2}>
+                                <Form.Item label="代码">
+                                    <Input placeholder="代码" onChange={this.changeDicCode} value={this.state.code}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={6} key={4}>
+                            <Col span={5} key={3}>
+                                <Form.Item label="类型">
+                                    <Input placeholder="类型" onChange={this.changeDicCode} value={this.state.code}/>
+                                </Form.Item>
+                            </Col>
+                            <Col span={5} key={4}>
                                 <Form.Item label="所属对象">
                                     <Input placeholder="所属对象" onChange={this.changeBelongs} value={this.state.belongs}/>
                                 </Form.Item>
                             </Col>
-                        </Row>
-                        <Row>
-                            <Col span={24} style={{ textAlign: 'center' }}>
+                            <Col span={4} key={5} className="custom-sr-btn">
                                 <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                    </Form>
-                </Row>
-                <Row style={{marginTop:"15px"}}>
-                    <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
-                        <Button type="default" size="default" className="btn" onClick={()=>this.props.addModalShow()}>新增</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => this.props.updateModalShow(this.state.selectRows)}>修改</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteDicByIds, this.state.selectRows)}>删除</Button>
-                        <Button type="default" size="default" className="btn">导入</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => this.props.detailsModalShow()} >显示关系</Button>
                         <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.sumDic.list} pagination={pagination}>
                         <Column 
-                            title = '排序'
+                            title = '名称'
                             dataIndex = 'sort'
                             key = 'sort'
                         />
@@ -181,42 +173,40 @@ class SumDic extends Component{
                             key = 'code'
                         />
                         <Column 
-                            title = '名称'
+                            title = '类型'
                             dataIndex = 'name'
                             key = 'name'
                         />
                         <Column 
-                            title = '创建时间'
+                            title = '更新人'
                             dataIndex = 'createTime'
                             key = 'createTime'
                         />
                         <Column 
-                            title = '修改时间'
+                            title = '最后更新时间'
                             dataIndex = 'modifyTime'
                             key = 'modifyTime'
                         />
                         <Column 
-                            title = '创建人'
+                            title = '所属对象'
                             dataIndex = 'creator'
                             key = 'creator'
                         />
                         <Column 
-                            title = '修改人'
+                            title = '来源'
                             dataIndex = 'modifier'
                             key = 'modifier'
                         />
                         <Column 
-                            title = '是否禁用'
-                            dataIndex = 'valid'
-                            key = 'valid'
-                            render = {(text, record) => (
-                                <Checkbox checked={record.valid=='Y'?false:true} onClick={() => this.props.changeDisabled(record)}></Checkbox>
-                            )}
-                        />
-                        <Column 
-                            title = '所属对象'
+                            title = '操作'
                             dataIndex = 'belongs'
                             key = 'belong'
+                            render={(text, record) => (
+                                <span>
+                                    <Icon type="edit" onClick={() => this.props.updateModalShow(record.id)} style={{marginRight: 10}}/>
+                                    <Icon type="delete" onClick={() => showDeleteConfirm(this.props.deleteJob, this.state.selectRows)}/>
+                                </span>
+                            )}
                         />
                         </Table>
                     </Form>

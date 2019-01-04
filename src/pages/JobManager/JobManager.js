@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Button, Table, Modal, Select} from 'antd';
+import {Row, Col, Form, Input, Button, Table, Modal, Select, Icon, Divider} from 'antd';
 
 import {findJobs, 
     addJobModalShow, addJobModalSure, addJobModalCancel,
@@ -141,62 +141,36 @@ class JobManager extends Component{
 
         return (
 
-            <div style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto"}}>
+            <div className="ant-advanced-search-form" style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto", marginBottom:"15px"}}>
                 <Row>
-                    <Form
-                        className="ant-advanced-search-form"
-                    >
+                    <Button type="default" size="default" className="custom-toolbar-btn" onClick={() => this.props.addJobModalShow()}><Icon type="plus" />新增</Button>
+                    <Button type="default" size="default" className="custom-toolbar-btn" onClick={() => showDeleteConfirm(this.props.deleteJob, this.state.selectRows)}><Icon type="delete" />全部删除</Button>
+                </Row>
+                <Divider />
+                <Row>
+                    <Form layout="vertical">
                         <Row gutter={24}>
-                            <Col span={8} key={1}>
-                                <Form.Item label="作业ID ">
-                                    <Input placeholder="作业ID" value={this.state.id} onChange={(e) => this.change(e, 'id')}/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={8} key={2}>
+                            <Col span={5} key={1}>
                                 <Form.Item label="作业名称">
-                                    <Input placeholder="作业名称" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                                    <Input placeholder="作业名称" value={this.state.id} onChange={(e) => this.change(e, 'id')}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={8} key={3}>
-                                <Form.Item label="作业描述">
-                                    <Input placeholder="作业描述" value={this.state.description} onChange={(e) => this.change(e, 'description')}/>
+                            <Col span={5} key={2}>
+                                <Form.Item label="运行状态">
+                                    <Input placeholder="运行状态" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
                                 </Form.Item>
                             </Col>
-                        </Row>
-                        <Row gutter={24}>
-                            <Col span={8} key={4}>
-                                <Form.Item label="作业类别">
-                                    <Input placeholder="作业类别" value={this.state.jobType} onChange={(e) => this.change(e, 'jobType')}/>
+                            <Col span={5} key={3}>
+                                <Form.Item label="更新时间">
+                                    <Input placeholder="更新时间" value={this.state.description} onChange={(e) => this.change(e, 'description')}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={8} key={5}>
-                                <Form.Item label="作业状态">
-                                    <Input placeholder="作业状态" value={this.state.state} onChange={(e) => this.change(e, 'state')}/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={8} key={6}>
-                                <Form.Item label="创建人">
-                                    <Input placeholder="创建人" value={this.state.creator} onChange={(e) => this.change(e, 'creator')}/>
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={24} style={{ textAlign: 'center' }}>
+                            <Col span={4} key={4} className="custom-sr-btn">
                                 <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                    </Form>
-                </Row>
-                <Row style={{marginTop:"15px"}}>
-                    <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
-                        <Button type="default" size="default" className="btn" onClick={() => this.props.addJobModalShow()}>新增作业</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => this.props.updateJobModalShow(this.state.selectRows)}>修改作业</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => showDeleteConfirm(this.props.deleteJob, this.state.selectRows)}>删除作业</Button>
-                        <Button type="default" size="default" className="btn" onClick={() => this.props.displayLogShow(this.state.selectRows)}>查看运行日志</Button>
-                        <Button type="default" size="default" className="btn">导入</Button>
-                        <Button type="default" size="default" className="btn">导出</Button>
-                        <Table rowKey={(record) => {return record.id}} rowSelection={rowSelection} dataSource={this.props.jobManager.list} columns={columns} scroll={{x: 1200}}/>
+                        <Table rowKey={(record) => {return record.id}} dataSource={this.props.jobManager.list} columns={columns} scroll={{x: 1200}}/>
                     </Form>
                 </Row>
                 <AddModal visible={this.props.jobManager.addVisible} onOk={(job) => this.props.addJobModalSure(job)} onCancel={() => this.props.addJobModalCancel()} ></AddModal>

@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Button, Table, Modal, Select, Icon, Divider} from 'antd';
+import {Row, Col, Form, Input, Button, Table, Modal, Select, Icon, Divider, message} from 'antd';
 
 import {findJobs, 
     addJobModalShow, addJobModalSure, addJobModalCancel,
     updateJobModalShow, updateJobModalSure, updateJobModalCancel,
     deleteJob,
-    displayLogShow, displayLogClose} from '../../redux/actions/job_manager';
+    displayLogShow, displayLogClose} from '../../redux/actions/reptile_job';
 import {connect} from 'react-redux';
 import axios from 'axios';
 
@@ -14,41 +14,35 @@ import './ReptileJob.css';
 const {TextArea} = Input
 const {Option} = Select
 
-class JobManager extends Component{
+class ReptileJob extends Component{
     constructor(props){
         super(props)
 
         this.state = {
             selectRows: [],
-            id: '',
             name: '',
-            description: '',
-            jobType: '',
-            state: '',
-            creator: '',
+            platform: '',
+            type: '',
+            timing: '',
         }
     }
 
     componentDidMount = () => {
         let job = {
-            id: this.state.id,
             name: this.state.name,
-            description: this.state.description,
-            jobType: this.state.jobType,
-            state: this.state.state,
-            creator: this.state.creator,
+            platform: this.state.platform,
+            type: this.state.type,
+            timing: this.state.timing,
         }
         this.props.findJobs(job)
     }
 
     search = () => {
         let job = {
-            id: this.state.id,
             name: this.state.name,
-            description: this.state.description,
-            jobType: this.state.jobType,
-            state: this.state.state,
-            creator: this.state.creator,
+            platform: this.state.platform,
+            type: this.state.type,
+            timing: this.state.timing,
         }
         this.props.findJobs(job)
     }
@@ -56,21 +50,17 @@ class JobManager extends Component{
     reset = () => {
         this.setState({
             selectRows: [],
-            id: '',
             name: '',
-            description: '',
-            jobType: '',
-            state: '',
-            creator: '',
+            platform: '',
+            type: '',
+            timing: '',
         })
 
         let job = {
-            id: '',
             name: '',
-            description: '',
-            jobType: '',
-            state: '',
-            creator: '',
+            platform: '',
+            type: '',
+            timing: '',
         }
         this.props.findJobs(job)
     }
@@ -84,6 +74,10 @@ class JobManager extends Component{
     render(){
           
           const columns = [{
+            title: 'ID',
+            dataIndex: 'id',
+            key: 'id',
+          },{
             title: '名称',
             dataIndex: 'name',
             key: 'name',
@@ -113,31 +107,16 @@ class JobManager extends Component{
             key: 'modifyTime',
           },{
             title: '操作',
-            dataIndex: 'createTime',
-            key: 'createTime',
-            render: text => (
+            render: (text, record) => (
                 <span>
                     <Icon type="caret-right" style={{marginRight: 10}}/>
                     <Icon type="border" style={{marginRight: 10}}/>
-                    <Icon type="file-text" style={{marginRight: 10}}/>
-                    <Icon type="edit" style={{marginRight: 10}}/>
-                    <Icon type="delete" />
+                    <Icon type="file-text" onClick={() => this.props.displayLogShow(record.id)} style={{marginRight: 10}}/>
+                    <Icon type="edit" onClick={() => this.props.updateJobModalShow(record.id)} style={{marginRight: 10}}/>
+                    <Icon type="delete" onClick={() => showDeleteConfirm(this.props.deleteJob, this.state.selectRows)}/>
                 </span>
             )
           }]; 
-
-        const rowSelection = {
-            type: 'checkbox',
-            onChange: (selectedRowKeys, selectedRows) => {
-                this.setState({
-                    selectRows: selectedRows
-                })
-            },
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
-                name: record.name,
-            }),
-        };
 
         return (
 
@@ -175,15 +154,20 @@ class JobManager extends Component{
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                        <Table rowKey={(record) => {return record.id}} rowSelection={rowSelection} dataSource={this.props.jobManager.list} columns={columns}/>
+                        <Table rowKey={(record) => {return record.id}} dataSource={this.props.reptileJob.list} columns={columns}/>
                     </Form>
                 </Row>
-                <AddModal visible={this.props.jobManager.addVisible} onOk={(job) => this.props.addJobModalSure(job)} onCancel={() => this.props.addJobModalCancel()} ></AddModal>
-                <UpdateModal visible={this.props.jobManager.updateVisible} onOk={(job) => this.props.updateJobModalSure(job)} onCancel={() => this.props.updateJobModalCancel()} id={this.props.jobManager.updateJobId} ></UpdateModal>
-                <LogModal visible={this.props.jobManager.logVisible} onOk={() => this.props.displayLogClose()} onCancel={() => this.props.displayLogClose()} id={this.props.jobManager.logJobId}></LogModal>
+                <AddModal visible={this.props.reptileJob.addVisible} onOk={(job) => this.props.addJobModalSure(job)} onCancel={() => this.props.addJobModalCancel()} ></AddModal>
+                <UpdateModal visible={this.props.reptileJob.updateVisible} onOk={(job) => this.props.updateJobModalSure(job)} onCancel={() => this.props.updateJobModalCancel()} id={this.props.reptileJob.updateJobId} ></UpdateModal>
+                <LogModal visible={this.props.reptileJob.logVisible} onOk={() => this.props.displayLogClose()} onCancel={() => this.props.displayLogClose()} id={this.props.reptileJob.logJobId}></LogModal>
             </div>
         )
     }
+}
+
+const formItemLayout = {
+    labelCol:{ span: 5 },
+    wrapperCol:{ span: 17 }
 }
 
 class AddModal extends Component{
@@ -237,23 +221,21 @@ class AddModal extends Component{
                 onCancel={() => this.props.onCancel()}
                 okText="确认"
                 cancelText="取消"
-                destroyOnClose={true} 
-            >
-                <Form.Item label="作业名称">
-                    <Input placeholder="作业名称" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
-                </Form.Item>
-                <Form.Item label="作业类型">
-                    <Select style={{width: 120}} onChange={this.changeJobType} value={this.state.jobType}>
-                    {this.state.jobTypes.map(type => {
-                        return (
-                            <Option key={type.id} value={type.code}>{type.name}</Option>
-                        )
-                    })}
-                    </Select>
-                </Form.Item>
-                <Form.Item label="作业描述">
-                    <Input placeholder="作业描述" value={this.state.description} onChange={(e) => this.change(e, 'description')}/>
-                </Form.Item>
+                destroyOnClose={true}>
+                <Form>
+                    <Form.Item label="作业名称" {...formItemLayout}>
+                        <Input placeholder="作业名称" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                    </Form.Item>
+                    <Form.Item label="平台" {...formItemLayout}>
+                        <Input placeholder="平台" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                    </Form.Item>
+                    <Form.Item label="种类" {...formItemLayout}>
+                        <Input placeholder="种类" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                    </Form.Item>
+                    <Form.Item label="定时设置" {...formItemLayout}>
+                        <Input placeholder="定时设置" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                    </Form.Item>
+                </Form>
             </Modal>
         )
     }
@@ -344,20 +326,17 @@ class UpdateModal extends Component{
                 cancelText="取消"
                 destroyOnClose={true} 
             >
-                <Form.Item label="作业名称">
+                <Form.Item label="作业名称" {...formItemLayout}>
                     <Input placeholder="作业名称" onChange={(e) => this.change(e, 'name')} value={this.state.name}/>
                 </Form.Item>
-                <Form.Item label="作业类型">
-                    <Select style={{width: 120}} onChange={this.changeType} value={this.state.jobType}>
-                        {this.state.jobTypes.map(type => {
-                            return (
-                                <Option key={type.id} value={type.code}>{type.name}</Option>
-                            )
-                        })}
-                    </Select>
+                <Form.Item label="平台" {...formItemLayout}>
+                    <Input placeholder="平台" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
                 </Form.Item>
-                <Form.Item label="作业描述">
-                    <Input placeholder="作业描述" onChange={(e) => this.change(e, 'description')} value={this.state.description}/>
+                <Form.Item label="种类" {...formItemLayout}>
+                    <Input placeholder="种类" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                </Form.Item>
+                <Form.Item label="定时设置" {...formItemLayout}>
+                    <Input placeholder="定时设置" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
                 </Form.Item>
             </Modal>
         )
@@ -407,13 +386,15 @@ class LogModal extends Component{
                 onCancel={() => this.props.onCancel()}
                 okText="确认"
                 cancelText="取消"
-                destroyOnClose={true} 
-            >
+                destroyOnClose={true}>
                 <Form.Item label="作业名称">
                     <Input readOnly placeholder="作业名称" value={this.state.name}/>
                 </Form.Item>
-                <Form.Item label="日志">
-                    <TextArea readOnly autosize={{minRows: 8, maxRows: 8}} placeholder="日志" value={this.state.log}/>
+                <Form.Item label="日志类别">
+                    <Input readOnly placeholder="日志类别" value={this.state.name}/>
+                </Form.Item>
+                <Form.Item label="日志内容">
+                    <TextArea readOnly autosize={{minRows: 8, maxRows: 8}} placeholder="日志内容" value={this.state.log}/>
                 </Form.Item>
             </Modal>
         )
@@ -441,9 +422,9 @@ function showDeleteConfirm(deleteJob, selectRows) {
 }
 
 export default connect((state) => ({
-    jobManager: state.jobManager
+    reptileJob: state.reptileJob
 }), {findJobs, 
     addJobModalShow, addJobModalSure, addJobModalCancel, 
     updateJobModalShow, updateJobModalSure, updateJobModalCancel,
     deleteJob,
-    displayLogShow, displayLogClose})(JobManager)
+    displayLogShow, displayLogClose})(ReptileJob)

@@ -157,56 +157,36 @@ class SystemLog extends Component{
         }
 
         return (
-            <div style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto"}}>
+            <div className="ant-advanced-search-form" style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto", marginBottom:"15px"}}>
                 <Row>
-                    <Form
-                        className="ant-advanced-search-form"
-                    >
+                    <Form layout="vertical">
                         <Row gutter={24}>
-                            <Col span={8} key={1}>
+                            <Col span={5} key={1}>
                                 <Form.Item label="操作用户">
                                     <Input placeholder="操作用户" onChange={this.changeoperateUser} value={this.state.operateUser}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={8} key={2}>
+                            <Col span={5} key={2}>
                                 <Form.Item label="日志类型">
                                     <Input placeholder="日志类型" onChange={this.changeLogType} value={this.state.logType}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={8} key={3}>
+                            <Col span={5} key={3}>
                                 <Form.Item label="操作IP">
                                     <Input placeholder="操作IP" onChange={this.changeOperateIP} value={this.state.operateIp}/>
                                 </Form.Item>
                             </Col>
-                        </Row>
-                        <Row gutter={24}>
-                            <Col span={8} key={4}>
-                                <Form.Item label="详&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;情">
-                                    <Input placeholder="详情" onChange={this.changeDetails} value={this.state.details}/>
+                            <Col span={5} key={3}>
+                                <Form.Item label="操作IP">
+                                    <Input placeholder="操作IP" onChange={this.changeOperateIP} value={this.state.operateIp}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={8} key={5}>
-                                <Form.Item label="创建时间">
-                                    <Input placeholder="创建时间" onChange={this.changeCreateTime} value={this.state.createTime}/>
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={24} style={{ textAlign: 'center' }}>
+                            <Col span={4} key={5} className="custom-sr-btn">
                                 <Button type="primary" htmlType="submit" onClick={this.findLog}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                    </Form>
-                </Row>
-                <Row style={{marginTop:"15px"}}>
-                    <Form className="ant-advanced-search-form" style={{marginBottom: "15px"}}>
-                        <Table 
-                            rowKey={(record) => record.id} 
-                            columns={columns} 
-                            dataSource={this.props.systemLog.list} 
-                            pagination={pagination}
-                        />
+                        <Table rowKey={(record) => record.id} columns={columns} dataSource={this.props.systemLog.list} pagination={pagination}/>
                     </Form>
                 </Row>
             </div>

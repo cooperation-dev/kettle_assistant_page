@@ -163,22 +163,22 @@ class SystemLog extends Component{
                         <Row gutter={24}>
                             <Col span={5} key={1}>
                                 <Form.Item label="操作用户">
-                                    <Input placeholder="操作用户" onChange={this.changeoperateUser} value={this.state.operateUser}/>
+                                    <Input placeholder="请输入操作用户" onChange={this.changeoperateUser} value={this.state.operateUser}/>
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={2}>
                                 <Form.Item label="日志类型">
-                                    <Input placeholder="日志类型" onChange={this.changeLogType} value={this.state.logType}/>
+                                    <Input placeholder="请输入日志类型" onChange={this.changeLogType} value={this.state.logType}/>
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={3}>
                                 <Form.Item label="操作IP">
-                                    <Input placeholder="操作IP" onChange={this.changeOperateIP} value={this.state.operateIp}/>
+                                    <Input placeholder="请输入操作IP" onChange={this.changeOperateIP} value={this.state.operateIp}/>
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={3}>
-                                <Form.Item label="操作IP">
-                                    <Input placeholder="操作IP" onChange={this.changeOperateIP} value={this.state.operateIp}/>
+                                <Form.Item label="记录时间">
+                                    <Input placeholder="请输入记录时间" onChange={this.changeOperateIP} value={this.state.operateIp}/>
                                 </Form.Item>
                             </Col>
                             <Col span={4} key={5} className="custom-sr-btn">

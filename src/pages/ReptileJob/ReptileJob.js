@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Button, Table, Modal, Select, Icon, Divider, message} from 'antd';
+import {Row, Col, Form, Input, Button, Table, Modal, Select, Icon, Divider, message, AutoComplete } from 'antd';
 
 import {findJobs, 
     addJobModalShow, addJobModalSure, addJobModalCancel,
     updateJobModalShow, updateJobModalSure, updateJobModalCancel,
     deleteJob,
-    displayLogShow, displayLogClose} from '../../redux/actions/reptile_job';
+    displayLogShow, displayLogClose,
+    startingJob, pauseJob} from '../../redux/actions/reptile_job';
 import {connect} from 'react-redux';
 import axios from 'axios';
 
@@ -14,6 +15,9 @@ import './ReptileJob.css';
 const {TextArea} = Input
 const {Option} = Select
 
+const statusData = ['正在运行', '运行失败', '未开始运行'];
+const platformData = ['京东','天猫','淘宝']
+
 class ReptileJob extends Component{
     constructor(props){
         super(props)
@@ -21,18 +25,18 @@ class ReptileJob extends Component{
         this.state = {
             selectRows: [],
             name: '',
+            status: '',
             platform: '',
-            type: '',
-            timing: '',
+            updateTime: '',
         }
     }
 
     componentDidMount = () => {
         let job = {
             name: this.state.name,
+            status: this.state.status,
             platform: this.state.platform,
-            type: this.state.type,
-            timing: this.state.timing,
+            updateTime: this.state.updateTime,
         }
         this.props.findJobs(job)
     }
@@ -40,9 +44,9 @@ class ReptileJob extends Component{
     search = () => {
         let job = {
             name: this.state.name,
+            status: this.state.status,
             platform: this.state.platform,
-            type: this.state.type,
-            timing: this.state.timing,
+            updateTime: this.state.updateTime,
         }
         this.props.findJobs(job)
     }
@@ -51,16 +55,16 @@ class ReptileJob extends Component{
         this.setState({
             selectRows: [],
             name: '',
+            status: '',
             platform: '',
-            type: '',
-            timing: '',
+            updateTime: '',
         })
 
         let job = {
             name: '',
+            status: '',
             platform: '',
-            type: '',
-            timing: '',
+            updateTime: '',
         }
         this.props.findJobs(job)
     }
@@ -71,53 +75,57 @@ class ReptileJob extends Component{
         this.setState(newState);
     }
 
+    changeValue = (value, attributes) => {
+        let newState = {};
+        newState[attributes] = value;
+        this.setState(newState);
+    }
+
     render(){
-          
-          const columns = [{
+        const columns = [{
             title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
-          },{
+            dataIndex: 'reptileId',
+            key: 'reptileId',
+        },{
             title: '名称',
             dataIndex: 'name',
             key: 'name',
-          }, {
+        }, {
             title: '平台',
-            dataIndex: 'description',
-            key: 'description',
-          },{
+            dataIndex: 'platform',
+            key: 'platform',
+        },{
             title: '种类',
-            dataIndex: 'cronSet',
-            key: 'cronSet',
-          },{
+            dataIndex: 'type',
+            key: 'type',
+        },{
             title: '定时设置',
-            dataIndex: 'jobType',
-            key: 'jobType',
-          },{
+            dataIndex: 'timing',
+            key: 'timing',
+        },{
             title: '运行状态',
-            dataIndex: 'state',
-            key: 'state',
-          },{
+            dataIndex: 'status',
+            key: 'status',
+        },{
             title: '更新人',
-            dataIndex: 'runState',
-            key: 'runState',
-          },{
+            dataIndex: 'updater',
+            key: 'updater',
+        },{
             title: '最后更新时间',
-            dataIndex: 'modifyTime',
-            key: 'modifyTime',
-          },{
+            dataIndex: 'updateTime',
+            key: 'updateTime',
+        },{
             title: '操作',
             render: (text, record) => (
                 <span>
-                    <Icon type="caret-right" style={{marginRight: 10}}/>
-                    <Icon type="border" style={{marginRight: 10}}/>
-                    <Icon type="file-text" onClick={() => this.props.displayLogShow(record.id)} style={{marginRight: 10}}/>
-                    <Icon type="edit" onClick={() => this.props.updateJobModalShow(record.id)} style={{marginRight: 10}}/>
-                    <Icon type="delete" onClick={() => showDeleteConfirm(this.props.deleteJob, this.state.selectRows)}/>
+                    <Icon type="caret-right" onClick={() => this.props.startingJob(record.reptileId)} style={{marginRight: 10}}/>
+                    <Icon type="border" onClick={() => this.props.pauseJob(record.reptileId)} style={{marginRight: 10}}/>
+                    <Icon type="file-text" onClick={() => this.props.displayLogShow(record.reptileId)} style={{marginRight: 10}}/>
+                    <Icon type="edit" onClick={() => this.props.updateJobModalShow(record.reptileId)} style={{marginRight: 10}}/>
+                    <Icon type="delete" onClick={() => showDeleteConfirm(this.props.deleteJob, record.reptileId)}/>
                 </span>
             )
-          }]; 
-
+        }]; 
         return (
 
             <div className="ant-advanced-search-form" style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto", marginBottom:"15px"}}>
@@ -131,22 +139,33 @@ class ReptileJob extends Component{
                         <Row gutter={24}>
                             <Col span={5} key={1}>
                                 <Form.Item label="作业名称 ">
-                                    <Input placeholder="请输入作业名称" value={this.state.id} onChange={(e) => this.change(e, 'id')}/>
+                                    <Input placeholder="请输入作业名称" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={2}>
                                 <Form.Item label="运行状态">
-                                    <Input placeholder="请选择运行状态" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                                    <AutoComplete
+                                        value={this.state.status}
+                                        dataSource={statusData}
+                                        placeholder="请选择运行状态"
+                                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                                        onChange={(value) => this.changeValue(value, 'status')}
+                                        />
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={3}>
                                 <Form.Item label="平台">
-                                    <Input placeholder="请选择平台" value={this.state.description} onChange={(e) => this.change(e, 'description')}/>
+                                    <AutoComplete
+                                        value={this.state.platform}
+                                        dataSource={platformData}
+                                        placeholder="请选择平台"
+                                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                                        onChange={(value) => this.changeValue(value, 'platform')}/>
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={4}>
                                 <Form.Item label="更新时间">
-                                    <Input placeholder="请输入更新时间" value={this.state.jobType} onChange={(e) => this.change(e, 'jobType')}/>
+                                    <Input placeholder="请输入更新时间" value={this.state.updateTime} onChange={(e) => this.change(e, 'updateTime')}/>
                                 </Form.Item>
                             </Col>
                             <Col span={4} key={5} className="custom-sr-btn">
@@ -154,7 +173,7 @@ class ReptileJob extends Component{
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                        <Table rowKey={(record) => {return record.id}} dataSource={this.props.reptileJob.list} columns={columns}/>
+                        <Table rowKey={(record) => {return record.reptileId}} dataSource={this.props.reptileJob.list} columns={columns}/>
                     </Form>
                 </Row>
                 <AddModal visible={this.props.reptileJob.addVisible} onOk={(job) => this.props.addJobModalSure(job)} onCancel={() => this.props.addJobModalCancel()} ></AddModal>
@@ -176,29 +195,10 @@ class AddModal extends Component{
         
         this.state = {
             name: '',
-            jobType: '',
-            jobTypes: [],
-            description: '',
+            platform: '',
+            type: '',
+            timing: '',
         }
-    }
-    
-    componentDidMount = () => {
-        this.findJobTypes()
-    }
-
-    findJobTypes = () => {
-        axios.get('/api/jobManagerController/findJobTypes')
-            .then(r => {
-                this.setState({
-                    jobTypes: r.data
-                })
-            })
-    }
-    
-    changeJobType = (e) => {
-        this.setState({
-            jobType: e
-        })
     }
 
     change = (event, attributes) => {
@@ -207,11 +207,18 @@ class AddModal extends Component{
         this.setState(newState);
     }
 
+    changeValue = (value, attributes) => {
+        let newState = {};
+        newState[attributes] = value;
+        this.setState(newState);
+    }
+
     render(){
         let job = {
             name: this.state.name,
-            jobType: this.state.jobType,
-            description: this.state.description,
+            platform: this.state.platform,
+            type: this.state.type,
+            timing: this.state.timing,
         }
         return (
             <Modal
@@ -227,13 +234,33 @@ class AddModal extends Component{
                         <Input placeholder="作业名称" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
                     </Form.Item>
                     <Form.Item label="平台" {...formItemLayout}>
-                        <Input placeholder="平台" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                        {/* <Input placeholder="平台" value={this.state.platform} onChange={(e) => this.change(e, 'platform')}/> */}
+                        <AutoComplete
+                        style={{ width: '100%' }}
+                        value={this.state.platform}
+                        dataSource={platformData}
+                        placeholder="平台"
+                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                        onChange={(value) => this.changeValue(value, 'platform')}/>
                     </Form.Item>
                     <Form.Item label="种类" {...formItemLayout}>
-                        <Input placeholder="种类" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                        <AutoComplete
+                        style={{ width: '100%' }}
+                        value={this.state.type}
+                        dataSource={platformData}
+                        placeholder="种类"
+                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                        onChange={(value) => this.changeValue(value, 'type')}/>
                     </Form.Item>
                     <Form.Item label="定时设置" {...formItemLayout}>
-                        <Input placeholder="定时设置" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                        {/* <Input placeholder="定时设置" value={this.state.timing} onChange={(e) => this.change(e, 'timing')}/> */}
+                        <AutoComplete
+                        style={{ width: '100%' }}
+                        value={this.state.timing}
+                        dataSource={platformData}
+                        placeholder="定时设置"
+                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                        onChange={(value) => this.changeValue(value, 'timing')}/>
                     </Form.Item>
                 </Form>
             </Modal>
@@ -247,18 +274,12 @@ class UpdateModal extends Component{
         super(props)
 
         this.state = {
-            id: '',
+            reptileId: '',
             name: '',
-            jobType: '',
-            jobTypes: [],
-            description: '',
+            platform: '',
+            type: '',
+            timing: '',
         }
-    }
-
-    changeType = (e) => {
-        this.setState({
-            jobType: e
-        })
     }
 
     change = (event, attributes) => {
@@ -266,14 +287,10 @@ class UpdateModal extends Component{
         newState[attributes] = event.target.value;
         this.setState(newState);
     }
-
-    findJobTypes = () => {
-        axios.get('/api/jobManagerController/findJobTypes')
-            .then(r => {
-                this.setState({
-                    jobTypes: r.data
-                })
-            })
+    changeValue = (value, attributes) => {
+        let newState = {};
+        newState[attributes] = value;
+        this.setState(newState);
     }
 
     componentWillReceiveProps = (nextProps) => {
@@ -288,27 +305,26 @@ class UpdateModal extends Component{
     }
 
     findJobById = (id) => {
-        axios.post('/api/jobManagerController/findJobById/'+id)
+        axios.get('/reptileService/v1/job/'+id)
             .then((response) => {
                 let data = response.data
                 this.setState({
-                    id: data.id,
+                    reptileId: data.reptileId,
                     name: data.name,
-                    code: data.code,
-                    jobType: data.jobType,
-                    description: data.description
+                    platform: data.platform,
+                    type: data.type,
+                    timing: data.timing
                 })
-                this.findJobTypes()
             })
     }
 
     ok = () => {
         let job = {
-            id: this.state.id,
+            reptileId: this.state.reptileId,
             name: this.state.name,
-            code: this.state.code,
-            jobType: this.state.jobType,
-            description: this.state.description
+            platform: this.state.platform,
+            type: this.state.type,
+            timing: this.state.timing
         }
 
         this.props.onOk(job)
@@ -330,13 +346,31 @@ class UpdateModal extends Component{
                     <Input placeholder="作业名称" onChange={(e) => this.change(e, 'name')} value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="平台" {...formItemLayout}>
-                    <Input placeholder="平台" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                    <AutoComplete
+                        style={{ width: '100%' }}
+                        value={this.state.platform}
+                        dataSource={platformData}
+                        placeholder="平台"
+                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                        onChange={(value) => this.changeValue(value, 'platform')}/>
                 </Form.Item>
                 <Form.Item label="种类" {...formItemLayout}>
-                    <Input placeholder="种类" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                    <AutoComplete
+                        style={{ width: '100%' }}
+                        value={this.state.type}
+                        dataSource={platformData}
+                        placeholder="种类"
+                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                        onChange={(value) => this.changeValue(value, 'type')}/>
                 </Form.Item>
                 <Form.Item label="定时设置" {...formItemLayout}>
-                    <Input placeholder="定时设置" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                    <AutoComplete
+                        style={{ width: '100%' }}
+                        value={this.state.timing}
+                        dataSource={platformData}
+                        placeholder="定时设置"
+                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                        onChange={(value) => this.changeValue(value, 'timing')}/>
                 </Form.Item>
             </Modal>
         )
@@ -348,10 +382,17 @@ class LogModal extends Component{
         super(props)
 
         this.state = {
-            id: '',
+            reptileId: '',
             name: '',
-            log: ''
+            logType: '最详细日志',
+            logs: ''
         }
+    }
+
+    changeValue = (value, attributes) => {
+        let newState = {};
+        newState[attributes] = value;
+        this.setState(newState);
     }
 
     componentWillReceiveProps = (nextProps) => {
@@ -361,23 +402,23 @@ class LogModal extends Component{
 
         let id = nextProps.id
         if(id!=undefined && id!=""){
-            this.findJobById(id)
+            // this.findJobById(id)
         }
     }
 
     findJobById = (id) => {
-        axios.post('/api/jobManagerController/findJobById/'+id)
+        axios.post('/reptileService/v1/job/'+id+'/logs')
             .then((response) => {
                 let data = response.data
                 this.setState({
                     id: data.id,
                     name: data.name,
-                    log: data.log
+                    logs: data.logs
                 })
             })
     }
-
     render(){
+        const logType = ['基础日志','行日志','最详细日志'];
         return (
             <Modal
                 title="运行日志"
@@ -391,34 +432,37 @@ class LogModal extends Component{
                     <Input readOnly placeholder="作业名称" value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="日志类别">
-                    <Input readOnly placeholder="日志类别" value={this.state.name}/>
+                    {/* <Input readOnly placeholder="日志类别" value={this.state.name}/> */}
+                    <AutoComplete
+                        style={{ width: '100%' }}
+                        value={this.state.logType}
+                        dataSource={logType}
+                        placeholder="日志类别"
+                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                        onChange={(value) => this.changeValue(value, 'logType')}/>
                 </Form.Item>
                 <Form.Item label="日志内容">
-                    <TextArea readOnly autosize={{minRows: 8, maxRows: 8}} placeholder="日志内容" value={this.state.log}/>
+                    <TextArea readOnly autosize={{minRows: 8, maxRows: 8}} placeholder="日志内容" value={this.state.logs}/>
                 </Form.Item>
             </Modal>
         )
     }
 }
 
-function showDeleteConfirm(deleteJob, selectRows) {
-    if(selectRows.length == 0){
-        message.error('请选择行!')
-    }else{
+function showDeleteConfirm(deleteJob, reptileId) {
         Modal.confirm({
-            title: '删除字典',
+            title: '删除爬虫作业',
             content: '确定要删除吗？',
             okText: '确定',
             okType: 'danger',
             cancelText: '取消',
             onOk() {
-                deleteJob(selectRows)
+                deleteJob(reptileId)
             },
             onCancel() {
               console.log('Cancel');
             },
           });
-    }
 }
 
 export default connect((state) => ({
@@ -427,4 +471,5 @@ export default connect((state) => ({
     addJobModalShow, addJobModalSure, addJobModalCancel, 
     updateJobModalShow, updateJobModalSure, updateJobModalCancel,
     deleteJob,
-    displayLogShow, displayLogClose})(ReptileJob)
+    displayLogShow, displayLogClose,
+    startingJob, pauseJob})(ReptileJob)

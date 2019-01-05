@@ -1,23 +1,27 @@
 import axios from 'axios';
 import {message} from 'antd';
 
-export const FIND_JOBS = "jobManager/findJobs";
+export const FIND_JOBS = "/reptileService/v1/jobs";
 //新增作业
-export const ADD_JOB_MODAL_SHOW = "jobManager/addModalShow";
-export const ADD_JOB_MODAL_SURE = "jobManager/addModalSure";
-export const ADD_JOB_MODAL_CANCEL = "jobManager/addModalCancel";
+export const ADD_JOB_MODAL_SHOW = "reptileJob/addModalShow";
+export const ADD_JOB_MODAL_SURE = "/reptileService/v1/job";
+export const ADD_JOB_MODAL_CANCEL = "reptileJob/addModalCancel";
 
 //修改作业
-export const UPDATE_JOB_MODAL_SHOW = "jobManager/updateModalShow";
-export const UPDATE_JOB_MODAL_SURE = "jobManager/updateModalSure";
-export const UPDATE_JOB_MODAL_CANCEL = "jobManager/updateModalCancel";
+export const UPDATE_JOB_MODAL_SHOW = "reptileJob/updateModalShow";
+export const UPDATE_JOB_MODAL_SURE = "/reptileService/v1/job";
+export const UPDATE_JOB_MODAL_CANCEL = "reptileJob/updateModalCancel";
 
 //删除作业
-export const DELETE_JOB_BY_IDS = "jobManager/deleteJobByIds";
+export const DELETE_JOB_BY_IDS = "/reptileService/v1/job/{id}";
 
 //查看运行日志
-export const DISPLAY_LOG_SHOW = "jobManager/displayLogShow";
-export const DISPLAY_LOG_CLOSE = "jobManager/displayLogClose";
+export const DISPLAY_LOG_SHOW = "reptileJob/displayLogShow";
+export const DISPLAY_LOG_CLOSE = "reptileJob/displayLogClose";
+
+//运行/停止
+export const STARTING_JOB = "/reptileService/v1/job/{id}/starting";
+export const PAUSE_JOB = "/reptileService/v1/job/{id}/pause";
 
 export const find_jobs = (list) => {
     return {
@@ -78,18 +82,32 @@ export const display_log_close = () => {
     }
 }
 
-export const delete_job_by_ids = (deleteJobs) => {
+export const delete_job_by_ids = (reptileJob) => {
     return {
         type: DELETE_JOB_BY_IDS,
-        deleteJobs: deleteJobs
+        reptileJob: reptileJob
+    }
+}
+
+export const starting_job = (reptileJob) => {
+    return {
+        type: STARTING_JOB,
+        reptileJob: reptileJob
+    }
+}
+
+export const pause_job = (reptileJob) => {
+    return {
+        type: PAUSE_JOB,
+        reptileJob: reptileJob
     }
 }
 
 export const findJobs = (job) => {
     return (dispatch) => {
         axios({
-            method: 'post',
-            url: '/api/jobManagerController/findJobs',
+            method: 'get',
+            url: '/reptileService/v1/jobs',
             data: job
         }).then((response) => {
             return response.data
@@ -111,7 +129,7 @@ export const addJobModalSure = (job) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: '/api/jobManagerController/saveJob',
+            url: ADD_JOB_MODAL_SURE,
             data: job
         }).then((res) => {
             return res.data
@@ -127,23 +145,17 @@ export const addJobModalCancel = () => {
     }
 }
 
-export const updateJobModalShow = (selectRows) => {
+export const updateJobModalShow = (id) => {
     return (dispatch) => {
-        if(selectRows.length == 0){
-            message.error('请选择行')
-        }else if(selectRows.length > 1){
-            message.error('选中纪录超过一行')
-        }else{
-            dispatch(update_job_modal_show(selectRows[0].id))
-        }
+        dispatch(update_job_modal_show(id))
     }
 }
 
 export const updateJobModalSure = (job) => {
     return (dispatch) => {
         axios({
-            method: 'post',
-            url: '/api/jobManagerController/updateJob',
+            method: 'put',
+            url: UPDATE_JOB_MODAL_SURE,
             data: job
         }).then((res) => {
             return res.data
@@ -159,40 +171,53 @@ export const updateJobModalCancel = () => {
     }
 }
 
-export const deleteJob = (selectRows) => {
+export const deleteJob = (reptileId) => {
     return (dispatch) => {
-        if(selectRows.length == 0){
-            message.error('请选择行')
-        }else{
-            let ids = []
-            selectRows.map(row => ids.push(row.id))
             axios({
-                method: 'post',
-                url: '/api/jobManagerController/deleteJobByIds',
-                data: ids
+                method: 'delete',
+                url: '/reptileService/v1/job/'+reptileId,
             }).then((response) => {
                 return response.data
-            }).then((list) => {
-                dispatch(delete_job_by_ids(list))
+            }).then((reptileJob) => {
+                dispatch(delete_job_by_ids(reptileJob))
             })
-        }
     }
 }
 
-export const displayLogShow = (selectRows) => {
+export const displayLogShow = (reptileId) => {
     return (dispatch) => {
-        if(selectRows.length == 0){
-            message.error('请选择行')
-        }else if(selectRows.length > 1){
-            message.error('选中纪录超过一行')
-        }else{
-            dispatch(display_log_show(selectRows[0].id))
-        }
+        dispatch(display_log_show(reptileId))
     }
 }
 
 export const displayLogClose = () => {
     return (dispatch) => {
         dispatch(display_log_close())
+    }
+}
+
+export const startingJob = (reptileId) => {
+    return (dispatch) => {
+        axios({
+            method: 'post',
+            url: '/reptileService/v1/job/'+reptileId+'/starting',
+        }).then((response) => {
+            return response.data
+        }).then((reptileJob) => {
+            dispatch(starting_job(reptileJob))
+        })
+    }
+}
+
+export const pauseJob = (reptileId) => {
+    return (dispatch) => {
+        axios({
+            method: 'post',
+            url: '/reptileService/v1/job/'+reptileId+'/pause',
+        }).then((response) => {
+            return response.data
+        }).then((reptileJob) => {
+            dispatch(pause_job(reptileJob))
+        })
     }
 }

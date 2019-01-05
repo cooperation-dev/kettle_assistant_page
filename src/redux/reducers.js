@@ -1,5 +1,6 @@
 import app from './reducers/app';
 import reptileJob from './reducers/reptile_job';
+import product from './reducers/product'
 import jobManager from './reducers/job_manager';
 import jobMonitor from './reducers/job_monitor';
 import sumDic from './reducers/sum_dic';
@@ -13,7 +14,8 @@ import captcha from './reducers/captcha';
 
 export default function combineReducers(state={}, action){
     const obj_app = app(state.app, action);
-    const obj_reptileJob = reptileJob(state.jobManager, action);
+    const obj_reptileJob = reptileJob(state.reptileJob, action);
+    const obj_product = product(state.product, action);
     const obj_jobManager = jobManager(state.jobManager, action);
     const obj_jobMonitor = jobMonitor(state.jobMonitor, action);
     const obj_sumDic = sumDic(state.sumDic, action);
@@ -27,6 +29,7 @@ export default function combineReducers(state={}, action){
     return {
         app: obj_app,
         reptileJob: obj_reptileJob,
+        product: obj_product,
         jobManager: obj_jobManager,
         jobMonitor: obj_jobMonitor,
         sumDic: obj_sumDic,

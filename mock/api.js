@@ -2,7 +2,7 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import Mock from 'mockjs';
 
-import {Jobs, job_monitor_analysis, 
+import {reptiles, products, Jobs, job_monitor_analysis, 
             input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
             input_range_date, input_range_week, input_range_month, input_range_year,
             output_range_date, output_range_week, output_range_month, output_range_year,
@@ -13,6 +13,111 @@ import {Jobs, job_monitor_analysis,
 
 const mock = new MockAdapter(axios);
 
+//爬虫接口
+mock.onGet('/reptileService/v1/jobs')
+.reply(config => {
+    let { name, status, platform, updateTime} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newReptiles = reptiles
+            if(name!=undefined && name!=""){
+                newReptiles = newReptiles.filter(reptile => reptile.name==name)
+            }
+            if(status!=undefined && status!=""){
+                newReptiles = newReptiles.filter(reptile => reptile.status==status)
+            }
+            if(platform!=undefined && platform!=""){
+                newReptiles = newReptiles.filter(reptile => reptile.platform==platform)
+            }
+            if(updateTime!=undefined && updateTime!=""){
+                newReptiles = newReptiles.filter(reptile => reptile.updateTime==updateTime)
+            }
+        resolve([200, newReptiles]);
+    })
+})
+mock.onPost('/reptileService/v1/job')
+.reply(config => {
+    let { name, platform, type, timing} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newReptile = Mock.mock({
+            reptileId: Mock.Random.id(),
+            name: name,
+            platform: platform,
+            type: type,
+            timing: timing,
+            status: "未开始运行",
+            updater: "test",
+            updateTime: '2019-01-05 00:00:00',
+        })
+        resolve([200, newReptile]);
+    })
+})
+for(let i=0; i<reptiles.length; i++){
+    let reptile = reptiles[i]
+    mock.onGet('/reptileService/v1/job/'+reptile.reptileId)
+    .reply('200', reptile)
+}
+mock.onPut('/reptileService/v1/job')
+.reply(config => {
+    let {reptileId, name, platform, type, timing} = JSON.parse(config.data)
+    let newReptile = reptiles.filter(reptile => reptile.reptileId==reptileId)[0]
+    if(name!=undefined && name!=''){
+        newReptile.name = name
+    }
+    if(platform!=undefined && platform!=''){
+        newReptile.platform = platform
+    }
+    if(type!=undefined && type!=''){
+        newReptile.type = type
+    }
+    if(timing!=undefined && timing!=''){
+        newReptile.timing = timing
+    }
+    return new Promise((resolve, reject) => {
+        resolve([200, newReptile]);
+    })
+})
+for(let i=0; i<reptiles.length; i++){
+    let reptile = reptiles[i]
+    mock.onDelete('/reptileService/v1/job/'+reptile.reptileId)
+    .reply('200', reptile.reptileId)
+}
+for(let i=0; i<reptiles.length; i++){
+    let reptile = reptiles[i]
+    mock.onPost('/reptileService/v1/job/'+reptile.reptileId+'/starting')
+    .reply(() => {
+        reptile.status = '正在运行'
+        return new Promise((resolve, reject) => {
+            resolve([200, reptile]);
+        })
+    })
+}
+for(let i=0; i<reptiles.length; i++){
+    let reptile = reptiles[i];
+    mock.onPost('/reptileService/v1/job/'+reptile.reptileId+'/pause')
+    .reply(() => {
+        reptile.status = '停止';
+        return new Promise((resolve, reject) => {
+            resolve([200, reptile]);
+        })
+    })
+}
+//-------------------------------------------------------------------
+//产品页面接口
+mock.onGet('/productService/v1/products')
+.reply(config => {
+    let { name, platform} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let newProducts = products
+            if(name!=undefined && name!=""){
+                newProducts = newProducts.filter(product => product.name==name)
+            }
+            if(platform!=undefined && platform!=""){
+                newProducts = newProducts.filter(product => product.platform==platform)
+            }
+        resolve([200, newProducts]);
+    })
+})
+//-------------------------------------------------------------------
 mock.onPost('/api/jobManagerController/findJobs')
     .reply(config => {
         let {id, name, description, jobType, state, creator} = JSON.parse(config.data)

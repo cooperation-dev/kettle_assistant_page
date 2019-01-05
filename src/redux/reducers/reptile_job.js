@@ -1,8 +1,8 @@
 import {FIND_JOBS, 
     ADD_JOB_MODAL_SHOW, ADD_JOB_MODAL_SURE, ADD_JOB_MODAL_CANCEL,
     UPDATE_JOB_MODAL_SHOW, UPDATE_JOB_MODAL_SURE, UPDATE_JOB_MODAL_CANCEL,
-    DISPLAY_LOG_SHOW, DISPLAY_LOG_CLOSE,
-    DELETE_JOB_BY_IDS} from '../actions/reptile_job';
+    DISPLAY_LOG_SHOW, DISPLAY_LOG_CLOSE,DELETE_JOB_BY_IDS,
+    STARTING_JOB, PAUSE_JOB} from '../actions/reptile_job';
 
 const initState = {
     list: [],
@@ -49,7 +49,7 @@ export default function reducers(state=initState, action){
         }
         case UPDATE_JOB_MODAL_SURE: {
             let newlist = state.list.map(ele => {
-                if(ele.id == action.job.id)
+                if(ele.reptileId == action.job.reptileId)
                     return action.job
                 else
                     return ele
@@ -80,13 +80,37 @@ export default function reducers(state=initState, action){
             }
         }
         case DELETE_JOB_BY_IDS: {
-            let deleteIds = action.deleteJobs
+            let reptileJob = action.reptileJob
             let newlist = []
             for(var i=0; i<state.list.length; i++){
-                if(deleteIds.indexOf(state.list[i].id) == -1){
+                if(reptileJob != state.list[i].reptileId){
                     newlist.push(state.list[i])
                 }
             }
+            return {
+                ...state,
+                list: newlist
+            }
+        }
+        case STARTING_JOB: {
+            let newlist = state.list.map(ele => {
+                if(ele.reptileId == action.reptileJob.reptileId)
+                    return action.reptileJob
+                else
+                    return ele
+            })
+            return {
+                ...state,
+                list: newlist
+            }
+        }
+        case PAUSE_JOB:{
+            let newlist = state.list.map(ele => {
+                if(ele.reptileId == action.reptileJob.reptileId)
+                    return action.reptileJob
+                else
+                    return ele
+            })
             return {
                 ...state,
                 list: newlist

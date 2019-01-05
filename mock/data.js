@@ -1,5 +1,34 @@
 import Mock from 'mockjs';
 
+//爬虫作业
+const reptiles = []
+for(let i=1; i<=5; i++){
+    reptiles.push(Mock.mock({
+        reptileId: Mock.Random.id(),
+        name: "测试作业" + i,
+        "platform|1": ['淘宝', '京东', '天猫'],
+        type: "电子产品",
+        timing: "5-12秒",
+        status: "正在运行",
+        updater: "test",
+        updateTime: "2019-01-05 00:00:00"
+    }))
+}
+
+//产品页面
+const products = []
+for(let i=1; i<=5; i++){
+    products.push(Mock.mock({
+        productId: Mock.Random.id(),
+        name: "测试产品" + i,
+        "platform|1": ['淘宝', '京东', '天猫'],
+        type: "电子产品",
+        price: "10000",
+        url: "www.test.com",
+        updateTime: "2019-01-05 00:00:00"
+    }))
+}
+
 //作业管理
 const Jobs = []
 for(let i=1; i<=11; i++){
@@ -748,7 +777,7 @@ const dic_tree = [
     }
 ]
 
-export {Jobs, job_monitor_analysis, 
+export {reptiles, products, Jobs, job_monitor_analysis, 
     input_date, input_week, input_month, input_year, output_date, output_week, output_month, output_year,
     input_range_date, input_range_week, input_range_month, input_range_year, output_range_date, output_range_week, output_range_month, output_range_year,
     sum_dic_list, 

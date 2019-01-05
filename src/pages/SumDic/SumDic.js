@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Form, Input, message, Modal, Row, Switch, Table, TreeSelect, Icon, Divider} from 'antd';
+import { Button, Col, Form, Input, message, Modal, Row, Switch, Table, TreeSelect, Icon, Divider, AutoComplete} from 'antd';
 import axios from 'axios';
 import { TreeCharts } from 'components/Echarts/TreeCharts';
 import React, { Component } from 'react';
@@ -124,7 +124,7 @@ class SumDic extends Component{
                 this.changePagination(page)
             }
         }
-
+        const dataSource = ['test', 'datasource', 'aaa'];
         return (
             <div className="ant-advanced-search-form" style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto", marginBottom:"15px"}}>
                 <Row>
@@ -138,22 +138,27 @@ class SumDic extends Component{
                         <Row gutter={24}>
                             <Col span={5} key={1}>
                                 <Form.Item label="名称">
-                                    <Input placeholder="名称" onChange={this.changeDicName} value={this.state.name}/>
+                                    <Input placeholder="请输入名称" onChange={this.changeDicName} value={this.state.name}/>
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={2}>
                                 <Form.Item label="代码">
-                                    <Input placeholder="代码" onChange={this.changeDicCode} value={this.state.code}/>
+                                    <Input placeholder="请输入代码" onChange={this.changeDicCode} value={this.state.code}/>
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={3}>
                                 <Form.Item label="类型">
-                                    <Input placeholder="类型" onChange={this.changeDicCode} value={this.state.code}/>
+                                    {/* <Input placeholder="类型" onChange={this.changeDicCode} value={this.state.code}/> */}
+                                    <AutoComplete
+                                        dataSource={dataSource}
+                                        placeholder="请选择类型"
+                                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                                        />
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={4}>
                                 <Form.Item label="所属对象">
-                                    <Input placeholder="所属对象" onChange={this.changeBelongs} value={this.state.belongs}/>
+                                    <Input placeholder="请输入所属对象" onChange={this.changeBelongs} value={this.state.belongs}/>
                                 </Form.Item>
                             </Col>
                             <Col span={4} key={5} className="custom-sr-btn">

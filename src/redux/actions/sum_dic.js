@@ -3,22 +3,21 @@ import {message} from 'antd';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //渲染字典列表
-export const SHOW_LIST = "sumDic/showList"
-//显示新增窗口
+export const SHOW_LIST = "/dicService/v1/dics"
+//新增窗口
 export const ADD_MODAL_SHOW = "sumDic/addModalShow"
-//新增窗口确认按钮
-export const ADD_MODAL_SURE = "sumDic/addModalSure"
-//新增窗口取消按钮
+export const ADD_MODAL_SURE = "/dicService/v1/dic"
 export const ADD_MODAL_CANCEL = "sumDic/addModalCancel"
-//显示修改窗口
+
+//修改窗口
 export const UPDATE_MODAL_SHOW = "sumDic/updateModalShow"
-//修改窗口确认按钮
-export const UPADTE_MODAL_SURE = "sumDic/updateModalSure"
-//修改窗口取消按钮
+export const UPADTE_MODAL_SURE = "/dicService/v1/dic"
 export const UPDATE_MODAL_CANCEL = "sumDic/updateModalCancel"
+
 //删除行
-export const DELETE_DIC_BY_IDS = "sumDic/deleteDicByIds"
+export const DELETE_DIC_BY_IDS = "/dicService/v1/dic/{id}"
 export const CHANGE_DISABLED = "sumDic/changeDisabled";
+
 //显示细节窗口
 export const DETAILS_MODAL_SHOW = "sumDic/detailsModalShow"
 //细节窗口确认
@@ -29,7 +28,7 @@ export const DETAILS_MODAL_CANCEL = "sumDic/detailsModalCancel"
 export const show_list = (data) => {
     return {
         type: SHOW_LIST,
-        list: data.data,
+        list: data,
         pageNo: data.pageNo,
         pageSize: data.pageSize,
         total: data.total
@@ -75,10 +74,10 @@ export const update_modal_cancel = () => {
     }
 }
 
-export const delete_dic_by_ids = (deleteDics) => {
+export const delete_dic_by_ids = (id) => {
     return {
         type: DELETE_DIC_BY_IDS,
-        deleteDics: deleteDics
+        id: id
     }
 }
 
@@ -111,8 +110,8 @@ export const details_modal_cancel = () => {
 export const showList = (dic) => {
     return (dispatch) => {
         axios({
-            method: 'post',
-            url: '/api/sumDicController/showList',
+            method: 'get',
+            url: '/dicService/v1/dics',
             data: dic
         }).then((r) => {
             return r.data.data
@@ -132,7 +131,7 @@ export const addModalSure = (dic) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: '/api/sumDicController/saveDic',
+            url: '/dicService/v1/dic',
             data: dic
         }).then(r => {return r.data.data})
             .then(dic => dispatch(add_modal_sure(dic)))
@@ -146,23 +145,17 @@ export const addModalCancel = () => {
     }
 }
 
-export const updateModalShow = (selectRows) => {
+export const updateModalShow = (id) => {
     return (dispatch) => {
-        if(selectRows.length == 0){
-            message.error('请选择行')
-        }else if(selectRows.length > 1){
-            message.error('选中纪录超过一行')
-        }else{
-            dispatch(update_modal_show(selectRows[0].id))
-        }
+        dispatch(update_modal_show(id))
     }
 }
 
 export const updateModalSure = (dic) => {
     return (dispatch) => {
         axios({
-            method: 'post',
-            url: '/api/sumDicController/updateDic',
+            method: 'put',
+            url: '/dicService/v1/dic',
             data: dic
         }).then((response) => {
             return response.data.data
@@ -178,23 +171,16 @@ export const updateModalCancel = () => {
     }
 }
 
-export const deleteDicByIds = (selectRows) => { 
-    if(selectRows.length == 0){
-        message.error('请选择行')
-    }else{
-        return (dispatch) => {
-            let ids = []
-            selectRows.map(row => ids.push(row.id))
-            axios({
-                method: 'post',
-                url: '/api/sumDicController/deleteDicByIds',
-                data: ids
-            }).then((r) => {
-                return r.data.data
-            }).then((list) => {
-                dispatch(delete_dic_by_ids(list))
-            })
-        }
+export const deleteDicByIds = (id) => { 
+    return (dispatch) => {
+        axios({
+            method: 'delete',
+            url: '/dicService/v1/dic/'+id,
+        }).then((r) => {
+            return r.data.data
+        }).then((id) => {
+            dispatch(delete_dic_by_ids(id))
+        })
     }
 }
 

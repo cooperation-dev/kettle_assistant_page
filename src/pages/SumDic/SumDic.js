@@ -103,19 +103,6 @@ class SumDic extends Component{
     }
 
     render(){
-       
-        const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                this.setState({
-                    selectRows: selectedRows
-                })
-            },
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
-                name: record.name,
-            }),
-        };
-
         const pagination = {
             pageSize: this.props.sumDic.pageSize,
             total: this.props.sumDic.total,
@@ -166,11 +153,11 @@ class SumDic extends Component{
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                        <Table rowKey={(record) => record.id} rowSelection={rowSelection} dataSource={this.props.sumDic.list} pagination={pagination}>
+                        <Table rowKey={(record) => record.id} dataSource={this.props.sumDic.list} pagination={pagination}>
                         <Column 
                             title = '名称'
-                            dataIndex = 'sort'
-                            key = 'sort'
+                            dataIndex = 'name'
+                            key = 'name'
                         />
                         <Column 
                             title = '代码'
@@ -179,8 +166,8 @@ class SumDic extends Component{
                         />
                         <Column 
                             title = '类型'
-                            dataIndex = 'name'
-                            key = 'name'
+                            dataIndex = 'type'
+                            key = 'type'
                         />
                         <Column 
                             title = '更新人'
@@ -209,7 +196,7 @@ class SumDic extends Component{
                             render={(text, record) => (
                                 <span>
                                     <Icon type="edit" onClick={() => this.props.updateModalShow(record.id)} style={{marginRight: 10}}/>
-                                    <Icon type="delete" onClick={() => showDeleteConfirm(this.props.deleteJob, this.state.selectRows)}/>
+                                    <Icon type="delete" onClick={() => showDeleteConfirm(this.props.deleteDicByIds, record.id)}/>
                                 </span>
                             )}
                         />
@@ -329,13 +316,6 @@ class AddModal extends Component{
                             <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
                         </Col>
                         <Col span={12} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
-                                {/* <Select style={{width: 120}} value={this.state.belongs} onChange={this.changeBelongs}>
-                                    {this.state.dicTypes.map(type => {
-                                        return (
-                                            <Option key={type.id} value={type.code}>{type.name}</Option>
-                                        )
-                                    })}
-                                </Select> */}
                                 <TreeSelect
                                     style={{ width: 300 }}
                                     value={this.state.belongs}
@@ -393,7 +373,7 @@ class UpdateModal extends Component{
     }
 
     findDicById = (id) => {
-        axios.get('/api/sumDicController/findDicById/'+id)
+        axios.get('/dicService/v1/dic/'+id)
             .then(r => {
                 let data = r.data.data
                 let belongsSwitch = data.belongs==undefined||data.belongs==""
@@ -511,24 +491,20 @@ class DetailsModal extends Component{
     }
 }
 
-function showDeleteConfirm(deleteDicByIds, selectRows) {
-    if(selectRows.length == 0){
-        message.error('请选择行!')
-    }else{
-        Modal.confirm({
-            title: '删除字典',
-            content: '确定要删除吗？',
-            okText: '确定',
-            okType: 'danger',
-            cancelText: '取消',
-            onOk() {
-                deleteDicByIds(selectRows)
-            },
-            onCancel() {
-              console.log('Cancel');
-            },
-          });
-    }
+function showDeleteConfirm(deleteDicByIds, id) {
+    Modal.confirm({
+        title: '删除字典',
+        content: '确定要删除吗？',
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk() {
+            deleteDicByIds(id)
+        },
+        onCancel() {
+            console.log('Cancel');
+        },
+        });
 }
 
 export default connect((state)=> ({

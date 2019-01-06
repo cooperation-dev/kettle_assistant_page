@@ -205,8 +205,8 @@ mock.onPost('/api/jobMonitorController/showRange')
             }, 500);
         })
     })
-
-mock.onPost('/api/sumDicController/showList')
+//---------------------------------------------------------------
+mock.onGet('/dicService/v1/dics')
     .reply(config => {
         let {code, name, valid, belongs} = JSON.parse(config.data)
         return new Promise((resolve, reject) => {
@@ -217,7 +217,7 @@ mock.onPost('/api/sumDicController/showList')
             if(name!=undefined && name!=""){
                 newlist = newlist.filter(dic => dic.name==name)
             }
-            newlist = newlist.filter(dic => dic.valid==valid)
+            newlist = newlist.filter(dic => dic.valid=='Y')
             if(belongs!=undefined && belongs!=""){
                 newlist = newlist.filter(dic => dic.belongs==belongs)
             }
@@ -233,7 +233,54 @@ mock.onPost('/api/sumDicController/showList')
             }, 500);
         })
     })
+    mock.onPost('/dicService/v1/dic')
+    .reply(config => {
+        let {name, code, belongs} = JSON.parse(config.data)
+        //dicType中文
+        let belongsCN=""
+        //belongs中文
+        if(belongs!=undefined && ""!=belongs){
+            belongsCN = sum_dic_list.filter(ele => ele.code == belongs)[0].name;
+        }
+        let maxId = sum_dic_list[sum_dic_list.length-1].id+1
+        return new Promise((resolve, reject) => {
+            let newdic = {
+                id: maxId,
+                code: code,
+                name: name,
+                sort: 110,
+                createTime: "2018-09-09 12:34:44",
+                modifyTime: '2018-09-18 01:23:46',
+                creator: 'adan',
+                valid: 'Y',
+                belongs: belongsCN
+            }
 
+            let data = {
+                code: '200',
+                msg: '',
+                data: newdic
+            }
+
+            setTimeout(() => {
+                resolve([200, data]);
+            }, 500);
+        })
+    })
+for(let i=0; i<sum_dic_list.length; i++){
+    let sumDic = sum_dic_list[i]
+    mock.onDelete('/dicService/v1/dic/'+sumDic.id)
+    .reply(() => {
+        return new Promise((resolve, reject) => {
+            let data = {
+                code: '200',
+                msg: '',
+                data: sumDic.id,
+            }
+            resolve([200, data]);
+        })
+    })
+}
 mock.onPost('/api/sumDicController/changeDisabled')
     .reply(config => {
         let row = JSON.parse(config.data)
@@ -786,58 +833,6 @@ mock.onPost('/api/jobManagerController/saveJob')
         })
     })
 
-mock.onPost('/api/sumDicController/saveDic')
-    .reply(config => {
-        let {name, code, belongs} = JSON.parse(config.data)
-        //dicType中文
-        let belongsCN=""
-        //belongs中文
-        if(belongs!=undefined && ""!=belongs){
-            belongsCN = sum_dic_list.filter(ele => ele.code == belongs)[0].name;
-        }
-        let maxId = sum_dic_list[sum_dic_list.length-1].id+1
-        return new Promise((resolve, reject) => {
-            let newdic = {
-                id: maxId,
-                code: code,
-                name: name,
-                sort: 110,
-                createTime: "2018-09-09 12:34:44",
-                modifyTime: '2018-09-18 01:23:46',
-                creator: 'adan',
-                valid: 'Y',
-                belongs: belongsCN
-            }
-
-            let data = {
-                code: '200',
-                msg: '',
-                data: newdic
-            }
-
-            setTimeout(() => {
-                resolve([200, data]);
-            }, 500);
-        })
-    })
-
-mock.onPost('/api/sumDicController/deleteDicByIds')
-    .reply(config => {
-        let ids = JSON.parse(config.data)
-        return new Promise((resolve, reject) => {
-            
-            let data = {
-                code: '200',
-                msg: '',
-                data: ids
-            }
-
-            setTimeout(() => {
-                resolve([200, data]);
-            }, 500);
-        })
-    })
-
 mock.onGet('/api/sumDicController/findDicTypes')
     .reply(config => {
         return new Promise((resolve, reject) => {
@@ -874,7 +869,7 @@ mock.onPost('/api/jobManagerController/updateJob')
         })
     })
 
-mock.onPost('/api/sumDicController/updateDic')
+mock.onPut('/dicService/v1/dic')
     .reply(config => {
         let {id, name, code, belongs} = JSON.parse(config.data)
         return new Promise((resolve, reject) => {
@@ -910,7 +905,7 @@ mock.onPost('/api/sumDicController/updateDic')
 
 for(let i=0; i<sum_dic_list.length; i++){
     let dic = sum_dic_list[i]
-    mock.onGet('/api/sumDicController/findDicById/'+dic.id)
+    mock.onGet('/dicService/v1/dic/'+dic.id)
         .reply(config => {
             let data = {
                 code: '200',

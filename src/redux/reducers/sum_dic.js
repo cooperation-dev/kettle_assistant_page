@@ -76,10 +76,10 @@ export default function reducers(state=initState, action){
             }
         }
         case DELETE_DIC_BY_IDS: {
-            let deleteIds = action.deleteDics
+            let id = action.id
             let newlist = []
             for(var i=0; i<state.list.length; i++){
-                if(deleteIds.indexOf(state.list[i].id) == -1){
+                if(id != state.list[i].id){
                     newlist.push(state.list[i])
                 }
             }

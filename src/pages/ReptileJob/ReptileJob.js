@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Button, Table, Modal, Select, Icon, Divider, message, AutoComplete } from 'antd';
+import {Row, Col, Form, Input, Button, Table, Modal, Select, Icon, Divider, TreeSelect, AutoComplete } from 'antd';
 
 import {findJobs, 
     addJobModalShow, addJobModalSure, addJobModalCancel,
@@ -144,13 +144,25 @@ class ReptileJob extends Component{
                             </Col>
                             <Col span={5} key={2}>
                                 <Form.Item label="运行状态">
-                                    <AutoComplete
+                                    {/* <AutoComplete
                                         value={this.state.status}
                                         dataSource={statusData}
                                         placeholder="请选择运行状态"
                                         filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
                                         onChange={(value) => this.changeValue(value, 'status')}
-                                        />
+                                        /> */}
+                                        <Select
+                                            showSearch
+                                            placeholder="请选择运行状态"
+                                            // optionFilterProp="children"
+                                            value={this.state.status}
+                                            onChange={(value) => this.changeValue(value, 'status')}
+                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        >
+                                            <Option value="未开始">未开始</Option>
+                                            <Option value="正在运行">正在运行</Option>
+                                            <Option value="已停止">已停止</Option>
+                                        </Select>
                                 </Form.Item>
                             </Col>
                             <Col span={5} key={3}>
@@ -244,16 +256,23 @@ class AddModal extends Component{
                         onChange={(value) => this.changeValue(value, 'platform')}/>
                     </Form.Item>
                     <Form.Item label="种类" {...formItemLayout}>
-                        <AutoComplete
-                        style={{ width: '100%' }}
-                        value={this.state.type}
-                        dataSource={platformData}
-                        placeholder="种类"
-                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-                        onChange={(value) => this.changeValue(value, 'type')}/>
+                        <TreeSelect
+                            showSearch
+                            style={{ width: '100%' }}
+                            value={this.state.type}
+                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                            placeholder="种类"
+                            allowClear
+                            treeDefaultExpandAll
+                            onChange={(value) => this.changeValue(value, 'type')}
+                        >
+                            <TreeSelect.TreeNode value="电子产品" title="电子产品" key="1">
+                                <TreeSelect.TreeNode value="电脑" title="电脑" key="2" />
+                                <TreeSelect.TreeNode value="手机" title="手机" key="3" />
+                            </TreeSelect.TreeNode>
+                        </TreeSelect>
                     </Form.Item>
                     <Form.Item label="定时设置" {...formItemLayout}>
-                        {/* <Input placeholder="定时设置" value={this.state.timing} onChange={(e) => this.change(e, 'timing')}/> */}
                         <AutoComplete
                         style={{ width: '100%' }}
                         value={this.state.timing}

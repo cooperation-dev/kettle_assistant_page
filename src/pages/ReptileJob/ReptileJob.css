@@ -5,6 +5,11 @@
       border-radius: 6px !important;
     }
     
+  .ant-select-selection {
+    border-radius: 1px;
+    /* width: 200px; */
+  }
+
   .ant-advanced-search-form .ant-form-item {
     /* display: flex !important; */
   }

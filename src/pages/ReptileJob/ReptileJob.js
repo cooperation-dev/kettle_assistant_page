@@ -25,7 +25,7 @@ class ReptileJob extends Component{
         this.state = {
             selectRows: [],
             name: '',
-            status: '',
+            status: undefined,
             platform: '',
             updateTime: '',
         }
@@ -137,20 +137,13 @@ class ReptileJob extends Component{
                 <Row>
                     <Form layout="vertical">
                         <Row gutter={24}>
-                            <Col span={5} key={1}>
+                            <Col key={1} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="作业名称 ">
-                                    <Input placeholder="请输入作业名称" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
+                                    <Input placeholder="请输入作业名称" value={this.state.name} onChange={(e) => this.change(e, 'name')} />
                                 </Form.Item>
                             </Col>
-                            <Col span={5} key={2}>
+                            <Col key={2} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="运行状态">
-                                    {/* <AutoComplete
-                                        value={this.state.status}
-                                        dataSource={statusData}
-                                        placeholder="请选择运行状态"
-                                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-                                        onChange={(value) => this.changeValue(value, 'status')}
-                                        /> */}
                                         <Select
                                             showSearch
                                             placeholder="请选择运行状态"
@@ -165,8 +158,8 @@ class ReptileJob extends Component{
                                         </Select>
                                 </Form.Item>
                             </Col>
-                            <Col span={5} key={3}>
-                                <Form.Item label="平台">
+                            <Col key={3} style={{float: "left", width: "20%"}}>
+                                <Form.Item label="平台" >
                                     <AutoComplete
                                         value={this.state.platform}
                                         dataSource={platformData}
@@ -175,12 +168,12 @@ class ReptileJob extends Component{
                                         onChange={(value) => this.changeValue(value, 'platform')}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={5} key={4}>
+                            <Col key={4} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="更新时间">
                                     <Input placeholder="请输入更新时间" value={this.state.updateTime} onChange={(e) => this.change(e, 'updateTime')}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={4} key={5} className="custom-sr-btn">
+                            <Col key={5} className="custom-sr-btn" style={{float: "left", width: "20%"}}>
                                 <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>

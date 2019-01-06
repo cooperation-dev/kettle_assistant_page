@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, message, Modal, Row, Switch, Table, TreeSelect, Icon, Divider, AutoComplete} from 'antd';
+import { Button, Col, Form, Input, Modal, Row, Switch, Table, TreeSelect, Icon, Divider, Select} from 'antd';
 import axios from 'axios';
 import { TreeCharts } from 'components/Echarts/TreeCharts';
 import React, { Component } from 'react';
@@ -10,15 +10,16 @@ import { addModalCancel, addModalShow, addModalSure,
 import './SumDic.css';
 
 const {Column} = Table
+const {Option} = Select
 
 class SumDic extends Component{
     constructor(props){
         super(props)
 
         this.state = {
-            code: '',
             name: '',
-            valid: 'Y',
+            code: '',
+            type: undefined,
             belongs: '',
             selectRows: [],
         }
@@ -28,35 +29,24 @@ class SumDic extends Component{
         this.search()
     }
 
-    changeDicName = (e) => {
-        this.setState({
-            name: e.target.value
-        })
+    change = (event, attributes) => {
+        let newState = {};
+        newState[attributes] = event.target.value;
+        this.setState(newState);
     }
 
-    changeDicCode = (e) => {
-        this.setState({
-            code: e.target.value
-        })
-    }
-    
-    changeValid = (e) => {
-        this.setState({
-            valid: this.state.valid=='Y'?'N':'Y'
-        })
-    }
-
-    changeBelongs = (e) => {
-        this.setState({
-            belongs: e.target.value
-        })
+    changeValue = (value, attributes) => {
+        let newState = {};
+        newState[attributes] = value;
+        this.setState(newState);
     }
 
     search = () => {
         let dic = {
-            code: this.state.code,
             name: this.state.name,
-            valid: this.state.valid,
+            code: this.state.code,
+            type: this.state.type,
+            belongs: this.state.belongs,
         }
         
         let data = {
@@ -64,14 +54,15 @@ class SumDic extends Component{
             pageSize: this.props.sumDic.pageSize,
             data: dic
         }
-        this.props.showList(data)
+        this.props.showList(dic)
     }
 
     reset = () => {
         let dic = {
-            code: '',
             name: '',
-            valid: 'Y',
+            code: '',
+            type: '',
+            belongs: '',
         }
         let data = {
             pageNo: 1,
@@ -80,9 +71,10 @@ class SumDic extends Component{
         }
 
         this.setState({
-            code: '',
             name: '',
-            valid: 'Y'
+            code: '',
+            type: undefined,
+            belongs: '',
         })
 
         this.props.showList(data)
@@ -90,9 +82,10 @@ class SumDic extends Component{
 
     changePagination = (page) => {
         let dic = {
-            code: this.state.code,
             name: this.state.name,
-            valid: this.state.valid,
+            code: this.state.code,
+            type: this.state.type,
+            belongs: this.state.belongs,
         }
         let data = {
             pageSize: this.props.sumDic.pageSize,
@@ -111,7 +104,6 @@ class SumDic extends Component{
                 this.changePagination(page)
             }
         }
-        const dataSource = ['test', 'datasource', 'aaa'];
         return (
             <div className="ant-advanced-search-form" style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto", marginBottom:"15px"}}>
                 <Row>
@@ -123,37 +115,42 @@ class SumDic extends Component{
                 <Row>
                     <Form layout="vertical">
                         <Row gutter={24}>
-                            <Col span={5} key={1}>
+                            <Col key={1} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="名称">
-                                    <Input placeholder="请输入名称" onChange={this.changeDicName} value={this.state.name}/>
+                                    <Input placeholder="请输入名称" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={5} key={2}>
+                            <Col key={2} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="代码">
-                                    <Input placeholder="请输入代码" onChange={this.changeDicCode} value={this.state.code}/>
+                                    <Input placeholder="请输入代码" value={this.state.code} onChange={(e) => this.change(e, 'code')}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={5} key={3}>
+                            <Col key={3} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="类型">
-                                    {/* <Input placeholder="类型" onChange={this.changeDicCode} value={this.state.code}/> */}
-                                    <AutoComplete
-                                        dataSource={dataSource}
+                                    <Select
+                                        showSearch
                                         placeholder="请选择类型"
-                                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-                                        />
+                                        notFoundContent="未匹配"
+                                        // optionFilterProp="children"
+                                        value={this.state.type}
+                                        onChange={(value) => this.changeValue(value, 'type')}
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                    >
+                                        <Option value="testType">testType</Option>
+                                    </Select>
                                 </Form.Item>
                             </Col>
-                            <Col span={5} key={4}>
+                            <Col key={4} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="所属对象">
-                                    <Input placeholder="请输入所属对象" onChange={this.changeBelongs} value={this.state.belongs}/>
+                                    <Input placeholder="请输入所属对象" value={this.state.belongs} onChange={(e) => this.change(e, 'belongs')}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={4} key={5} className="custom-sr-btn">
+                            <Col key={5} className="custom-sr-btn" style={{float: "left", width: "20%"}}>
                                 <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                        <Table rowKey={(record) => record.id} dataSource={this.props.sumDic.list} pagination={pagination}>
+                        <Table rowKey={(record) => record.dic_id} dataSource={this.props.sumDic.list} pagination={pagination}>
                         <Column 
                             title = '名称'
                             dataIndex = 'name'
@@ -171,32 +168,30 @@ class SumDic extends Component{
                         />
                         <Column 
                             title = '更新人'
-                            dataIndex = 'createTime'
-                            key = 'createTime'
+                            dataIndex = 'updater'
+                            key = 'updater'
                         />
                         <Column 
                             title = '最后更新时间'
-                            dataIndex = 'modifyTime'
-                            key = 'modifyTime'
+                            dataIndex = 'updateTime'
+                            key = 'updateTime'
                         />
                         <Column 
                             title = '所属对象'
-                            dataIndex = 'creator'
-                            key = 'creator'
+                            dataIndex = 'belongs'
+                            key = 'belongs'
                         />
                         <Column 
                             title = '来源'
-                            dataIndex = 'modifier'
-                            key = 'modifier'
+                            dataIndex = 'source'
+                            key = 'source'
                         />
                         <Column 
                             title = '操作'
-                            dataIndex = 'belongs'
-                            key = 'belong'
                             render={(text, record) => (
                                 <span>
-                                    <Icon type="edit" onClick={() => this.props.updateModalShow(record.id)} style={{marginRight: 10}}/>
-                                    <Icon type="delete" onClick={() => showDeleteConfirm(this.props.deleteDicByIds, record.id)}/>
+                                    <Icon type="edit" onClick={() => this.props.updateModalShow(record.dic_id)} style={{marginRight: 10}}/>
+                                    <Icon type="delete" onClick={() => showDeleteConfirm(this.props.deleteDicByIds, record.dic_id)}/>
                                 </span>
                             )}
                         />
@@ -340,7 +335,7 @@ class UpdateModal extends Component{
         super(props)
 
         this.state = {
-            id: '',
+            dic_id: '',
             name: '',
             code: '',
             dicTypes: [],
@@ -378,7 +373,7 @@ class UpdateModal extends Component{
                 let data = r.data.data
                 let belongsSwitch = data.belongs==undefined||data.belongs==""
                 this.setState({
-                    id: data.id,
+                    dic_id: data.dic_id,
                     name: data.name,
                     code: data.code,
                     belongsSwitch: belongsSwitch?false:true,

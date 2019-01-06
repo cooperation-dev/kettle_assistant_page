@@ -56,26 +56,28 @@ for(let i=0; i<reptiles.length; i++){
     mock.onGet('/reptileService/v1/job/'+reptile.reptileId)
     .reply('200', reptile)
 }
-mock.onPut('/reptileService/v1/job')
-.reply(config => {
-    let {reptileId, name, platform, type, timing} = JSON.parse(config.data)
-    let newReptile = reptiles.filter(reptile => reptile.reptileId==reptileId)[0]
-    if(name!=undefined && name!=''){
-        newReptile.name = name
-    }
-    if(platform!=undefined && platform!=''){
-        newReptile.platform = platform
-    }
-    if(type!=undefined && type!=''){
-        newReptile.type = type
-    }
-    if(timing!=undefined && timing!=''){
-        newReptile.timing = timing
-    }
-    return new Promise((resolve, reject) => {
-        resolve([200, newReptile]);
+for(let i=0; i<reptiles.length; i++){
+    let reptile = reptiles[i]
+    mock.onPut('/reptileService/v1/job/'+reptile.reptileId)
+    .reply(config => {
+        let {name, platform, type, timing} = JSON.parse(config.data)
+        if(name!=undefined && name!=''){
+            reptile.name = name
+        }
+        if(platform!=undefined && platform!=''){
+            reptile.platform = platform
+        }
+        if(type!=undefined && type!=''){
+            reptile.type = type
+        }
+        if(timing!=undefined && timing!=''){
+            reptile.timing = timing
+        }
+        return new Promise((resolve, reject) => {
+            resolve([200, reptile]);
+        })
     })
-})
+}
 for(let i=0; i<reptiles.length; i++){
     let reptile = reptiles[i]
     mock.onDelete('/reptileService/v1/job/'+reptile.reptileId)
@@ -208,16 +210,18 @@ mock.onPost('/api/jobMonitorController/showRange')
 //---------------------------------------------------------------
 mock.onGet('/dicService/v1/dics')
     .reply(config => {
-        let {code, name, valid, belongs} = JSON.parse(config.data)
+        let {name, code, type, belongs} = JSON.parse(config.data)
         return new Promise((resolve, reject) => {
             let newlist = sum_dic_list
-            if(code!=undefined && code!=""){
-                newlist = newlist.filter(dic => dic.code==code)
-            }
             if(name!=undefined && name!=""){
                 newlist = newlist.filter(dic => dic.name==name)
             }
-            newlist = newlist.filter(dic => dic.valid=='Y')
+            if(code!=undefined && code!=""){
+                newlist = newlist.filter(dic => dic.code==code)
+            }
+            if(type!=undefined && type!=""){
+                newlist = newlist.filter(dic => dic.type==type)
+            }
             if(belongs!=undefined && belongs!=""){
                 newlist = newlist.filter(dic => dic.belongs==belongs)
             }
@@ -269,13 +273,13 @@ mock.onGet('/dicService/v1/dics')
     })
 for(let i=0; i<sum_dic_list.length; i++){
     let sumDic = sum_dic_list[i]
-    mock.onDelete('/dicService/v1/dic/'+sumDic.id)
+    mock.onDelete('/dicService/v1/dic/'+sumDic.dic_id)
     .reply(() => {
         return new Promise((resolve, reject) => {
             let data = {
                 code: '200',
                 msg: '',
-                data: sumDic.id,
+                data: sumDic.dic_id,
             }
             resolve([200, data]);
         })
@@ -905,7 +909,7 @@ mock.onPut('/dicService/v1/dic')
 
 for(let i=0; i<sum_dic_list.length; i++){
     let dic = sum_dic_list[i]
-    mock.onGet('/dicService/v1/dic/'+dic.id)
+    mock.onGet('/dicService/v1/dic/'+dic.dic_id)
         .reply(config => {
             let data = {
                 code: '200',

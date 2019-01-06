@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const FIND_PRODUCTS = "/productService/v1/products";
+export const FIND_PRODUCTS = "product/findProducts";
 
 export const find_products = (list) => {
     return {

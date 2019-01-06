@@ -285,66 +285,54 @@ const output_range_year = {
  */
 const sum_dic_list = []
 const org_sum_dic_oracle = Mock.mock({
-    id: 1,
-    code: 'dic_type',
+    dic_id: Mock.Random.id(),
     name: '字典类型',
-    sort: 1,
-    createTime: "2018-09-09 12:34:44",
-    modifyTime: '2018-09-18 01:23:46',
-    creator: 'adan',
-    valid: 'Y',
-    dicType: 'dic_type',
-    dicTypeCN: '字典管理', 
+    code: 'dic_type',
+    type: 'testType',
+    updater: 'adan',
+    updateTime: '2019-01-05 00:00:00',
     belongs: '',
-    parentId: ''
+    source: '枚举',
 })
 const org_sum_dic_mysql = Mock.mock({
-    id: 2,
-    code: 'database_type',
+    dic_id: Mock.Random.id(),
     name: '数据库类型',
-    sort: 2,
-    createTime: "2018-09-09 12:34:44",
-    modifyTime: '2018-09-18 01:23:46',
-    creator: 'adan',
-    valid: 'Y',
+    code: 'database_type',
+    type: 'testType',
+    updater: 'adan',
+    updateTime: '2019-01-05 00:00:00',
     belongs: '',
-    parentId: ''
+    source: '枚举',
 })
 const org_sum_dic_sqlserver = Mock.mock({
-    id: 3,
-    code: 'valid',
+    dic_id: Mock.Random.id(),
     name: '有效性',
-    sort: 11,
-    createTime: "2018-09-09 12:34:44",
-    modifyTime: '2018-09-18 01:23:46',
-    creator: 'adan',
-    valid: 'Y',
+    code: 'valid',
+    type: 'testType',
+    updater: 'adan',
+    updateTime: '2019-01-05 00:00:00',
     belongs: '字典类型',
-    parentId: 1
+    source: '枚举',
 })
 const org_sum_dic_success_failed = Mock.mock({
-    id: 4,
-    code: 'Y',
+    dic_id: Mock.Random.id(),
     name: '有效',
-    sort: 111,
-    createTime: "2018-09-09 12:34:44",
-    modifyTime: '2018-09-18 01:23:46',
-    creator: 'adan',
-    valid: 'Y',
+    code: 'Y',
+    type: 'testType',
+    updater: 'adan',
+    updateTime: '2019-01-05 00:00:00',
     belongs: '有效性',
-    parentId: 3
+    source: '枚举',
 })
 const org_sum_dic_encoding = Mock.mock({
-    id: 5,
-    code: 'N',
+    dic_id: Mock.Random.id(),
     name: '无效',
-    sort: 112,
-    createTime: "2018-09-09 12:34:44",
-    modifyTime: '2018-09-18 01:23:46',
-    creator: 'adan',
-    valid: 'Y',
+    code: 'N',
+    type: 'testType',
+    updater: 'adan',
+    updateTime: '2019-01-05 00:00:00',
     belongs: '有效性',
-    parentId: 3
+    source: '枚举',
 })
 sum_dic_list.push(org_sum_dic_oracle)
 sum_dic_list.push(org_sum_dic_mysql)

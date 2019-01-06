@@ -1,27 +1,26 @@
 import axios from 'axios';
-import {message} from 'antd';
 
-export const FIND_JOBS = "/reptileService/v1/jobs";
+export const FIND_JOBS = "reptileJob/findJobs";
 //新增作业
 export const ADD_JOB_MODAL_SHOW = "reptileJob/addModalShow";
-export const ADD_JOB_MODAL_SURE = "/reptileService/v1/job";
+export const ADD_JOB_MODAL_SURE = "reptileJob/addModalSure";
 export const ADD_JOB_MODAL_CANCEL = "reptileJob/addModalCancel";
 
 //修改作业
 export const UPDATE_JOB_MODAL_SHOW = "reptileJob/updateModalShow";
-export const UPDATE_JOB_MODAL_SURE = "/reptileService/v1/job";
+export const UPDATE_JOB_MODAL_SURE = "reptileJob/updateModalSure";
 export const UPDATE_JOB_MODAL_CANCEL = "reptileJob/updateModalCancel";
 
 //删除作业
-export const DELETE_JOB_BY_IDS = "/reptileService/v1/job/{id}";
+export const DELETE_JOB_BY_IDS = "reptileJob/deleteJobByIds";
 
 //查看运行日志
 export const DISPLAY_LOG_SHOW = "reptileJob/displayLogShow";
 export const DISPLAY_LOG_CLOSE = "reptileJob/displayLogClose";
 
 //运行/停止
-export const STARTING_JOB = "/reptileService/v1/job/{id}/starting";
-export const PAUSE_JOB = "/reptileService/v1/job/{id}/pause";
+export const STARTING_JOB = "reptileJob/startingJob";
+export const PAUSE_JOB = "reptileJob/pauseJob";
 
 export const find_jobs = (list) => {
     return {
@@ -129,7 +128,7 @@ export const addJobModalSure = (job) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: ADD_JOB_MODAL_SURE,
+            url: '/reptileService/v1/job',
             data: job
         }).then((res) => {
             return res.data
@@ -151,11 +150,11 @@ export const updateJobModalShow = (id) => {
     }
 }
 
-export const updateJobModalSure = (job) => {
+export const updateJobModalSure = (job,reptileId) => {
     return (dispatch) => {
         axios({
             method: 'put',
-            url: UPDATE_JOB_MODAL_SURE,
+            url: '/reptileService/v1/job/'+reptileId,
             data: job
         }).then((res) => {
             return res.data

@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Button, Table, AutoComplete} from 'antd';
+import {Row, Col, Form, Input, Button, Table, Select} from 'antd';
 
 import {findProducts} from '../../redux/actions/product';
 import {connect} from 'react-redux';
 
 import './Product.css';
+
+const {Option} = Select
 
 class Product extends Component{
     constructor(props){
@@ -12,7 +14,7 @@ class Product extends Component{
 
         this.state = {
             name: '',
-            platform: '',
+            platform: undefined,
         }
     }
 
@@ -35,7 +37,7 @@ class Product extends Component{
     reset = () => {
         this.setState({
             name: '',
-            platform: '',
+            platform: undefined,
         })
 
         let reptile = {
@@ -87,30 +89,35 @@ class Product extends Component{
             dataIndex: 'updateTime',
             key: 'updateTime',
         }]; 
-        const platformData = ['京东','天猫','淘宝']
         return (
 
             <div className="ant-advanced-search-form" style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto", marginBottom:"15px"}}>
                 <Row>
                     <Form layout="vertical">
                         <Row gutter={24}>
-                            <Col span={5} key={1}>
+                            <Col key={1} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="产品 ">
                                     <Input placeholder="请输入产品" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
                                 </Form.Item>
                             </Col>
-                            <Col span={5} key={3}>
+                            <Col key={2} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="平台">
-                                    <AutoComplete
-                                        value={this.state.platform}
-                                        dataSource={platformData}
+                                    <Select
+                                        showSearch
                                         placeholder="请选择平台"
-                                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                                        notFoundContent="未匹配"
+                                        // optionFilterProp="children"
+                                        value={this.state.platform}
                                         onChange={(value) => this.changeValue(value, 'platform')}
-                                        />
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                    >
+                                        <Option value="京东">京东</Option>
+                                        <Option value="淘宝">淘宝</Option>
+                                        <Option value="天猫">天猫</Option>
+                                    </Select>
                                 </Form.Item>
                             </Col>
-                            <Col span={4} key={5} className="custom-sr-btn">
+                            <Col key={3} className="custom-sr-btn" style={{float: "left", width: "20%"}}>
                                 <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>

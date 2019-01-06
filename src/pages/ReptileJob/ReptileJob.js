@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Button, Table, Modal, Select, Icon, Divider, TreeSelect, AutoComplete } from 'antd';
+import {Row, Col, Form, Input, Button, Table, Modal, Select, Icon, Divider, TreeSelect, DatePicker } from 'antd';
 
 import {findJobs, 
     addJobModalShow, addJobModalSure, addJobModalCancel,
@@ -14,9 +14,7 @@ import './ReptileJob.css';
 
 const {TextArea} = Input
 const {Option} = Select
-
-const statusData = ['正在运行', '运行失败', '未开始运行'];
-const platformData = ['京东','天猫','淘宝']
+const {RangePicker} = DatePicker
 
 class ReptileJob extends Component{
     constructor(props){
@@ -26,7 +24,7 @@ class ReptileJob extends Component{
             selectRows: [],
             name: '',
             status: undefined,
-            platform: '',
+            platform: undefined,
             updateTime: '',
         }
     }
@@ -55,8 +53,8 @@ class ReptileJob extends Component{
         this.setState({
             selectRows: [],
             name: '',
-            status: '',
-            platform: '',
+            status: undefined,
+            platform: undefined,
             updateTime: '',
         })
 
@@ -144,33 +142,42 @@ class ReptileJob extends Component{
                             </Col>
                             <Col key={2} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="运行状态">
-                                        <Select
-                                            showSearch
-                                            placeholder="请选择运行状态"
-                                            // optionFilterProp="children"
-                                            value={this.state.status}
-                                            onChange={(value) => this.changeValue(value, 'status')}
-                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                        >
-                                            <Option value="未开始">未开始</Option>
-                                            <Option value="正在运行">正在运行</Option>
-                                            <Option value="已停止">已停止</Option>
-                                        </Select>
+                                    <Select
+                                        showSearch
+                                        placeholder="请选择运行状态"
+                                        notFoundContent="未匹配"
+                                        // optionFilterProp="children"
+                                        value={this.state.status}
+                                        onChange={(value) => this.changeValue(value, 'status')}
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                    >
+                                        <Option value="未开始">未开始</Option>
+                                        <Option value="正在运行">正在运行</Option>
+                                        <Option value="已停止">已停止</Option>
+                                    </Select>
                                 </Form.Item>
                             </Col>
                             <Col key={3} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="平台" >
-                                    <AutoComplete
-                                        value={this.state.platform}
-                                        dataSource={platformData}
+                                    <Select
+                                        showSearch
                                         placeholder="请选择平台"
-                                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-                                        onChange={(value) => this.changeValue(value, 'platform')}/>
+                                        notFoundContent="未匹配"
+                                        // optionFilterProp="children"
+                                        value={this.state.platform}
+                                        onChange={(value) => this.changeValue(value, 'platform')}
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                    >
+                                        <Option value="京东">京东</Option>
+                                        <Option value="淘宝">淘宝</Option>
+                                        <Option value="天猫">天猫</Option>
+                                    </Select>
                                 </Form.Item>
                             </Col>
                             <Col key={4} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="更新时间">
-                                    <Input placeholder="请输入更新时间" value={this.state.updateTime} onChange={(e) => this.change(e, 'updateTime')}/>
+                                    {/* <Input placeholder="请输入更新时间" value={this.state.updateTime} onChange={(e) => this.change(e, 'updateTime')}/> */}
+                                    <RangePicker placeholder={['开始日期', '结束日期']}/>
                                 </Form.Item>
                             </Col>
                             <Col key={5} className="custom-sr-btn" style={{float: "left", width: "20%"}}>
@@ -182,7 +189,7 @@ class ReptileJob extends Component{
                     </Form>
                 </Row>
                 <AddModal visible={this.props.reptileJob.addVisible} onOk={(job) => this.props.addJobModalSure(job)} onCancel={() => this.props.addJobModalCancel()} ></AddModal>
-                <UpdateModal visible={this.props.reptileJob.updateVisible} onOk={(job) => this.props.updateJobModalSure(job)} onCancel={() => this.props.updateJobModalCancel()} id={this.props.reptileJob.updateJobId} ></UpdateModal>
+                <UpdateModal visible={this.props.reptileJob.updateVisible} onOk={(job, reptileId) => this.props.updateJobModalSure(job, reptileId)} onCancel={() => this.props.updateJobModalCancel()} id={this.props.reptileJob.updateJobId} ></UpdateModal>
                 <LogModal visible={this.props.reptileJob.logVisible} onOk={() => this.props.displayLogClose()} onCancel={() => this.props.displayLogClose()} id={this.props.reptileJob.logJobId}></LogModal>
             </div>
         )
@@ -200,9 +207,9 @@ class AddModal extends Component{
         
         this.state = {
             name: '',
-            platform: '',
+            platform: undefined,
             type: '',
-            timing: '',
+            timing: undefined,
         }
     }
 
@@ -239,14 +246,20 @@ class AddModal extends Component{
                         <Input placeholder="作业名称" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
                     </Form.Item>
                     <Form.Item label="平台" {...formItemLayout}>
-                        {/* <Input placeholder="平台" value={this.state.platform} onChange={(e) => this.change(e, 'platform')}/> */}
-                        <AutoComplete
-                        style={{ width: '100%' }}
-                        value={this.state.platform}
-                        dataSource={platformData}
-                        placeholder="平台"
-                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-                        onChange={(value) => this.changeValue(value, 'platform')}/>
+                        <Select
+                            showSearch
+                            style={{ width: '100%' }}
+                            placeholder="平台"
+                            notFoundContent="未匹配"
+                            // optionFilterProp="children"
+                            value={this.state.platform}
+                            onChange={(value) => this.changeValue(value, 'platform')}
+                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        >
+                            <Option value="京东">京东</Option>
+                            <Option value="淘宝">淘宝</Option>
+                            <Option value="天猫">天猫</Option>
+                        </Select>
                     </Form.Item>
                     <Form.Item label="种类" {...formItemLayout}>
                         <TreeSelect
@@ -266,13 +279,19 @@ class AddModal extends Component{
                         </TreeSelect>
                     </Form.Item>
                     <Form.Item label="定时设置" {...formItemLayout}>
-                        <AutoComplete
-                        style={{ width: '100%' }}
-                        value={this.state.timing}
-                        dataSource={platformData}
-                        placeholder="定时设置"
-                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-                        onChange={(value) => this.changeValue(value, 'timing')}/>
+                        <Select
+                            showSearch
+                            style={{ width: '100%' }}
+                            placeholder="定时设置"
+                            notFoundContent="未匹配"
+                            // optionFilterProp="children"
+                            value={this.state.timing}
+                            onChange={(value) => this.changeValue(value, 'timing')}
+                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        >
+                            <Option value="2-3秒">2-3秒</Option>
+                            <Option value="5-10秒">5-10秒</Option>
+                        </Select>
                     </Form.Item>
                 </Form>
             </Modal>
@@ -288,9 +307,9 @@ class UpdateModal extends Component{
         this.state = {
             reptileId: '',
             name: '',
-            platform: '',
+            platform: undefined,
             type: '',
-            timing: '',
+            timing: undefined,
         }
     }
 
@@ -332,14 +351,13 @@ class UpdateModal extends Component{
 
     ok = () => {
         let job = {
-            reptileId: this.state.reptileId,
             name: this.state.name,
             platform: this.state.platform,
             type: this.state.type,
             timing: this.state.timing
         }
-
-        this.props.onOk(job)
+        let reptileId = this.state.reptileId
+        this.props.onOk(job, reptileId)
     }
 
     render(){                 
@@ -358,31 +376,52 @@ class UpdateModal extends Component{
                     <Input placeholder="作业名称" onChange={(e) => this.change(e, 'name')} value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="平台" {...formItemLayout}>
-                    <AutoComplete
+                    <Select
+                        showSearch
                         style={{ width: '100%' }}
-                        value={this.state.platform}
-                        dataSource={platformData}
                         placeholder="平台"
-                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-                        onChange={(value) => this.changeValue(value, 'platform')}/>
+                        notFoundContent="未匹配"
+                        // optionFilterProp="children"
+                        value={this.state.platform}
+                        onChange={(value) => this.changeValue(value, 'platform')}
+                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    >
+                        <Option value="京东">京东</Option>
+                        <Option value="淘宝">淘宝</Option>
+                        <Option value="天猫">天猫</Option>
+                    </Select>
                 </Form.Item>
                 <Form.Item label="种类" {...formItemLayout}>
-                    <AutoComplete
+                    <TreeSelect
+                        showSearch
                         style={{ width: '100%' }}
                         value={this.state.type}
-                        dataSource={platformData}
+                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                         placeholder="种类"
-                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-                        onChange={(value) => this.changeValue(value, 'type')}/>
+                        allowClear
+                        treeDefaultExpandAll
+                        onChange={(value) => this.changeValue(value, 'type')}
+                    >
+                        <TreeSelect.TreeNode value="电子产品" title="电子产品" key="1">
+                            <TreeSelect.TreeNode value="电脑" title="电脑" key="2" />
+                            <TreeSelect.TreeNode value="手机" title="手机" key="3" />
+                        </TreeSelect.TreeNode>
+                    </TreeSelect>
                 </Form.Item>
                 <Form.Item label="定时设置" {...formItemLayout}>
-                    <AutoComplete
+                    <Select
+                        showSearch
                         style={{ width: '100%' }}
-                        value={this.state.timing}
-                        dataSource={platformData}
                         placeholder="定时设置"
-                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-                        onChange={(value) => this.changeValue(value, 'timing')}/>
+                        notFoundContent="未匹配"
+                        // optionFilterProp="children"
+                        value={this.state.timing}
+                        onChange={(value) => this.changeValue(value, 'timing')}
+                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    >
+                        <Option value="2-3秒">2-3秒</Option>
+                        <Option value="5-10秒">5-10秒</Option>
+                    </Select>
                 </Form.Item>
             </Modal>
         )
@@ -430,7 +469,6 @@ class LogModal extends Component{
             })
     }
     render(){
-        const logType = ['基础日志','行日志','最详细日志'];
         return (
             <Modal
                 title="运行日志"
@@ -444,14 +482,20 @@ class LogModal extends Component{
                     <Input readOnly placeholder="作业名称" value={this.state.name}/>
                 </Form.Item>
                 <Form.Item label="日志类别">
-                    {/* <Input readOnly placeholder="日志类别" value={this.state.name}/> */}
-                    <AutoComplete
+                    <Select
+                        showSearch
                         style={{ width: '100%' }}
-                        value={this.state.logType}
-                        dataSource={logType}
                         placeholder="日志类别"
-                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-                        onChange={(value) => this.changeValue(value, 'logType')}/>
+                        notFoundContent="未匹配"
+                        // optionFilterProp="children"
+                        value={this.state.logType}
+                        onChange={(value) => this.changeValue(value, 'logType')}
+                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    >
+                        <Option value="基础日志">基础日志</Option>
+                        <Option value="行日志">行日志</Option>
+                        <Option value="最详细日志">最详细日志</Option>
+                    </Select>
                 </Form.Item>
                 <Form.Item label="日志内容">
                     <TextArea readOnly autosize={{minRows: 8, maxRows: 8}} placeholder="日志内容" value={this.state.logs}/>

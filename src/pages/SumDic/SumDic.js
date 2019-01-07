@@ -199,7 +199,7 @@ class SumDic extends Component{
                     </Form>
                 </Row>
                 <AddModal visible={this.props.sumDic.addModalVisible} ok={(dic)=>this.props.addModalSure(dic)} cancel={()=>this.props.addModalCancel()}></AddModal>
-                <UpdateModal visible={this.props.sumDic.updateModalVisible} id={this.props.sumDic.updateId} ok={(dic)=>this.props.updateModalSure(dic)} cancel={()=>this.props.updateModalCancel()}></UpdateModal>
+                <UpdateModal visible={this.props.sumDic.updateModalVisible} id={this.props.sumDic.updateId} ok={(dicReqVO,dic_id)=>this.props.updateModalSure(dicReqVO,dic_id)} cancel={()=>this.props.updateModalCancel()}></UpdateModal>
                 <DetailsModal visible={this.props.sumDic.detailsModalVisible} ok={(dic)=>this.props.detailsModalSure(dic)} cancel={()=>this.props.detailsModalCancel()} data={this.props.sumDic.dicTree}></DetailsModal>
             </div>
         )
@@ -409,13 +409,13 @@ class UpdateModal extends Component{
     }
 
     ok = () => {
-        let dic = {
-            id: this.state.id,
+        let dicReqVO = {
             name: this.state.name,
             code: this.state.code,
             belongs: this.state.belongsSwitch?this.state.belongs:''
         }
-        this.props.ok(dic)
+        let dic_id = this.state.dic_id;
+        this.props.ok(dicReqVO, dic_id)
 
     }
 

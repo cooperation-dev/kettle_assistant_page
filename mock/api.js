@@ -13,7 +13,7 @@ import {reptiles, products, Jobs, job_monitor_analysis,
 
 const mock = new MockAdapter(axios);
 
-//爬虫接口
+//爬虫
 mock.onGet('/reptileService/v1/jobs')
 .reply(config => {
     let { name, status, platform, updateTime} = JSON.parse(config.data)
@@ -104,7 +104,7 @@ for(let i=0; i<reptiles.length; i++){
     })
 }
 //-------------------------------------------------------------------
-//产品页面接口
+//产品页面
 mock.onGet('/productService/v1/products')
 .reply(config => {
     let { name, platform} = JSON.parse(config.data)
@@ -120,6 +120,7 @@ mock.onGet('/productService/v1/products')
     })
 })
 //-------------------------------------------------------------------
+//作业管理
 mock.onPost('/api/jobManagerController/findJobs')
     .reply(config => {
         let {id, name, description, jobType, state, creator} = JSON.parse(config.data)
@@ -148,7 +149,8 @@ mock.onPost('/api/jobManagerController/findJobs')
             }, 500);
         })
     })
-
+//------------------------------------------------------------------------
+//作业监控
 mock.onPost('/api/jobMonitorController/loadData')
     .reply('200', job_monitor_analysis)
 
@@ -208,6 +210,7 @@ mock.onPost('/api/jobMonitorController/showRange')
         })
     })
 //---------------------------------------------------------------
+//字典管理
 mock.onGet('/dicService/v1/dics')
     .reply(config => {
         let {name, code, type, belongs} = JSON.parse(config.data)
@@ -285,6 +288,74 @@ for(let i=0; i<sum_dic_list.length; i++){
         })
     })
 }
+for(let i = 0; i < sum_dic_list.length; i++){
+    let dicRespVo = sum_dic_list[i];
+    mock.onPut('/dicService/v1/dic/'+dicRespVo.dic_id)
+    .reply(config => {
+        let {name, code, belongs} = JSON.parse(config.data)
+        return new Promise((resolve, reject) => {
+            if(name!=undefined){
+                dicRespVo.name = name
+            }
+            if(code!=undefined){
+                dicRespVo.code = code
+            }
+            if(belongs!=undefined){
+                if(belongs != ""){
+                    //中文
+                    let belongsCN = sum_dic_list.filter(ele => ele.code==belongs)[0].name
+                    dicRespVo.belongs = belongsCN
+                }else{
+                    dicRespVo.belongs = ''
+                }
+            }
+            
+            let data = {
+                code: '200',
+                msg: '',
+                data: dicRespVo
+            }
+
+            setTimeout(() => {
+                resolve([200, data]);
+            }, 500);
+
+        })
+    })
+}
+for(let i=0; i<sum_dic_list.length; i++){
+    let dic = sum_dic_list[i]
+    mock.onGet('/dicService/v1/dic/'+dic.dic_id)
+        .reply(config => {
+            let data = {
+                code: '200',
+                msg: '',
+                data: dic
+            }
+            
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, data]);
+                }, 500);
+
+            })
+        })
+}
+mock.onGet('/api/sumDicController/findDicTree')
+    .reply(config => {
+        return new Promise((resolve, reject) => {
+
+            let data = {
+                code: '200',
+                msg: '',
+                data: dic_tree
+            }
+
+            setTimeout(() => {
+                resolve([200, data]);
+            }, 500);
+        })
+    })
 mock.onPost('/api/sumDicController/changeDisabled')
     .reply(config => {
         let row = JSON.parse(config.data)
@@ -302,7 +373,7 @@ mock.onPost('/api/sumDicController/changeDisabled')
             }, 500);
         })
     })
-
+//-----------------------------------------------------------------
     mock.onPost('databaseManager/addDatabasetSure')
     .reply(config => {
         let {name, sort, agencyName, valid, agencyCode, dbType, interviewMethod, jndiName, connectionString} = JSON.parse(config.data)
@@ -524,39 +595,6 @@ mock.onPost('systemLog/findLogs', {
     details: '',
     create_time: ''
 }).reply('200', data_system_log)
-
-mock.onPost('/api/systemLogController/findLogs')
-    .reply(config => {
-        let {operator, logType, operateIp, details, createTime} = JSON.parse(config.data)
-        return new Promise((resolve, reject) => {
-            let newlog = data_system_log
-            if(operator!=undefined && operator!=""){
-                newlog = newlog.filter(log => log.operator==operator)
-            }
-            if(logType!=undefined && logType!=""){
-                newlog = newlog.filter(log => log.logType==logType)
-            }
-            if(operateIp!=undefined && operateIp!=""){
-                newlog = newlog.filter(log => log.operateIp==operateIp)
-            }
-            if(details!=undefined && details!=""){
-                newlog = newlog.filter(log => log.details==details)
-            }
-            if(createTime!=undefined && createTime!=""){
-                newlog = newlog.filter(log => log.createTime==createTime)
-            }
-
-            let data = {
-                code: "200",
-                msg: '',
-                data: newlog
-            }
-
-            setTimeout(() => {
-                resolve([200, data]);
-            }, 500);
-        })
-    })
 
 mock.onPost('roleManager/addRoleSure')
 .reply(config => {
@@ -872,72 +910,34 @@ mock.onPost('/api/jobManagerController/updateJob')
             }, 500);
         })
     })
+//-------------------------------------------------------------
+//系统日志
+mock.onPost('/systemlogService/v1/logs')
+.reply(config => {
+    let {operator, type, operateIp, recordTime} = JSON.parse(config.data)
+    return new Promise((resolve, reject) => {
+        let PageVO = data_system_log
+        if(operator!=undefined && operator!=""){
+            PageVO = PageVO.filter(log => log.operator==operator)
+        }
+        if(type!=undefined && type!=""){
+            PageVO = PageVO.filter(log => log.type==type)
+        }
+        if(operateIp!=undefined && operateIp!=""){
+            PageVO = PageVO.filter(log => log.operateIp==operateIp)
+        }
+        if(recordTime!=undefined && recordTime!=""){
+            PageVO = PageVO.filter(log => log.recordTime==recordTime)
+        }
 
-mock.onPut('/dicService/v1/dic')
-    .reply(config => {
-        let {id, name, code, belongs} = JSON.parse(config.data)
-        return new Promise((resolve, reject) => {
-            let newdic = sum_dic_list.filter(dic => dic.id==id)[0]
-            if(name!=undefined){
-                newdic.name = name
-            }
-            if(code!=undefined){
-                newdic.code = code
-            }
-            if(belongs!=undefined){
-                if(belongs != ""){
-                    //中文
-                    let belongsCN = sum_dic_list.filter(ele => ele.code==belongs)[0].name
-                    newdic.belongs = belongsCN
-                }else{
-                    newdic.belongs = ''
-                }
-            }
-            
-            let data = {
-                code: '200',
-                msg: '',
-                data: newdic
-            }
+        let data = {
+            code: "200",
+            msg: '',
+            data: PageVO
+        }
 
-            setTimeout(() => {
-                resolve([200, data]);
-            }, 500);
-
-        })
+        setTimeout(() => {
+            resolve([200, data]);
+        }, 500);
     })
-
-for(let i=0; i<sum_dic_list.length; i++){
-    let dic = sum_dic_list[i]
-    mock.onGet('/dicService/v1/dic/'+dic.dic_id)
-        .reply(config => {
-            let data = {
-                code: '200',
-                msg: '',
-                data: dic
-            }
-            
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve([200, data]);
-                }, 500);
-
-            })
-        })
-}
-
-mock.onGet('/api/sumDicController/findDicTree')
-    .reply(config => {
-        return new Promise((resolve, reject) => {
-
-            let data = {
-                code: '200',
-                msg: '',
-                data: dic_tree
-            }
-
-            setTimeout(() => {
-                resolve([200, data]);
-            }, 500);
-        })
-    })
+})

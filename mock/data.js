@@ -369,12 +369,12 @@ const data_system_log = []
 for(let i=0; i<=10; i++){
     data_system_log.push(Mock.mock({
         // key: i+1,
-        id: i+1,
-        "operateUser|1": ['adan', "zhangsan", "lisi", "wangwu"],
-        "logType|1": ['普通日志', '登陆日志', '系统日志'],
+        system_log_id: Mock.Random.id(),
+        "operator|1": ['adan', "zhangsan", "lisi", "wangwu"],
+        "type|1": ['普通日志', '登陆日志', '系统日志'],
         "operateIp|1": ['122.334.43.123', '124.56.46.35', '23.142.34.14', '32.142.134.1'],
+        recordTime: '2018-11-05 00:00:00',
         "details": Mock.Random.string(20),
-        createTime: '2018-11-05 00:00:00'
     }))
 }
 

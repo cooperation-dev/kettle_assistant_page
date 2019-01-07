@@ -3,19 +3,19 @@ import {message} from 'antd';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //渲染字典列表
-export const SHOW_LIST = "/dicService/v1/dics"
+export const SHOW_LIST = "sumDic/showList"
 //新增窗口
 export const ADD_MODAL_SHOW = "sumDic/addModalShow"
-export const ADD_MODAL_SURE = "/dicService/v1/dic"
+export const ADD_MODAL_SURE = "sumDic/addModalSure"
 export const ADD_MODAL_CANCEL = "sumDic/addModalCancel"
 
 //修改窗口
 export const UPDATE_MODAL_SHOW = "sumDic/updateModalShow"
-export const UPADTE_MODAL_SURE = "/dicService/v1/dic"
+export const UPADTE_MODAL_SURE = "sumDic/updateModalSure"
 export const UPDATE_MODAL_CANCEL = "sumDic/updateModalCancel"
 
 //删除行
-export const DELETE_DIC_BY_IDS = "/dicService/v1/dic/{id}"
+export const DELETE_DIC_BY_IDS = "sumDic/deleteByIds"
 export const CHANGE_DISABLED = "sumDic/changeDisabled";
 
 //显示细节窗口
@@ -41,10 +41,10 @@ export const add_modal_show = () => {
     }
 }
 
-export const add_modal_sure = (dic) => {
+export const add_modal_sure = (data) => {
     return {
         type: ADD_MODAL_SURE,
-        dic: dic
+        dic: data
     }
 }
 
@@ -107,12 +107,12 @@ export const details_modal_cancel = () => {
     }
 }
 
-export const showList = (dic) => {
+export const showList = (dicReqVO) => {
     return (dispatch) => {
         axios({
             method: 'get',
             url: '/dicService/v1/dics',
-            data: dic
+            data: dicReqVO
         }).then((r) => {
             return r.data.data
         }).then((data) => {
@@ -127,14 +127,14 @@ export const addModalShow = () => {
     }
 }
 
-export const addModalSure = (dic) => {
+export const addModalSure = (dicReqVO) => {
     return (dispatch) => {
         axios({
             method: 'post',
             url: '/dicService/v1/dic',
-            data: dic
-        }).then(r => {return r.data.data})
-            .then(dic => dispatch(add_modal_sure(dic)))
+            data: dicReqVO
+        }).then(response => {return response.data.data})
+            .then(data => dispatch(add_modal_sure(data)))
 
     }
 }
@@ -151,12 +151,12 @@ export const updateModalShow = (id) => {
     }
 }
 
-export const updateModalSure = (dic) => {
+export const updateModalSure = (dicReqVO, dic_id) => {
     return (dispatch) => {
         axios({
             method: 'put',
-            url: '/dicService/v1/dic',
-            data: dic
+            url: '/dicService/v1/dic/'+dic_id,
+            data: dicReqVO
         }).then((response) => {
             return response.data.data
         }).then((data) => {

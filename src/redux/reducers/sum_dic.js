@@ -58,7 +58,7 @@ export default function reducers(state=initState, action){
         case UPADTE_MODAL_SURE: {
             let dic = action.dic
             let newlist = state.list.map(ele => {
-                if(ele.id == dic.id)
+                if(ele.dic_id == dic.dic_id)
                     return dic
                 else
                     return ele

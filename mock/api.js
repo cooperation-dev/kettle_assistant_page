@@ -213,28 +213,34 @@ mock.onPost('/api/jobMonitorController/showRange')
 //字典管理
 mock.onGet('/dicService/v1/dics')
     .reply(config => {
-        let {name, code, type, belongs} = JSON.parse(config.data)
+        let {pageSize, pageNo, data} = JSON.parse(config.data)
+        let {name, code, type, belongs} = JSON.parse(JSON.stringify(data))
         return new Promise((resolve, reject) => {
-            let newlist = sum_dic_list
+            let DicRespVO = sum_dic_list
             if(name!=undefined && name!=""){
-                newlist = newlist.filter(dic => dic.name==name)
+                DicRespVO = DicRespVO.filter(dic => dic.name==name)
             }
             if(code!=undefined && code!=""){
-                newlist = newlist.filter(dic => dic.code==code)
+                DicRespVO = DicRespVO.filter(dic => dic.code==code)
             }
             if(type!=undefined && type!=""){
-                newlist = newlist.filter(dic => dic.type==type)
+                DicRespVO = DicRespVO.filter(dic => dic.type==type)
             }
             if(belongs!=undefined && belongs!=""){
-                newlist = newlist.filter(dic => dic.belongs==belongs)
+                DicRespVO = DicRespVO.filter(dic => dic.belongs==belongs)
             }
 
+            let pageVo = {
+                total: sum_dic_list.length,
+                pageNo: pageNo,
+                pageSize: pageSize,
+                data: DicRespVO,
+            }
             let data = {
                 code: '200',
                 msg: '',
-                data: newlist
+                data: pageVo
             }
-
             setTimeout(() => {
                 resolve([200, data]);
             }, 500);
@@ -251,7 +257,7 @@ mock.onGet('/dicService/v1/dics')
         }
         let maxId = sum_dic_list[sum_dic_list.length-1].id+1
         return new Promise((resolve, reject) => {
-            let newdic = {
+            let dicRespVO = {
                 id: maxId,
                 code: code,
                 name: name,
@@ -266,9 +272,8 @@ mock.onGet('/dicService/v1/dics')
             let data = {
                 code: '200',
                 msg: '',
-                data: newdic
+                data: dicRespVO
             }
-
             setTimeout(() => {
                 resolve([200, data]);
             }, 500);
@@ -324,15 +329,14 @@ for(let i = 0; i < sum_dic_list.length; i++){
     })
 }
 for(let i=0; i<sum_dic_list.length; i++){
-    let dic = sum_dic_list[i]
-    mock.onGet('/dicService/v1/dic/'+dic.dic_id)
+    let dicRespVO = sum_dic_list[i]
+    mock.onGet('/dicService/v1/dic/'+dicRespVO.dic_id)
         .reply(config => {
             let data = {
                 code: '200',
                 msg: '',
-                data: dic
+                data: dicRespVO
             }
-            
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     resolve([200, data]);
@@ -914,28 +918,34 @@ mock.onPost('/api/jobManagerController/updateJob')
 //系统日志
 mock.onPost('/systemlogService/v1/logs')
 .reply(config => {
-    let {operator, type, operateIp, recordTime} = JSON.parse(config.data)
+    let {pageSize, pageNo, data} = JSON.parse(config.data);
+    let {operator, type, operateIp, recordTime} = JSON.parse(JSON.stringify(data));
     return new Promise((resolve, reject) => {
-        let PageVO = data_system_log
+        let SystemLogRespVO = data_system_log
         if(operator!=undefined && operator!=""){
-            PageVO = PageVO.filter(log => log.operator==operator)
+            SystemLogRespVO = SystemLogRespVO.filter(log => log.operator==operator)
         }
         if(type!=undefined && type!=""){
-            PageVO = PageVO.filter(log => log.type==type)
+            SystemLogRespVO = SystemLogRespVO.filter(log => log.type==type)
         }
         if(operateIp!=undefined && operateIp!=""){
-            PageVO = PageVO.filter(log => log.operateIp==operateIp)
+            SystemLogRespVO = SystemLogRespVO.filter(log => log.operateIp==operateIp)
         }
         if(recordTime!=undefined && recordTime!=""){
-            PageVO = PageVO.filter(log => log.recordTime==recordTime)
+            SystemLogRespVO = SystemLogRespVO.filter(log => log.recordTime==recordTime)
         }
 
+        let pageVO = {
+            total: data_system_log.length,
+            pageNo: pageNo,
+            pageSize: pageSize,
+            data: SystemLogRespVO
+        }
         let data = {
             code: "200",
             msg: '',
-            data: PageVO
+            data: pageVO
         }
-
         setTimeout(() => {
             resolve([200, data]);
         }, 500);

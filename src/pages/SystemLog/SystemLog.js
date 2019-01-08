@@ -41,17 +41,16 @@ class SystemLog extends Component{
     }
 
     componentDidMount = () => {
-        let systemLogReqVO = {
+        let systemLog = {
             operator: this.state.operator,
             type: this.state.type,
             operateIp: this.state.operateIp,
             recordTime: this.state.recordTime,
-
         }
-        let log = {
+        let systemLogReqVO = {
             pageSize: this.props.systemLog.pageSize,
             pageNo: this.props.systemLog.pageNo,
-            data: systemLogReqVO
+            data: systemLog
         }
         this.props.findLogs(systemLogReqVO)
     }
@@ -62,18 +61,18 @@ class SystemLog extends Component{
         this.setState(newState);
     }
 
-    findLog = () => {
-        let systemLogReqVO = {
+    search = () => {
+        let systemLog = {
             operator: this.state.operator,
             type: this.state.type,
             operateIp: this.state.operateIp,
             recordTime: this.state.recordTime,
 
         }
-        let log = {
+        let systemLogReqVO = {
             pageSize: this.props.systemLog.pageSize,
             pageNo: 1,
-            data: systemLogReqVO
+            data: systemLog
         }
         this.props.findLogs(systemLogReqVO)
     }
@@ -86,37 +85,35 @@ class SystemLog extends Component{
             recordTime: '',
         })
 
-        let data = {
+        let systemLog = {
             operator: '',
             type: '',
             operateIp: '',
             recordTime: '',
         }
 
-        let log = {
+        let systemLogReqVO = {
             pageSize: this.props.systemLog.pageSize,
             pageNo: 1,
-            data: data
+            data: systemLog
         }
-        this.props.findLogs(log)
+        this.props.findLogs(systemLogReqVO)
 
     }
     
     changePagination = (page) => {
-        let data = {
-            operateUser: this.state.operateUser,
-            logType: this.state.logType,
+        let systemLog = {
+            operator: this.state.operator,
+            type: this.state.type,
             operateIp: this.state.operateIp,
-            details: this.state.details,
-            createTime: this.state.createTime
-
+            recordTime: this.state.recordTime,
         }
-        let log = {
+        let systemLogReqVO = {
             pageSize: this.props.systemLog.pageSize,
             pageNo: page,
-            data: data
+            data: systemLog
         }
-        this.props.findLogs(log)
+        this.props.findLogs(systemLogReqVO)
     }
 
     render(){
@@ -128,7 +125,6 @@ class SystemLog extends Component{
                 this.changePagination(page)
             }
         }
-
         return (
             <div className="ant-advanced-search-form" style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto", marginBottom:"15px"}}>
                 <Row>
@@ -155,11 +151,11 @@ class SystemLog extends Component{
                                 </Form.Item>
                             </Col>
                             <Col key={5} className="custom-sr-btn" style={{float: "left", width: "20%"}}>
-                                <Button type="primary" htmlType="submit" onClick={this.findLog}>查询</Button>
+                                <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                        <Table rowKey={(record) => record.system_log_id} columns={columns} dataSource={this.props.systemLog.list}/>
+                        <Table rowKey={(record) => record.system_log_id} columns={columns} dataSource={this.props.systemLog.list} pagination={pagination}/>
                     </Form>
                 </Row>
             </div>

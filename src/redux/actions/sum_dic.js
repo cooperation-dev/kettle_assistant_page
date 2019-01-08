@@ -28,7 +28,7 @@ export const DETAILS_MODAL_CANCEL = "sumDic/detailsModalCancel"
 export const show_list = (data) => {
     return {
         type: SHOW_LIST,
-        list: data,
+        list: data.data,
         pageNo: data.pageNo,
         pageSize: data.pageSize,
         total: data.total
@@ -113,8 +113,8 @@ export const showList = (dicReqVO) => {
             method: 'get',
             url: '/dicService/v1/dics',
             data: dicReqVO
-        }).then((r) => {
-            return r.data.data
+        }).then((response) => {
+            return response.data.data
         }).then((data) => {
             dispatch(show_list(data))
         })

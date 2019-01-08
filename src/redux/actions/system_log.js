@@ -5,7 +5,7 @@ export const FIND_LOGS = "systemLog/findLogs";
 export const find_logs = (data) => {
     return {
         type: FIND_LOGS, 
-        list: data,
+        list: data.data,
         pageNo: data.pageNo,
         pageSize: data.pageSize,
         total: data.total

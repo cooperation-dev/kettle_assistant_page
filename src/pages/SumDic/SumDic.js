@@ -49,12 +49,12 @@ class SumDic extends Component{
             belongs: this.state.belongs,
         }
         
-        let data = {
+        let dicReqVO = {
             pageNo: this.props.sumDic.pageNo,
             pageSize: this.props.sumDic.pageSize,
             data: dic
         }
-        this.props.showList(dic)
+        this.props.showList(dicReqVO)
     }
 
     reset = () => {
@@ -64,7 +64,7 @@ class SumDic extends Component{
             type: '',
             belongs: '',
         }
-        let data = {
+        let dicReqVO = {
             pageNo: 1,
             pageSize: this.props.sumDic.pageSize,
             data: dic
@@ -77,7 +77,7 @@ class SumDic extends Component{
             belongs: '',
         })
 
-        this.props.showList(data)
+        this.props.showList(dicReqVO)
     }
 
     changePagination = (page) => {
@@ -87,12 +87,12 @@ class SumDic extends Component{
             type: this.state.type,
             belongs: this.state.belongs,
         }
-        let data = {
+        let dicReqVO = {
             pageSize: this.props.sumDic.pageSize,
             pageNo: page,
             data: dic
         }
-        this.props.showList(data)
+        this.props.showList(dicReqVO)
     }
 
     render(){
@@ -260,34 +260,28 @@ class AddModal extends Component{
             belongs: e
         })
     }
-
     ok = () => {
-        let dic = {
+        let dicReqVO = {
             name: this.state.name,
             code: this.state.code,
             dicType: this.state.dicTypeSwitch?this.state.dicType_select:'',
             belongs: this.state.belongs
         }
-        this.props.ok(dic)
+        this.props.ok(dicReqVO)
 
         this.setState({
             name: '',
             code: ''
         })
     }
-
     cancel = () => {
         this.props.cancel()
-
         this.setState({
             name: '',
             code: ''
         })
     }
-
     render(){
-        
-
         return (
             <Modal
                 title="新增字典"
@@ -296,34 +290,30 @@ class AddModal extends Component{
                 onCancel={this.cancel}
                 okText="确认"
                 cancelText="取消"
-                destroyOnClose={true} 
-            >
+                destroyOnClose={true}>
                 <Form.Item label="字典名称">
                     <Input placeholder="字典名称" value={this.state.name} onChange={this.changeDicName}/>
                 </Form.Item>
                 <Form.Item label="字典代码">
                     <Input placeholder="字典代码" value={this.state.code} onChange={this.changeDicCode}/>
                 </Form.Item>
-
                 <Row>
                     <Form.Item label="所属对象" >
                         <Col span={4}>
                             <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
                         </Col>
                         <Col span={12} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
-                                <TreeSelect
-                                    style={{ width: 300 }}
-                                    value={this.state.belongs}
-                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                    treeData={this.state.dicTypes}
-                                    placeholder="Please select"
-                                    treeDefaultExpandAll
-                                    onChange={this.changeBelongs}
-                                />
+                            <TreeSelect
+                                style={{ width: 300 }}
+                                value={this.state.belongs}
+                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                treeData={this.state.dicTypes}
+                                placeholder="Please select"
+                                treeDefaultExpandAll
+                                onChange={this.changeBelongs}/>
                         </Col>
                     </Form.Item>
                 </Row>
-                
             </Modal>
         )
     }
@@ -369,8 +359,8 @@ class UpdateModal extends Component{
 
     findDicById = (id) => {
         axios.get('/dicService/v1/dic/'+id)
-            .then(r => {
-                let data = r.data.data
+            .then(response => {
+                let data = response.data.data
                 let belongsSwitch = data.belongs==undefined||data.belongs==""
                 this.setState({
                     dic_id: data.dic_id,

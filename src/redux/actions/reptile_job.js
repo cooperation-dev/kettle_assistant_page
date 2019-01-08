@@ -22,10 +22,13 @@ export const DISPLAY_LOG_CLOSE = "reptileJob/displayLogClose";
 export const STARTING_JOB = "reptileJob/startingJob";
 export const PAUSE_JOB = "reptileJob/pauseJob";
 
-export const find_jobs = (list) => {
+export const find_jobs = (reptileRespVO) => {
     return {
         type: FIND_JOBS,
-        list: list
+        list: reptileRespVO.data,
+        pageNo: reptileRespVO.pageNo,
+        pageSize: reptileRespVO.pageSize,
+        total: reptileRespVO.total
     }
 }
 
@@ -35,10 +38,10 @@ export const add_job_modal_show = () => {
     }
 }
 
-export const add_job_modal_sure = (job) => {
+export const add_job_modal_sure = (reptileRespVO) => {
     return {
         type: ADD_JOB_MODAL_SURE,
-        job: job
+        reptileRespVO: reptileRespVO
     }
 }
 
@@ -55,10 +58,10 @@ export const update_job_modal_show = (id) => {
     }
 }
 
-export const update_job_modal_sure = (job) => {
+export const update_job_modal_sure = (reptileRespVO) => {
     return {
         type: UPDATE_JOB_MODAL_SURE,
-        job: job
+        reptileRespVO: reptileRespVO
     }
 }
 
@@ -81,38 +84,37 @@ export const display_log_close = () => {
     }
 }
 
-export const delete_job_by_ids = (reptileJob) => {
+export const delete_job_by_ids = (reptileId) => {
     return {
         type: DELETE_JOB_BY_IDS,
-        reptileJob: reptileJob
+        reptileId: reptileId
     }
 }
 
-export const starting_job = (reptileJob) => {
+export const starting_job = (reptileRespVO) => {
     return {
         type: STARTING_JOB,
-        reptileJob: reptileJob
+        reptileRespVO: reptileRespVO
     }
 }
 
-export const pause_job = (reptileJob) => {
+export const pause_job = (reptileRespVO) => {
     return {
         type: PAUSE_JOB,
-        reptileJob: reptileJob
+        reptileRespVO: reptileRespVO
     }
 }
 
-export const findJobs = (job) => {
+export const findJobs = (reptileReqVO) => {
     return (dispatch) => {
         axios({
             method: 'get',
             url: '/reptileService/v1/jobs',
-            data: job
+            data: reptileReqVO
         }).then((response) => {
-            return response.data
-        })
-        .then((list) => {
-            dispatch(find_jobs(list))
+            return response.data.data
+        }).then((reptileRespVO) => {
+            dispatch(find_jobs(reptileRespVO))
         }) 
     }
 }
@@ -124,16 +126,16 @@ export const addJobModalShow = () => {
     }
 }
 
-export const addJobModalSure = (job) => {
+export const addJobModalSure = (reptileReqVO) => {
     return (dispatch) => {
         axios({
             method: 'post',
             url: '/reptileService/v1/job',
-            data: job
+            data: reptileReqVO
         }).then((res) => {
-            return res.data
-        }).then((job) => {
-            dispatch(add_job_modal_sure(job))
+            return res.data.data
+        }).then((reptileRespVO) => {
+            dispatch(add_job_modal_sure(reptileRespVO))
         })
     }
 }
@@ -156,10 +158,10 @@ export const updateJobModalSure = (job,reptileId) => {
             method: 'put',
             url: '/reptileService/v1/job/'+reptileId,
             data: job
-        }).then((res) => {
-            return res.data
-        }).then((job) => {
-            dispatch(update_job_modal_sure(job))
+        }).then((response) => {
+            return response.data.data
+        }).then((reptileRespVO) => {
+            dispatch(update_job_modal_sure(reptileRespVO))
         })
     }
 }
@@ -176,9 +178,9 @@ export const deleteJob = (reptileId) => {
                 method: 'delete',
                 url: '/reptileService/v1/job/'+reptileId,
             }).then((response) => {
-                return response.data
-            }).then((reptileJob) => {
-                dispatch(delete_job_by_ids(reptileJob))
+                return response.data.data
+            }).then((reptileId) => {
+                dispatch(delete_job_by_ids(reptileId))
             })
     }
 }
@@ -201,9 +203,9 @@ export const startingJob = (reptileId) => {
             method: 'post',
             url: '/reptileService/v1/job/'+reptileId+'/starting',
         }).then((response) => {
-            return response.data
-        }).then((reptileJob) => {
-            dispatch(starting_job(reptileJob))
+            return response.data.data
+        }).then((reptileRespVO) => {
+            dispatch(starting_job(reptileRespVO))
         })
     }
 }
@@ -214,9 +216,9 @@ export const pauseJob = (reptileId) => {
             method: 'post',
             url: '/reptileService/v1/job/'+reptileId+'/pause',
         }).then((response) => {
-            return response.data
-        }).then((reptileJob) => {
-            dispatch(pause_job(reptileJob))
+            return response.data.data
+        }).then((reptileRespVO) => {
+            dispatch(pause_job(reptileRespVO))
         })
     }
 }

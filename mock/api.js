@@ -16,29 +16,42 @@ const mock = new MockAdapter(axios);
 //爬虫
 mock.onGet('/reptileService/v1/jobs')
 .reply(config => {
-    let { name, status, platform, updateTime} = JSON.parse(config.data)
+    let { pageNo, pageSize, data} = JSON.parse(config.data)
+    let { name, status, platform, updateTime} = JSON.parse(JSON.stringify(data))
     return new Promise((resolve, reject) => {
-        let newReptiles = reptiles
+        let reptileRespVO = reptiles
             if(name!=undefined && name!=""){
-                newReptiles = newReptiles.filter(reptile => reptile.name==name)
+                reptileRespVO = reptileRespVO.filter(reptile => reptile.name==name)
             }
             if(status!=undefined && status!=""){
-                newReptiles = newReptiles.filter(reptile => reptile.status==status)
+                reptileRespVO = reptileRespVO.filter(reptile => reptile.status==status)
             }
             if(platform!=undefined && platform!=""){
-                newReptiles = newReptiles.filter(reptile => reptile.platform==platform)
+                reptileRespVO = reptileRespVO.filter(reptile => reptile.platform==platform)
             }
             if(updateTime!=undefined && updateTime!=""){
-                newReptiles = newReptiles.filter(reptile => reptile.updateTime==updateTime)
+                reptileRespVO = reptileRespVO.filter(reptile => reptile.updateTime==updateTime)
             }
-        resolve([200, newReptiles]);
+
+            let pageVO = {
+                total: reptiles.length,
+                pageNo: pageNo,
+                pageSize: pageSize,
+                data: reptileRespVO
+            }
+            let data = {
+                code: '200',
+                msg: '',
+                data: pageVO,
+            }
+        resolve([200, data]);
     })
 })
 mock.onPost('/reptileService/v1/job')
 .reply(config => {
     let { name, platform, type, timing} = JSON.parse(config.data)
     return new Promise((resolve, reject) => {
-        let newReptile = Mock.mock({
+        let reptileRespVO = Mock.mock({
             reptileId: Mock.Random.id(),
             name: name,
             platform: platform,
@@ -48,58 +61,97 @@ mock.onPost('/reptileService/v1/job')
             updater: "test",
             updateTime: '2019-01-05 00:00:00',
         })
-        resolve([200, newReptile]);
+
+        let data = {
+            code:'200',
+            msg: '',
+            data: reptileRespVO,
+        }
+        resolve([200, data]);
     })
 })
 for(let i=0; i<reptiles.length; i++){
-    let reptile = reptiles[i]
-    mock.onGet('/reptileService/v1/job/'+reptile.reptileId)
-    .reply('200', reptile)
+    let reptileRespVO = reptiles[i]
+    mock.onGet('/reptileService/v1/job/'+reptileRespVO.reptileId)
+    .reply(() => {
+        return new Promise((resolve, reject) => {
+            let data = {
+                code: '200',
+                msg: '',
+                data: reptileRespVO,
+            }
+            resolve([200, data])
+        })
+    })
 }
 for(let i=0; i<reptiles.length; i++){
-    let reptile = reptiles[i]
-    mock.onPut('/reptileService/v1/job/'+reptile.reptileId)
+    let reptileRespVO = reptiles[i]
+    mock.onPut('/reptileService/v1/job/'+reptileRespVO.reptileId)
     .reply(config => {
         let {name, platform, type, timing} = JSON.parse(config.data)
         if(name!=undefined && name!=''){
-            reptile.name = name
+            reptileRespVO.name = name
         }
         if(platform!=undefined && platform!=''){
-            reptile.platform = platform
+            reptileRespVO.platform = platform
         }
         if(type!=undefined && type!=''){
-            reptile.type = type
+            reptileRespVO.type = type
         }
         if(timing!=undefined && timing!=''){
-            reptile.timing = timing
+            reptileRespVO.timing = timing
         }
         return new Promise((resolve, reject) => {
-            resolve([200, reptile]);
+            let data = {
+                code: '200',
+                msg: '',
+                data: reptileRespVO,
+            }
+            resolve([200, data]);
         })
     })
 }
 for(let i=0; i<reptiles.length; i++){
     let reptile = reptiles[i]
     mock.onDelete('/reptileService/v1/job/'+reptile.reptileId)
-    .reply('200', reptile.reptileId)
-}
-for(let i=0; i<reptiles.length; i++){
-    let reptile = reptiles[i]
-    mock.onPost('/reptileService/v1/job/'+reptile.reptileId+'/starting')
     .reply(() => {
-        reptile.status = '正在运行'
         return new Promise((resolve, reject) => {
-            resolve([200, reptile]);
+            let data = {
+                code: '200',
+                msg: '',
+                data: reptile.reptileId,
+            }
+            resolve([200, data])
         })
     })
 }
 for(let i=0; i<reptiles.length; i++){
-    let reptile = reptiles[i];
-    mock.onPost('/reptileService/v1/job/'+reptile.reptileId+'/pause')
+    let reptileRespVO = reptiles[i]
+    mock.onPost('/reptileService/v1/job/'+reptileRespVO.reptileId+'/starting')
     .reply(() => {
-        reptile.status = '停止';
+        reptileRespVO.status = '正在运行'
         return new Promise((resolve, reject) => {
-            resolve([200, reptile]);
+            let data = {
+                code: '200',
+                msg: '',
+                data: reptileRespVO,
+            }
+            resolve([200, data]);
+        })
+    })
+}
+for(let i=0; i<reptiles.length; i++){
+    let reptileRespVO = reptiles[i];
+    mock.onPost('/reptileService/v1/job/'+reptileRespVO.reptileId+'/pause')
+    .reply(() => {
+        reptileRespVO.status = '停止';
+        return new Promise((resolve, reject) => {
+            let data = {
+                code: '200',
+                msg: '',
+                data: reptileRespVO,
+            }
+            resolve([200, data]);
         })
     })
 }
@@ -107,16 +159,29 @@ for(let i=0; i<reptiles.length; i++){
 //产品页面
 mock.onGet('/productService/v1/products')
 .reply(config => {
-    let { name, platform} = JSON.parse(config.data)
+    let { pageNo, pageSize, data} = JSON.parse(config.data)
+    let { name, platform} = JSON.parse(JSON.stringify(data))
     return new Promise((resolve, reject) => {
-        let newProducts = products
+        let productRespVO = products
             if(name!=undefined && name!=""){
-                newProducts = newProducts.filter(product => product.name==name)
+                productRespVO = productRespVO.filter(product => product.name==name)
             }
             if(platform!=undefined && platform!=""){
-                newProducts = newProducts.filter(product => product.platform==platform)
+                productRespVO = productRespVO.filter(product => product.platform==platform)
             }
-        resolve([200, newProducts]);
+
+            let pageVO = {
+                total: products.length,
+                pageNo: pageNo,
+                pageSize: pageSize,
+                data: productRespVO
+            }
+            let data = {
+                code: '200',
+                msg: '',
+                data: pageVO,
+            }
+        resolve([200, data]);
     })
 })
 //-------------------------------------------------------------------

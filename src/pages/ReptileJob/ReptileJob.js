@@ -30,23 +30,22 @@ class ReptileJob extends Component{
     }
 
     componentDidMount = () => {
-        let job = {
-            name: this.state.name,
-            status: this.state.status,
-            platform: this.state.platform,
-            updateTime: this.state.updateTime,
-        }
-        this.props.findJobs(job)
+        this.search();
     }
 
     search = () => {
-        let job = {
+        let reptile = {
             name: this.state.name,
             status: this.state.status,
             platform: this.state.platform,
             updateTime: this.state.updateTime,
         }
-        this.props.findJobs(job)
+        let reptileReqVO = {
+            pageSize: this.props.reptileJob.pageSize,
+            pageNo: 1,
+            data: reptile
+        }
+        this.props.findJobs(reptileReqVO)
     }
 
     reset = () => {
@@ -58,13 +57,18 @@ class ReptileJob extends Component{
             updateTime: '',
         })
 
-        let job = {
+        let reptile = {
             name: '',
             status: '',
             platform: '',
             updateTime: '',
         }
-        this.props.findJobs(job)
+        let reptileReqVO = {
+            pageSize: this.props.reptileJob.pageSize,
+            pageNo: 1,
+            data: reptile
+        }
+        this.props.findJobs(reptileReqVO)
     }
     
     change = (event, attributes) => {
@@ -79,7 +83,30 @@ class ReptileJob extends Component{
         this.setState(newState);
     }
 
+    changePagination = (page) => {
+        let reptile = {
+            name: this.state.name,
+            status: this.state.status,
+            platform: this.state.platform,
+            updateTime: this.state.updateTime,
+        }
+        let reptileReqVO = {
+            pageSize: this.props.reptileJob.pageSize,
+            pageNo: page,
+            data: reptile
+        }
+        this.props.findJobs(reptileReqVO)
+    }
     render(){
+        const pagination = {
+            pageSize: this.props.reptileJob.pageSize,
+            total: this.props.reptileJob.total,
+            current: this.props.reptileJob.pageNo,
+            onChange:(page) => {
+                this.changePagination(page)
+            }
+        }
+
         const columns = [{
             title: 'ID',
             dataIndex: 'reptileId',
@@ -124,8 +151,8 @@ class ReptileJob extends Component{
                 </span>
             )
         }]; 
-        return (
 
+        return (
             <div className="ant-advanced-search-form" style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto", marginBottom:"15px"}}>
                 <Row>
                     <Button type="default" size="default" className="custom-toolbar-btn" onClick={() => this.props.addJobModalShow()}><Icon type="plus" />新增</Button>
@@ -185,11 +212,11 @@ class ReptileJob extends Component{
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                        <Table rowKey={(record) => {return record.reptileId}} dataSource={this.props.reptileJob.list} columns={columns}/>
+                        <Table rowKey={(record) => {return record.reptileId}} dataSource={this.props.reptileJob.list} columns={columns} pagination={pagination}/>
                     </Form>
                 </Row>
-                <AddModal visible={this.props.reptileJob.addVisible} onOk={(job) => this.props.addJobModalSure(job)} onCancel={() => this.props.addJobModalCancel()} ></AddModal>
-                <UpdateModal visible={this.props.reptileJob.updateVisible} onOk={(job, reptileId) => this.props.updateJobModalSure(job, reptileId)} onCancel={() => this.props.updateJobModalCancel()} id={this.props.reptileJob.updateJobId} ></UpdateModal>
+                <AddModal visible={this.props.reptileJob.addVisible} onOk={(reptileReqVO) => this.props.addJobModalSure(reptileReqVO)} onCancel={() => this.props.addJobModalCancel()} ></AddModal>
+                <UpdateModal visible={this.props.reptileJob.updateVisible} onOk={(reptileReqVO, reptileId) => this.props.updateJobModalSure(reptileReqVO, reptileId)} onCancel={() => this.props.updateJobModalCancel()} id={this.props.reptileJob.updateJobId} ></UpdateModal>
                 <LogModal visible={this.props.reptileJob.logVisible} onOk={() => this.props.displayLogClose()} onCancel={() => this.props.displayLogClose()} id={this.props.reptileJob.logJobId}></LogModal>
             </div>
         )
@@ -209,7 +236,7 @@ class AddModal extends Component{
             name: '',
             platform: undefined,
             type: '',
-            timing: undefined,
+            timing: '5-12秒',
         }
     }
 
@@ -226,7 +253,7 @@ class AddModal extends Component{
     }
 
     render(){
-        let job = {
+        let reptileReqVO = {
             name: this.state.name,
             platform: this.state.platform,
             type: this.state.type,
@@ -236,7 +263,7 @@ class AddModal extends Component{
             <Modal
                 title="新增作业"
                 visible={this.props.visible}
-                onOk={() => this.props.onOk(job)}
+                onOk={() => this.props.onOk(reptileReqVO)}
                 onCancel={() => this.props.onCancel()}
                 okText="确认"
                 cancelText="取消"
@@ -289,8 +316,10 @@ class AddModal extends Component{
                             onChange={(value) => this.changeValue(value, 'timing')}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
-                            <Option value="2-3秒">2-3秒</Option>
-                            <Option value="5-10秒">5-10秒</Option>
+                            <Option value="1-3秒">1-3秒</Option>
+                            <Option value="3-5秒">3-5秒</Option>
+                            <Option value="5-12秒">5-12秒</Option>
+                            <Option value="12-20秒">12-20秒</Option>
                         </Select>
                     </Form.Item>
                 </Form>
@@ -338,26 +367,26 @@ class UpdateModal extends Component{
     findJobById = (id) => {
         axios.get('/reptileService/v1/job/'+id)
             .then((response) => {
-                let data = response.data
+                let reptileRespVO = response.data.data
                 this.setState({
-                    reptileId: data.reptileId,
-                    name: data.name,
-                    platform: data.platform,
-                    type: data.type,
-                    timing: data.timing
+                    reptileId: reptileRespVO.reptileId,
+                    name: reptileRespVO.name,
+                    platform: reptileRespVO.platform,
+                    type: reptileRespVO.type,
+                    timing: reptileRespVO.timing
                 })
             })
     }
 
     ok = () => {
-        let job = {
+        let reptileReqVO = {
             name: this.state.name,
             platform: this.state.platform,
             type: this.state.type,
             timing: this.state.timing
         }
         let reptileId = this.state.reptileId
-        this.props.onOk(job, reptileId)
+        this.props.onOk(reptileReqVO, reptileId)
     }
 
     render(){                 

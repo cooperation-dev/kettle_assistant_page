@@ -8,6 +8,36 @@ import './Product.css';
 
 const {Option} = Select
 
+const columns = [{
+    title: 'ID',
+    dataIndex: 'productId',
+    key: 'productId',
+},{
+    title: '产品',
+    dataIndex: 'name',
+    key: 'name',
+}, {
+    title: '平台',
+    dataIndex: 'platform',
+    key: 'platform',
+},{
+    title: '类别',
+    dataIndex: 'type',
+    key: 'type',
+},{
+    title: '价格',
+    dataIndex: 'price',
+    key: 'price',
+},{
+    title: '网页链接',
+    dataIndex: 'url',
+    key: 'url',
+},{
+    title: '最新时间',
+    dataIndex: 'updateTime',
+    key: 'updateTime',
+}]; 
+
 class Product extends Component{
     constructor(props){
         super(props)
@@ -19,19 +49,20 @@ class Product extends Component{
     }
 
     componentDidMount = () => {
-        let reptile = {
-            name: this.state.name,
-            platform: this.state.platform,
-        }
-        this.props.findProducts(reptile)
+        this.search();
     }
 
     search = () => {
-        let reptile = {
+        let product = {
             name: this.state.name,
             platform: this.state.platform,
         }
-        this.props.findProducts(reptile)
+        let productReqVO = {
+            pageSize: this.props.product.pageSize,
+            pageNo: 1,
+            data: product
+        }
+        this.props.findProducts(productReqVO)
     }
 
     reset = () => {
@@ -40,11 +71,16 @@ class Product extends Component{
             platform: undefined,
         })
 
-        let reptile = {
+        let product = {
             name: '',
             platform: '',
         }
-        this.props.findProducts(reptile)
+        let productReqVO = {
+            pageSize: this.props.product.pageSize,
+            pageNo: 1,
+            data: product
+        }
+        this.props.findProducts(productReqVO)
     }
     
     change = (event, attributes) => {
@@ -59,36 +95,27 @@ class Product extends Component{
         this.setState(newState);
     }
 
+    changePagination = (page) => {
+        let product = {
+            name: this.state.name,
+            platform: this.state.platform,
+        }
+        let productReqVO = {
+            pageSize: this.props.product.pageSize,
+            pageNo: page,
+            data: product
+        }
+        this.props.findProducts(productReqVO)
+    }
     render(){
-        const columns = [{
-            title: 'ID',
-            dataIndex: 'productId',
-            key: 'productId',
-        },{
-            title: '产品',
-            dataIndex: 'name',
-            key: 'name',
-        }, {
-            title: '平台',
-            dataIndex: 'platform',
-            key: 'platform',
-        },{
-            title: '类别',
-            dataIndex: 'type',
-            key: 'type',
-        },{
-            title: '价格',
-            dataIndex: 'price',
-            key: 'price',
-        },{
-            title: '网页链接',
-            dataIndex: 'url',
-            key: 'url',
-        },{
-            title: '最新时间',
-            dataIndex: 'updateTime',
-            key: 'updateTime',
-        }]; 
+        const pagination = {
+            pageSize: this.props.product.pageSize,
+            total: this.props.product.total,
+            current: this.props.product.pageNo,
+            onChange:(page) => {
+                this.changePagination(page)
+            }
+        }
         return (
 
             <div className="ant-advanced-search-form" style={{width:"98%", position:"relative", marginLeft:"auto", marginRight:"auto", marginBottom:"15px"}}>
@@ -122,7 +149,7 @@ class Product extends Component{
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                        <Table rowKey={(record) => {return record.productId}} dataSource={this.props.product.list} columns={columns}/>
+                        <Table rowKey={(record) => {return record.productId}} dataSource={this.props.product.list} columns={columns} pagination={pagination}/>
                     </Form>
                 </Row>
             </div>

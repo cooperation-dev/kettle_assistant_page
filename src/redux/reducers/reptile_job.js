@@ -11,6 +11,10 @@ const initState = {
     logVisible: false,
     updateJobId: '',
     logJobId: '',
+    //分页
+    total: 0, //数据总数
+    pageSize: 10, //默认一页10条
+    pageNo: 1 //当前显示数
 }
 
 export default function reducers(state=initState, action){
@@ -18,7 +22,10 @@ export default function reducers(state=initState, action){
         case FIND_JOBS: {
             return {
                 ...state,
-                list: action.list
+                list: action.list,
+                total: action.total,
+                pageSize: action.pageSize,
+                pageNo: action.pageNo,
             }
         }
         case ADD_JOB_MODAL_SHOW: {
@@ -28,7 +35,7 @@ export default function reducers(state=initState, action){
             }
         }
         case ADD_JOB_MODAL_SURE: {
-            state.list.push(action.job)
+            state.list.push(action.reptileRespVO)
             return {
                 ...state,
                 addVisible: false,
@@ -49,8 +56,8 @@ export default function reducers(state=initState, action){
         }
         case UPDATE_JOB_MODAL_SURE: {
             let newlist = state.list.map(ele => {
-                if(ele.reptileId == action.job.reptileId)
-                    return action.job
+                if(ele.reptileId == action.reptileRespVO.reptileId)
+                    return action.reptileRespVO
                 else
                     return ele
             })
@@ -80,10 +87,10 @@ export default function reducers(state=initState, action){
             }
         }
         case DELETE_JOB_BY_IDS: {
-            let reptileJob = action.reptileJob
+            let reptileId = action.reptileId
             let newlist = []
             for(var i=0; i<state.list.length; i++){
-                if(reptileJob != state.list[i].reptileId){
+                if(reptileId != state.list[i].reptileId){
                     newlist.push(state.list[i])
                 }
             }
@@ -94,8 +101,8 @@ export default function reducers(state=initState, action){
         }
         case STARTING_JOB: {
             let newlist = state.list.map(ele => {
-                if(ele.reptileId == action.reptileJob.reptileId)
-                    return action.reptileJob
+                if(ele.reptileId == action.reptileRespVO.reptileId)
+                    return action.reptileRespVO
                 else
                     return ele
             })
@@ -106,8 +113,8 @@ export default function reducers(state=initState, action){
         }
         case PAUSE_JOB:{
             let newlist = state.list.map(ele => {
-                if(ele.reptileId == action.reptileJob.reptileId)
-                    return action.reptileJob
+                if(ele.reptileId == action.reptileRespVO.reptileId)
+                    return action.reptileRespVO
                 else
                     return ele
             })

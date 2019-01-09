@@ -10,20 +10,47 @@ class CustomForm extends React.Component{
         const {
             label,
             field,
+            type,
             value,
         } = this.props;
         return (
-            <Form.Item label={label}>
-                {getFieldDecorator(field, {
-                    rules: [{
-                        required: true, message: '请输入'+label,
-                    },{
-                        max: 10, message: '长度过大',
-                    }],
-                    initialValue: value
-                })
-                (<Input placeholder={label} onChange={(event) => {this.changeInput(event, field)}}/>)}
-            </Form.Item>
+            <div>
+                {(() => {
+                        switch (type) {
+                            case 'input':{
+                                return(
+                                    <Form.Item label={label}>
+                                        {getFieldDecorator(field, {
+                                            rules: [{
+                                                required: true, message: '请输入'+label,
+                                            },{
+                                                max: 10, message: '长度过大',
+                                            }],
+                                            initialValue: value
+                                        })
+                                        (<Input placeholder={label} onChange={(event) => {this.changeInput(event, field)}}/>)}
+                                    </Form.Item>
+                                )
+                            }
+                            case 'select':{
+                                return(
+                                    <Form.Item label={label}>
+                                        {getFieldDecorator(field, {
+                                            rules: [{
+                                                required: true, message: '请输入'+label,
+                                            },{
+                                                max: 10, message: '长度过大',
+                                            }],
+                                            initialValue: value
+                                        })
+                                        (<Input placeholder={label} onChange={(event) => {this.changeInput(event, field)}}/>)}
+                                    </Form.Item>
+                                )
+                            }
+                        }
+                    }
+                )()}
+            </div>
         )
     }
 }

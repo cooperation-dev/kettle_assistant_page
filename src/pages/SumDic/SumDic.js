@@ -239,17 +239,6 @@ class AddModal extends Component{
         })
     }
 
-    // changeDicName = (e) => {
-    //     this.setState({
-    //         name: e.target.value
-    //     })
-    // }
-
-    // changeDicCode = (e) => {
-    //     this.setState({
-    //         code: e.target.value
-    //     })
-    // }
     change = (event, attribute) => {
         let newState = {};
         newState[attribute] = event.target.value;
@@ -299,14 +288,8 @@ class AddModal extends Component{
                 okText="确认"
                 cancelText="取消"
                 destroyOnClose={true}>
-                <CustomForm label = "字典名称" field = "name" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
-                <CustomForm label = "字典代码" field = "code" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
-                {/* <Form.Item label="字典名称">
-                    <Input placeholder="字典名称" value={this.state.name} onChange={this.changeDicName}/>
-                </Form.Item>
-                <Form.Item label="字典代码">
-                    <Input placeholder="字典代码" value={this.state.code} onChange={this.changeDicCode}/>
-                </Form.Item> */}
+                <CustomForm label = "字典名称" field = "name" type="input" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
+                <CustomForm label = "字典代码" field = "code" type="input" value = {this.state.code} change = {(event, attribute) => {this.change(event, attribute)}}/>
                 <Row>
                     <Form.Item label="所属对象" >
                         <Col span={4}>
@@ -383,16 +366,10 @@ class UpdateModal extends Component{
             this.findDicTypes()
     }
 
-    changeName = (e) => {
-        this.setState({
-            name: e.target.value
-        })
-    }
-
-    changeCode = (e) => {
-        this.setState({
-            code: e.target.value
-        })
+    change = (event, attribute) => {
+        let newState = {};
+        newState[attribute] = event.target.value;
+        this.setState(newState);
     }
 
     changeBelongsSwitch = (e) => {
@@ -434,15 +411,9 @@ class UpdateModal extends Component{
                 onCancel={this.cancel}
                 okText="确认"
                 cancelText="取消"
-                destroyOnClose={true} 
-            >
-                <Form.Item label="字典名称">
-                    <Input placeholder="字典名称" value={this.state.name} onChange={this.changeName}/>
-                </Form.Item>
-                <Form.Item label="字典代码">
-                    <Input placeholder="字典代码" value={this.state.code} onChange={this.changeCode}/>
-                </Form.Item>
-
+                destroyOnClose={true}>
+                <CustomForm label = "字典名称" field = "name" type="input" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
+                <CustomForm label = "字典代码" field = "code" type="input" value = {this.state.code} change = {(event, attribute) => {this.change(event, attribute)}}/>
                 <Row >
                     <Form.Item label="所属对象">
                         <Col span={4}>

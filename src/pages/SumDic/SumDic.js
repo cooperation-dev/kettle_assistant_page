@@ -7,6 +7,9 @@ import { addModalCancel, addModalShow, addModalSure,
     changeDisabled, deleteDicByIds, 
     detailsModalCancel, detailsModalShow, detailsModalSure, 
     showList, updateModalCancel, updateModalShow, updateModalSure } from '../../redux/actions/sum_dic';
+
+import CustomForm from '../../components/CustomForm/CustomForm'
+
 import './SumDic.css';
 
 const {Column} = Table
@@ -291,12 +294,18 @@ class AddModal extends Component{
                 okText="确认"
                 cancelText="取消"
                 destroyOnClose={true}>
-                <Form.Item label="字典名称">
+                <CustomForm label = "字典名称" field = "name" value = {this.state.name}
+                    // change = "this.changeDicName"
+                />
+                <CustomForm label = "字典代码" field = "code" value = {this.state.name}
+                    // change = "this.changeDicName"
+                />
+                {/* <Form.Item label="字典名称">
                     <Input placeholder="字典名称" value={this.state.name} onChange={this.changeDicName}/>
                 </Form.Item>
                 <Form.Item label="字典代码">
                     <Input placeholder="字典代码" value={this.state.code} onChange={this.changeDicCode}/>
-                </Form.Item>
+                </Form.Item> */}
                 <Row>
                     <Form.Item label="所属对象" >
                         <Col span={4}>

@@ -239,16 +239,21 @@ class AddModal extends Component{
         })
     }
 
-    changeDicName = (e) => {
-        this.setState({
-            name: e.target.value
-        })
-    }
+    // changeDicName = (e) => {
+    //     this.setState({
+    //         name: e.target.value
+    //     })
+    // }
 
-    changeDicCode = (e) => {
-        this.setState({
-            code: e.target.value
-        })
+    // changeDicCode = (e) => {
+    //     this.setState({
+    //         code: e.target.value
+    //     })
+    // }
+    change = (event, attribute) => {
+        let newState = {};
+        newState[attribute] = event.target.value;
+        this.setState(newState);
     }
 
     changeBelongsSwitch = (e) => {
@@ -294,12 +299,8 @@ class AddModal extends Component{
                 okText="确认"
                 cancelText="取消"
                 destroyOnClose={true}>
-                <CustomForm label = "字典名称" field = "name" value = {this.state.name}
-                    // change = "this.changeDicName"
-                />
-                <CustomForm label = "字典代码" field = "code" value = {this.state.name}
-                    // change = "this.changeDicName"
-                />
+                <CustomForm label = "字典名称" field = "name" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
+                <CustomForm label = "字典代码" field = "code" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
                 {/* <Form.Item label="字典名称">
                     <Input placeholder="字典名称" value={this.state.name} onChange={this.changeDicName}/>
                 </Form.Item>

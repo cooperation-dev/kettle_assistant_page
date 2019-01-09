@@ -2,11 +2,8 @@ import React from 'react'
 import { Form, Input} from 'antd';
 
 class CustomForm extends React.Component{
-    changeInput = (event, attributes) => {
-        let newState = {};
-        newState[attributes] = event.target.value;
-        // this.setState(newState);
-        this.props.form.setFieldsValue(newState);
+    changeInput = (event, attribute) => {
+        this.props.change(event, attribute);
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -14,7 +11,6 @@ class CustomForm extends React.Component{
             label,
             field,
             value,
-            change,
         } = this.props;
         return (
             <Form.Item label={label}>

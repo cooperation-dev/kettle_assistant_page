@@ -10,6 +10,8 @@ import {findJobs,
 import {connect} from 'react-redux';
 import axios from 'axios';
 
+import CommonForm from '../../components/CommonForm/CommonForm'
+
 import './ReptileJob.css';
 
 const {TextArea} = Input
@@ -223,10 +225,9 @@ class ReptileJob extends Component{
     }
 }
 
-const formItemLayout = {
-    labelCol:{ span: 5 },
-    wrapperCol:{ span: 17 }
-}
+let platFormData = ['京东','淘宝','天猫']
+let typeData = ['电子产品','家用产品','户外用品']
+let timingData = ['1-3秒','3-5秒','5-12秒','12-20秒']
 
 class AddModal extends Component{
     constructor(props){
@@ -269,59 +270,18 @@ class AddModal extends Component{
                 cancelText="取消"
                 destroyOnClose={true}>
                 <Form>
-                    <Form.Item label="作业名称" {...formItemLayout}>
-                        <Input placeholder="作业名称" value={this.state.name} onChange={(e) => this.change(e, 'name')}/>
-                    </Form.Item>
-                    <Form.Item label="平台" {...formItemLayout}>
-                        <Select
-                            showSearch
-                            style={{ width: '100%' }}
-                            placeholder="平台"
-                            notFoundContent="未匹配"
-                            // optionFilterProp="children"
-                            value={this.state.platform}
-                            onChange={(value) => this.changeValue(value, 'platform')}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        >
-                            <Option value="京东">京东</Option>
-                            <Option value="淘宝">淘宝</Option>
-                            <Option value="天猫">天猫</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item label="种类" {...formItemLayout}>
-                        <TreeSelect
-                            showSearch
-                            style={{ width: '100%' }}
-                            value={this.state.type}
-                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                            placeholder="种类"
-                            allowClear
-                            treeDefaultExpandAll
-                            onChange={(value) => this.changeValue(value, 'type')}
-                        >
-                            <TreeSelect.TreeNode value="电子产品" title="电子产品" key="1">
-                                <TreeSelect.TreeNode value="电脑" title="电脑" key="2" />
-                                <TreeSelect.TreeNode value="手机" title="手机" key="3" />
-                            </TreeSelect.TreeNode>
-                        </TreeSelect>
-                    </Form.Item>
-                    <Form.Item label="定时设置" {...formItemLayout}>
-                        <Select
-                            showSearch
-                            style={{ width: '100%' }}
-                            placeholder="定时设置"
-                            notFoundContent="未匹配"
-                            // optionFilterProp="children"
-                            value={this.state.timing}
-                            onChange={(value) => this.changeValue(value, 'timing')}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        >
-                            <Option value="1-3秒">1-3秒</Option>
-                            <Option value="3-5秒">3-5秒</Option>
-                            <Option value="5-12秒">5-12秒</Option>
-                            <Option value="12-20秒">12-20秒</Option>
-                        </Select>
-                    </Form.Item>
+                    <CommonForm label = "作业名称" field = "name" type="input" 
+                        value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
+                    <CommonForm label = "平台" field = "platform" type="select" data={platFormData} 
+                        value = {this.state.platform} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
+                    {/*<TreeSelect.TreeNode value="电子产品" title="电子产品" key="1">
+                        <TreeSelect.TreeNode value="电脑" title="电脑" key="2" />
+                        <TreeSelect.TreeNode value="手机" title="手机" key="3" />
+                    </TreeSelect.TreeNode>*/}
+                    <CommonForm label = "种类" field = "type" type="treeSelect" data={typeData} 
+                        value = {this.state.type} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
+                    <CommonForm label = "定时设置" field = "timing" type="select" data={timingData} 
+                        value = {this.state.timing} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
                 </Form>
             </Modal>
         )
@@ -399,59 +359,19 @@ class UpdateModal extends Component{
                 onCancel={() => this.props.onCancel()}
                 okText="确认"
                 cancelText="取消"
-                destroyOnClose={true} 
-            >
-                <Form.Item label="作业名称" {...formItemLayout}>
-                    <Input placeholder="作业名称" onChange={(e) => this.change(e, 'name')} value={this.state.name}/>
-                </Form.Item>
-                <Form.Item label="平台" {...formItemLayout}>
-                    <Select
-                        showSearch
-                        style={{ width: '100%' }}
-                        placeholder="平台"
-                        notFoundContent="未匹配"
-                        // optionFilterProp="children"
-                        value={this.state.platform}
-                        onChange={(value) => this.changeValue(value, 'platform')}
-                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                    >
-                        <Option value="京东">京东</Option>
-                        <Option value="淘宝">淘宝</Option>
-                        <Option value="天猫">天猫</Option>
-                    </Select>
-                </Form.Item>
-                <Form.Item label="种类" {...formItemLayout}>
-                    <TreeSelect
-                        showSearch
-                        style={{ width: '100%' }}
-                        value={this.state.type}
-                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                        placeholder="种类"
-                        allowClear
-                        treeDefaultExpandAll
-                        onChange={(value) => this.changeValue(value, 'type')}
-                    >
-                        <TreeSelect.TreeNode value="电子产品" title="电子产品" key="1">
-                            <TreeSelect.TreeNode value="电脑" title="电脑" key="2" />
-                            <TreeSelect.TreeNode value="手机" title="手机" key="3" />
-                        </TreeSelect.TreeNode>
-                    </TreeSelect>
-                </Form.Item>
-                <Form.Item label="定时设置" {...formItemLayout}>
-                    <Select
-                        showSearch
-                        style={{ width: '100%' }}
-                        placeholder="定时设置"
-                        notFoundContent="未匹配"
-                        // optionFilterProp="children"
-                        value={this.state.timing}
-                        onChange={(value) => this.changeValue(value, 'timing')}
-                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                    >
-                        <Option value="2-3秒">2-3秒</Option>
-                        <Option value="5-10秒">5-10秒</Option>
-                    </Select>
-                </Form.Item>
+                destroyOnClose={true}>
+                <CommonForm label = "作业名称" field = "name" type="input" 
+                    value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
+                <CommonForm label = "平台" field = "platform" type="select" data={platFormData} 
+                    value = {this.state.platform} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
+                {/*<TreeSelect.TreeNode value="电子产品" title="电子产品" key="1">
+                    <TreeSelect.TreeNode value="电脑" title="电脑" key="2" />
+                    <TreeSelect.TreeNode value="手机" title="手机" key="3" />
+                </TreeSelect.TreeNode>*/}
+                <CommonForm label = "种类" field = "type" type="treeSelect" data={typeData} 
+                    value = {this.state.type} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
+                <CommonForm label = "定时设置" field = "timing" type="select" data={timingData} 
+                    value = {this.state.timing} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
             </Modal>
         )
     }

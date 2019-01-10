@@ -8,7 +8,7 @@ import { addModalCancel, addModalShow, addModalSure,
     detailsModalCancel, detailsModalShow, detailsModalSure, 
     showList, updateModalCancel, updateModalShow, updateModalSure } from '../../redux/actions/sum_dic';
 
-import CustomForm from '../../components/CustomForm/CustomForm'
+import CommonForm from '../../components/CommonForm/CommonForm'
 
 import './SumDic.css';
 
@@ -288,16 +288,16 @@ class AddModal extends Component{
                 okText="确认"
                 cancelText="取消"
                 destroyOnClose={true}>
-                <CustomForm label = "字典名称" field = "name" type="input" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
-                <CustomForm label = "字典代码" field = "code" type="input" value = {this.state.code} change = {(event, attribute) => {this.change(event, attribute)}}/>
+                <CommonForm label = "字典名称" field = "name" type="input" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
+                <CommonForm label = "字典代码" field = "code" type="input" value = {this.state.code} change = {(event, attribute) => {this.change(event, attribute)}}/>
                 <Row>
                     <Form.Item label="所属对象" >
-                        <Col span={4}>
+                        <Col span={5}>
                             <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
                         </Col>
-                        <Col span={12} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
+                        <Col span={17} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
                             <TreeSelect
-                                style={{ width: 300 }}
+                                style={{ width: '100%' }}
                                 value={this.state.belongs}
                                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                                 treeData={this.state.dicTypes}
@@ -412,8 +412,8 @@ class UpdateModal extends Component{
                 okText="确认"
                 cancelText="取消"
                 destroyOnClose={true}>
-                <CustomForm label = "字典名称" field = "name" type="input" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
-                <CustomForm label = "字典代码" field = "code" type="input" value = {this.state.code} change = {(event, attribute) => {this.change(event, attribute)}}/>
+                <CommonForm label = "字典名称" field = "name" type="input" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
+                <CommonForm label = "字典代码" field = "code" type="input" value = {this.state.code} change = {(event, attribute) => {this.change(event, attribute)}}/>
                 <Row >
                     <Form.Item label="所属对象">
                         <Col span={4}>

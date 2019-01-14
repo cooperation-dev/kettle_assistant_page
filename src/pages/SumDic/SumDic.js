@@ -12,6 +12,8 @@ import CommonForm from '../../components/CommonForm/CommonForm'
 
 import './SumDic.css';
 
+const {} = CommonForm
+
 const {Column} = Table
 const {Option} = Select
 
@@ -258,6 +260,7 @@ class AddModal extends Component{
         })
     }
     ok = () => {
+
         let dicReqVO = {
             name: this.state.name,
             code: this.state.code,
@@ -283,10 +286,13 @@ class AddModal extends Component{
             <Modal
                 title="新增字典"
                 visible={this.props.visible}
-                onOk={this.ok}
-                onCancel={this.cancel}
-                okText="确认"
-                cancelText="取消"
+                // onOk={this.ok}
+                // onCancel={this.cancel}
+                // okText="确认"
+                // cancelText="取消"
+                // okButtonProps={{hidden: true}}
+                // cancelButtonProps={{ hidden: true }}
+                footer={null}
                 destroyOnClose={true}>
                 <CommonForm label = "字典名称" field = "name" type="input" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
                 <CommonForm label = "字典代码" field = "code" type="input" value = {this.state.code} change = {(event, attribute) => {this.change(event, attribute)}}/>
@@ -307,6 +313,7 @@ class AddModal extends Component{
                         </Col>
                     </Form.Item>
                 </Row>
+                <CommonForm type="button" ok={() => this.ok()}></CommonForm>
             </Modal>
         )
     }
@@ -480,4 +487,4 @@ export default connect((state)=> ({
         addModalShow, addModalSure, addModalCancel,
         updateModalShow, updateModalSure, updateModalCancel,
         deleteDicByIds, changeDisabled,
-        detailsModalShow, detailsModalSure, detailsModalCancel})(SumDic)
+        detailsModalShow, detailsModalSure, detailsModalCancel})(Form.create({})(SumDic))

@@ -1,5 +1,7 @@
 import React from 'react'
 import { Form, Input, Select, TreeSelect} from 'antd';
+import { Button } from 'antd/lib/radio';
+import FormItem from 'antd/lib/form/FormItem';
 
 const {Option} = Select
 
@@ -13,13 +15,19 @@ class CommonForm extends React.Component{
         this.props.change(value, attribute);
     }
 
-    valid =() => {
+    valid = () => {
         this.props.form.validateFields((err, values) => {
             if (err) {
                 return;
               }
         })
     }
+
+    ok = () => {
+        this.valid()
+        this.props.ok()
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const {
@@ -101,6 +109,13 @@ class CommonForm extends React.Component{
                                             })}
                                         </TreeSelect>)}
                                     </Form.Item>
+                                )
+                            }
+                            case 'button': {
+                                return (
+                                    <FormItem>
+                                        <Button onClick={()=>this.ok()}>aaa</Button>
+                                    </FormItem>
                                 )
                             }
                         }

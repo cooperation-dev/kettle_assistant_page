@@ -16,7 +16,7 @@ export const findProducts = (productReqVO) => {
     return (dispatch) => {
         axios({
             method: 'get',
-            url: '/productService/v1/products',
+            url: '/api/rest/productService/v1/products',
             data: productReqVO
         }).then((response) => {
             return response.data.data

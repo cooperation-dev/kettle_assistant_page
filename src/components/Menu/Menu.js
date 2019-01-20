@@ -44,13 +44,13 @@ class LeftMenu extends Component{
                             return (
                                 <SubMenu 
                                     key={menu.code}
-                                    title={<span><Icon type={menu.icon}/><span>{menu.name}</span></span>}
+                                    title={<span><Icon type={menu.menuStyleVO.icon}/><span>{menu.name}</span></span>}
                                 >
                                     {
                                         menu.children.map(child => {
                                             return (
                                                 <Menu.Item key={child.code}>
-                                                    <Link to={child.direction}>{child.name}</Link>
+                                                    <Link to={child.code}>{child.name}</Link>
                                                 </Menu.Item>
                                             )
                                         })

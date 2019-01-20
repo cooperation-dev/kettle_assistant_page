@@ -10,14 +10,14 @@ import { addModalCancel, addModalShow, addModalSure,
 
 import CommonForm from '../../components/CommonForm/CommonForm'
 
-import './SumDic.css';
+import './DicManager.css';
 
 const {} = CommonForm
 
 const {Column} = Table
 const {Option} = Select
 
-class SumDic extends Component{
+class DicManager extends Component{
     constructor(props){
         super(props)
 
@@ -487,4 +487,4 @@ export default connect((state)=> ({
         addModalShow, addModalSure, addModalCancel,
         updateModalShow, updateModalSure, updateModalCancel,
         deleteDicByIds, changeDisabled,
-        detailsModalShow, detailsModalSure, detailsModalCancel})(Form.create({})(SumDic))
+        detailsModalShow, detailsModalSure, detailsModalCancel})(Form.create({})(DicManager))

@@ -9,9 +9,9 @@ import {connect} from 'react-redux';
 
 import axios from 'axios'
 
-import './DatabaseManager.css'
+import './InstanceManager.css'
 
-class DatabaseManager extends Component{
+class InstanceManager extends Component{
     constructor(props){
         super(props)
 
@@ -437,4 +437,4 @@ export default connect((state) => ({databaseManager: state.databaseManager}), {
     addDatabaseShow, addDatabaseCancel, addDatabaseSure, 
     deleteDatabasesByIds, 
     updateDatabaseShow, updateDatabaseCancel, updateDatabaseSure, 
-})(DatabaseManager)
+})(InstanceManager)

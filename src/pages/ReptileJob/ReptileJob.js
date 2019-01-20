@@ -110,10 +110,6 @@ class ReptileJob extends Component{
         }
 
         const columns = [{
-            title: 'ID',
-            dataIndex: 'reptileId',
-            key: 'reptileId',
-        },{
             title: '名称',
             dataIndex: 'name',
             key: 'name',

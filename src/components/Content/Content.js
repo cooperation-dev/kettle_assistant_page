@@ -61,11 +61,11 @@ class Content extends Component{
                     {
                         this.props.menu_list.filter(menu => menu.component!="").map(menu => {
                             return (
-                                <Route key={menu.code} exact path={menu.direction} component={createComponent(require(`bundle-loader?lazy&name=[name]!pages/${menu.component}/${menu.component}`))}></Route>
+                                <Route key={menu.code} exact path={'/app/'+ menu.code} component={createComponent(require(`bundle-loader?lazy&name=[name]!pages/${menu.component}/${menu.component}`))}></Route>
                             )
                         })
                     }
-                    <Redirect exact from="/app" to="/app/sum_dic"></Redirect>
+                    <Redirect exact from="/app" to="/app/reptile_job"></Redirect>
                     <Route key="error" exact path="/app/error" component={createComponent(require(`bundle-loader?lazy&name=[name]!pages/Exception/500`))} />
                     <Route path="*" component={createComponent(require(`bundle-loader?lazy&name=[name]!pages/Exception/404`))} />
                 </Switch>

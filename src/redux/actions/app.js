@@ -1,4 +1,4 @@
-import '../../../mock/api';
+// import '../../../mock/api';
 import axios from 'axios';
 // import axios from '../../router/Adapter'
 
@@ -41,13 +41,14 @@ export function loadMenu(){
     return (dispatch) => {
         axios({
             method: 'get', 
-            url: '/api/homeController/loadMenu'
+            url: '/api/rest/menuService/v1/menus'
         }).then((reponse) => {
             return reponse.data.data
         }).then((list) => {
             dispatch(load_menu(list))
-        }).catch((error) => {
-            this.history.push('/user/login')
         })
+        // .catch((error) => {
+        //     this.history.push('/user/login')
+        // })
     }
 }

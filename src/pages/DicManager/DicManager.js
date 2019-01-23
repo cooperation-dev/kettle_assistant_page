@@ -8,7 +8,8 @@ import { addModalCancel, addModalShow, addModalSure,
     detailsModalCancel, detailsModalShow, detailsModalSure, 
     showList, updateModalCancel, updateModalShow, updateModalSure } from '../../redux/actions/sum_dic';
 
-import CommonForm from '../../components/CommonForm/CommonForm'
+// import CommonForm from '../../components/CommonForm/CommonForm'
+import CommonForm from '../../components/CommonForm/CommonFormTest'
 
 import './DicManager.css';
 
@@ -214,7 +215,7 @@ class DicManager extends Component{
 
 class AddModal extends Component{
     constructor(props){
-        super(props)
+        super(props);
 
         this.state = {
             id: '',
@@ -281,39 +282,39 @@ class AddModal extends Component{
             code: ''
         })
     }
+    valid = () => {
+        this.form.validateFields((err, values) => {
+            if (err) {
+                return;
+            }
+            this.ok();
+        })
+    }
     render(){
+        const items = [
+            {
+                label: '字典名称',
+                key: 'name',
+                value: this.state.name,
+                component: <Input placeholder="字典名称" onChange={(value) => {this.change(value, 'name')}}/>,
+            },
+            {
+                label: '字典代码',
+                key: 'code',
+                value: this.state.code,
+                component: <Input placeholder="字典代码" onChange={(value) => {this.change(value, 'code')}}/>,
+            },
+        ]
         return (
             <Modal
                 title="新增字典"
                 visible={this.props.visible}
-                // onOk={this.ok}
-                // onCancel={this.cancel}
-                // okText="确认"
-                // cancelText="取消"
-                // okButtonProps={{hidden: true}}
-                // cancelButtonProps={{ hidden: true }}
-                footer={null}
+                onOk={this.valid}
+                onCancel={this.cancel}
+                okText="确认"
+                cancelText="取消"
                 destroyOnClose={true}>
-                <CommonForm label = "字典名称" field = "name" type="input" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
-                <CommonForm label = "字典代码" field = "code" type="input" value = {this.state.code} change = {(event, attribute) => {this.change(event, attribute)}}/>
-                <Row>
-                    <Form.Item label="所属对象" >
-                        <Col span={5}>
-                            <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
-                        </Col>
-                        <Col span={17} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
-                            <TreeSelect
-                                style={{ width: '100%' }}
-                                value={this.state.belongs}
-                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                treeData={this.state.dicTypes}
-                                placeholder="Please select"
-                                treeDefaultExpandAll
-                                onChange={this.changeBelongs}/>
-                        </Col>
-                    </Form.Item>
-                </Row>
-                <CommonForm type="button" ok={() => this.ok()}></CommonForm>
+                <CommonForm items={items} customForm={(form) => this.form = form}/>
             </Modal>
         )
     }

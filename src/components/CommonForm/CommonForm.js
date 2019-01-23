@@ -76,7 +76,7 @@ class CommonForm extends React.Component{
                                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                                             {this.props.data.map((value) => {
                                                 return(
-                                                    <Option value={value}>{value}</Option>
+                                                    <Option value={value.key}>{value.value}</Option>
                                                 )
                                             })}
                                         </Select>)}
@@ -104,7 +104,7 @@ class CommonForm extends React.Component{
                                             onChange={(value) => this.change(value, field)}>
                                             {this.props.data.map((value) => {
                                                 return(
-                                                    <TreeSelect.TreeNode value={value} title={value} key="1"/>
+                                                    <TreeSelect.TreeNode value={value.key} title={value.value} key="1"/>
                                                 )
                                             })}
                                         </TreeSelect>)}

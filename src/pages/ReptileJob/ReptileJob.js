@@ -221,9 +221,20 @@ class ReptileJob extends Component{
     }
 }
 
-let platFormData = ['京东','淘宝','天猫']
-let typeData = ['电子产品','家用产品','户外用品']
-let timingData = ['1-3秒','3-5秒','5-12秒','12-20秒']
+let platFormData = [
+    {key:0,value:'淘宝'},
+    {key:1,value:'天猫'},
+    {key:2,value:'京东'},
+]
+let typeData = [
+    {key:0,value:'手机'},
+]
+let timingData = [
+    {key:'1-3',value:'1-3秒'},
+    {key:'3-5',value:'3-5秒'},
+    {key:'5-12',value:'5-12秒'},
+    {key:'12-20',value:'12-20秒'},
+]
 
 class AddModal extends Component{
     constructor(props){
@@ -233,7 +244,7 @@ class AddModal extends Component{
             name: '',
             platform: undefined,
             type: '',
-            timing: '5-12秒',
+            timing: '5-12',
         }
     }
 
@@ -321,7 +332,7 @@ class UpdateModal extends Component{
     }
 
     findJobById = (id) => {
-        axios.get('/reptileService/v1/job/'+id)
+        axios.get('/api/rest/reptileService/v1/job/'+id)
             .then((response) => {
                 let reptileRespVO = response.data.data
                 this.setState({

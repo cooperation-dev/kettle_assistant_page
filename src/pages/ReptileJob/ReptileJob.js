@@ -45,7 +45,7 @@ class ReptileJob extends Component{
         // }
         let reptileVO = {
             name: this.state.name,
-            status: this.state.status=='undefined'?'':this.state.status,
+            status: this.state.status==undefined?'':this.state.status,
             pageSize: this.props.reptileJob.pageSize,
             pageNo: 1,
         }
@@ -61,18 +61,20 @@ class ReptileJob extends Component{
             updateTime: '',
         })
 
-        let reptile = {
+        // let reptile = {
+        //     name: '',
+        //     status: '',
+        //     platform: '',
+        //     updateTime: '',
+        // }
+        let reptileVO = {
             name: '',
             status: '',
-            platform: '',
-            updateTime: '',
-        }
-        let reptileReqVO = {
             pageSize: this.props.reptileJob.pageSize,
             pageNo: 1,
-            data: reptile
+            // data: reptile
         }
-        this.props.findJobs(reptileReqVO)
+        this.props.findJobs(reptileVO)
     }
     
     change = (event, attributes) => {
@@ -127,7 +129,11 @@ class ReptileJob extends Component{
             title: '定时设置',
             dataIndex: 'interval',
             key: 'interval',
+<<<<<<< HEAD
             render: text => <div>{text}秒</div>,
+=======
+            render: text => <span>{text}秒</span>,
+>>>>>>> fc40be7f75e0e896c23d4370348c4e79ef6e7edc
         },{
             title: '运行状态',
             dataIndex: 'status',
@@ -179,9 +185,9 @@ class ReptileJob extends Component{
                                         onChange={(value) => this.changeValue(value, 'status')}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                     >
-                                        <Option value="未开始">未开始</Option>
-                                        <Option value="正在运行">正在运行</Option>
-                                        <Option value="已停止">已停止</Option>
+                                        <Option value="0">准备启动</Option>
+                                        <Option value="2">正在运行</Option>
+                                        <Option value="3">已停止</Option>
                                     </Select>
                                 </Form.Item>
                             </Col>

@@ -146,11 +146,11 @@ class ReptileJob extends Component{
             title: '操作',
             render: (text, record) => (
                 <span>
-                    <Icon type="caret-right" onClick={() => this.props.startingJob(record.reptileId)} style={{marginRight: 10}}/>
-                    <Icon type="border" onClick={() => this.props.pauseJob(record.reptileId)} style={{marginRight: 10}}/>
-                    <Icon type="file-text" onClick={() => this.props.displayLogShow(record.reptileId)} style={{marginRight: 10}}/>
-                    <Icon type="edit" onClick={() => this.props.updateJobModalShow(record.reptileId)} style={{marginRight: 10}}/>
-                    <Icon type="delete" onClick={() => showDeleteConfirm(this.props.deleteJob, record.reptileId)}/>
+                    <span style={{cursor:'pointer'}}><Icon type="caret-right" onClick={() => this.props.startingJob(record.reptileId)} style={{marginRight: 10}}/></span>
+                    <span style={{cursor:'pointer'}}><Icon type="border" onClick={() => this.props.pauseJob(record.reptileId)} style={{marginRight: 10}}/></span>
+                    <span style={{cursor:'pointer'}}><Icon type="file-text" onClick={() => this.props.displayLogShow(record.reptileId)} style={{marginRight: 10}}/></span>
+                    <span style={{cursor:'pointer'}}><Icon type="edit" onClick={() => this.props.updateJobModalShow(record.reptileId)} style={{marginRight: 10}}/></span>
+                    <span style={{cursor:'pointer'}}><Icon type="delete" onClick={() => showDeleteConfirm(this.props.deleteJob, record.reptileId)}/></span>
                 </span>
             )
         }]; 

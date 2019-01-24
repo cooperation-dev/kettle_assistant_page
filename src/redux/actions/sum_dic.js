@@ -108,15 +108,11 @@ export const details_modal_cancel = () => {
 }
 
 export const showList = (dicReqVO) => {
-    let name = dicReqVO.name==undefined?'':dicReqVO.name
-    let code = dicReqVO.code==undefined?'':dicReqVO.code
-    let source = dicReqVO.source==undefined?'':dicReqVO.source
-    let belongs = dicReqVO.belongs==undefined?'':dicReqVO.belongs
     return (dispatch) => {
         axios({
             method: 'get',
-            url: '/api/rest/dicService/v1/dics?pageNo='+dicReqVO.pageNo+'&pageSize='+dicReqVO.pageSize+'&name='+name+'&code='+code+'&source='+source+'&belongs='+belongs,
-            // data: dicReqVO
+            url: '/dicService/v1/dics',
+            data: dicReqVO
         }).then((response) => {
             return response.data.data
         }).then((data) => {
@@ -135,7 +131,7 @@ export const addModalSure = (dicReqVO) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: '/api/rest/dicService/v1/dic',
+            url: '/dicService/v1/dic',
             data: dicReqVO
         }).then(response => {return response.data.data})
             .then(data => dispatch(add_modal_sure(data)))
@@ -159,7 +155,7 @@ export const updateModalSure = (dicReqVO, dic_id) => {
     return (dispatch) => {
         axios({
             method: 'put',
-            url: '/api/rest/dicService/v1/dic/'+dic_id,
+            url: '/dicService/v1/dic/'+dic_id,
             data: dicReqVO
         }).then((response) => {
             return response.data.data
@@ -179,7 +175,7 @@ export const deleteDicByIds = (id) => {
     return (dispatch) => {
         axios({
             method: 'delete',
-            url: '/api/rest/dicService/v1/dic/'+id,
+            url: '/dicService/v1/dic/'+id,
         }).then((r) => {
             return r.data.data
         }).then((id) => {

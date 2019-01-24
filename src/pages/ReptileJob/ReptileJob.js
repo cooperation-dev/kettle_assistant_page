@@ -187,29 +187,6 @@ class ReptileJob extends Component{
                                     </Select>
                                 </Form.Item>
                             </Col>
-                            <Col key={3} style={{float: "left", width: "20%"}}>
-                                <Form.Item label="平台" >
-                                    <Select
-                                        showSearch
-                                        placeholder="请选择平台"
-                                        notFoundContent="未匹配"
-                                        // optionFilterProp="children"
-                                        value={this.state.platform}
-                                        onChange={(value) => this.changeValue(value, 'platform')}
-                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                    >
-                                        <Option value="京东">京东</Option>
-                                        <Option value="淘宝">淘宝</Option>
-                                        <Option value="天猫">天猫</Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                            <Col key={4} style={{float: "left", width: "20%"}}>
-                                <Form.Item label="更新时间">
-                                    {/* <Input placeholder="请输入更新时间" value={this.state.updateTime} onChange={(e) => this.change(e, 'updateTime')}/> */}
-                                    <RangePicker placeholder={['开始日期', '结束日期']}/>
-                                </Form.Item>
-                            </Col>
                             <Col key={5} className="custom-sr-btn" style={{float: "left", width: "20%"}}>
                                 <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
@@ -300,12 +277,12 @@ class AddModal extends Component{
                 placeholder='种类'
                 allowClear
                 treeDefaultExpandAll
+                treeNodeFilterProp='title'
                 onChange={(value) => this.changeValue(value, 'type')}>
                     <TreeSelect.TreeNode value="2" title="电子产品" key="1">
                         <TreeSelect.TreeNode value="1" title="电脑" key="2" />
                         <TreeSelect.TreeNode value="0" title="手机" key="3" />
                     </TreeSelect.TreeNode>
-                })}
             </TreeSelect>
         )
         const timingSel = (

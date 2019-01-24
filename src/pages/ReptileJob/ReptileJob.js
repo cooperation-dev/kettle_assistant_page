@@ -129,11 +129,7 @@ class ReptileJob extends Component{
             title: '定时设置',
             dataIndex: 'interval',
             key: 'interval',
-<<<<<<< HEAD
-            render: text => <div>{text}秒</div>,
-=======
             render: text => <span>{text}秒</span>,
->>>>>>> fc40be7f75e0e896c23d4370348c4e79ef6e7edc
         },{
             title: '运行状态',
             dataIndex: 'status',

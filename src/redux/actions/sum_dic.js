@@ -184,39 +184,6 @@ export const deleteDicByIds = (id) => {
     }
 }
 
-export const changeDisabled = (row) => {
-    return (dispatch) => {
-        axios({
-            method: 'post',
-            url: '/api/sumDicController/changeDisabled',
-            data: row
-        }).then((r) => {
-            return r.data.data
-        }).then(d => {
-            dispatch(change_disabled(d))
-        }) 
-    }
-}
-
-export const detailsModalShow = () => {
-    return (dispatch) => {
-        axios.get('/api/sumDicController/findDicTypes')
-                .then(r => 
-                    {
-                        let children = []
-                        r.data.data.map(d => children.push(d))
-                        let data = {
-                            children: children
-                        }
-                        return [data]
-                    })
-                .then(data => {
-                    dispatch(details_modal_show(data))
-                })
-
-    }
-}
-
 export const detailsModalSure = () => {
     return (dispatch) => {
         dispatch(details_modal_sure())

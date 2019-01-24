@@ -45,7 +45,7 @@ class ReptileJob extends Component{
         // }
         let reptileVO = {
             name: this.state.name,
-            status: this.state.status,
+            status: this.state.status=='undefined'?'':this.state.status,
             pageSize: this.props.reptileJob.pageSize,
             pageNo: 1,
         }
@@ -125,8 +125,9 @@ class ReptileJob extends Component{
             key: 'type',
         },{
             title: '定时设置',
-            dataIndex: 'timing',
-            key: 'timing',
+            dataIndex: 'interval',
+            key: 'interval',
+            render: text => <a href="javascript:;">{text}</a>,
         },{
             title: '运行状态',
             dataIndex: 'status',

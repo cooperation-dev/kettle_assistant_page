@@ -37,18 +37,19 @@ class ReptileJob extends Component{
     }
 
     search = () => {
-        let reptile = {
+        // let reptileVO = {
+        //     name: this.state.name,
+        //     status: this.state.status,
+        //     platform: this.state.platform,
+        //     updateTime: this.state.updateTime,
+        // }
+        let reptileVO = {
             name: this.state.name,
             status: this.state.status,
-            platform: this.state.platform,
-            updateTime: this.state.updateTime,
-        }
-        let reptileReqVO = {
             pageSize: this.props.reptileJob.pageSize,
             pageNo: 1,
-            data: reptile
         }
-        this.props.findJobs(reptileReqVO)
+        this.props.findJobs(reptileVO)
     }
 
     reset = () => {

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Row, Col, Form, Input, Button, Table, Select, TreeSelect} from 'antd';
 
+
 import {findProducts} from '../../redux/actions/product';
 import {connect} from 'react-redux';
 
@@ -28,6 +29,16 @@ const columns = [{
     title: '网页链接',
     dataIndex: 'url',
     key: 'url',
+    render: text => {
+        let max_length = 60
+        if(text.length > max_length) {
+            return <span>{text.substring(0, max_length)}...</span>
+
+                // <Tooltip title={text} placement="a">
+                // </Tooltip>
+        }
+        return <span>{text}</span>
+    }
 },{
     title: '最新时间',
     dataIndex: 'updateTime',

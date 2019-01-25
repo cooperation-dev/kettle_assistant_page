@@ -229,18 +229,18 @@ class AddModal extends Component{
     }
 
     componentDidMount = () => {
-        this.findDicTypes()
+        // this.findDicTypes()
     }
 
-    findDicTypes = () => {
-        axios.get('/api/sumDicController/findDicTypes').then((r) => {
-            return r.data.data
-        }).then((list) => {
-            this.setState({
-                dicTypes: list,
-            })
-        })
-    }
+    // findDicTypes = () => {
+    //     axios.get('/api/sumDicController/findDicTypes').then((r) => {
+    //         return r.data.data
+    //     }).then((list) => {
+    //         this.setState({
+    //             dicTypes: list,
+    //         })
+    //     })
+    // }
 
     change = (event, attribute) => {
         let newState = {};
@@ -348,15 +348,15 @@ class UpdateModal extends Component{
 
     }
 
-    findDicTypes = () => {
-        axios.get('/api/sumDicController/findDicTypes').then((r) => {
-            return r.data.data
-        }).then((list) => {
-            this.setState({
-                dicTypes: list,
-            })
-        })
-    }
+    // findDicTypes = () => {
+    //     axios.get('/api/sumDicController/findDicTypes').then((r) => {
+    //         return r.data.data
+    //     }).then((list) => {
+    //         this.setState({
+    //             dicTypes: list,
+    //         })
+    //     })
+    // }
 
     findDicById = (id) => {
         axios.get('/dicService/v1/dic/'+id)
@@ -371,7 +371,7 @@ class UpdateModal extends Component{
                     belongs: belongsSwitch?'':data.belongs,
                 })
             })
-            this.findDicTypes()
+            // this.findDicTypes()
     }
 
     change = (event, attribute) => {

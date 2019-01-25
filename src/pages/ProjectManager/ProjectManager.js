@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Button, Table, Select, TreeSelect} from 'antd';
+import {Row, Col, Form, Input, Button, Table, Select, TreeSelect, Tooltip} from 'antd';
 
 
 import {findProducts} from '../../redux/actions/product';
@@ -180,7 +180,7 @@ class Product extends Component{
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                        <Table rowKey={(record) => {return record.productId}} dataSource={this.props.product.list} columns={columns} pagination={pagination} scroll={{ x: '200%'}}/>
+                        <Table rowKey={(record) => {return record.productId}} dataSource={this.props.product.list} columns={columns} pagination={pagination} />
                     </Form>
                 </Row>
             </div>

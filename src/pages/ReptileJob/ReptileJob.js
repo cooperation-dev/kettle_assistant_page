@@ -37,15 +37,10 @@ class ReptileJob extends Component{
     }
 
     search = () => {
-        // let reptileVO = {
-        //     name: this.state.name,
-        //     status: this.state.status,
-        //     platform: this.state.platform,
-        //     updateTime: this.state.updateTime,
-        // }
         let reptileVO = {
             name: this.state.name,
             status: this.state.status==undefined?'':this.state.status,
+            platform: this.state.platform==undefined?'':this.state.platform,
             pageSize: this.props.reptileJob.pageSize,
             pageNo: 1,
         }
@@ -60,16 +55,10 @@ class ReptileJob extends Component{
             platform: undefined,
             updateTime: '',
         })
-
-        // let reptile = {
-        //     name: '',
-        //     status: '',
-        //     platform: '',
-        //     updateTime: '',
-        // }
         let reptileVO = {
             name: '',
             status: '',
+            platform: '',
             pageSize: this.props.reptileJob.pageSize,
             pageNo: 1,
             // data: reptile
@@ -90,18 +79,14 @@ class ReptileJob extends Component{
     }
 
     changePagination = (page) => {
-        let reptile = {
+        let reptileVO = {
             name: this.state.name,
-            status: this.state.status,
-            platform: this.state.platform,
-            updateTime: this.state.updateTime,
-        }
-        let reptileReqVO = {
+            status: this.state.status==undefined?'':this.state.status,
+            platform: this.state.platform==undefined?'':this.state.platform,
             pageSize: this.props.reptileJob.pageSize,
             pageNo: page,
-            data: reptile
         }
-        this.props.findJobs(reptileReqVO)
+        this.props.findJobs(reptileVO)
     }
     render(){
         const pagination = {
@@ -179,11 +164,12 @@ class ReptileJob extends Component{
                                         // optionFilterProp="children"
                                         value={this.state.status}
                                         onChange={(value) => this.changeValue(value, 'status')}
-                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                    >
-                                        <Option value="0">准备启动</Option>
-                                        <Option value="2">正在运行</Option>
-                                        <Option value="3">已停止</Option>
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                                        <Option value="0">未启动</Option>
+                                        <Option value="1">准备启动</Option>
+                                        <Option value="2">等待运行</Option>
+                                        <Option value="3">正在运行</Option>
+                                        <Option value="4">结束"</Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
@@ -197,9 +183,12 @@ class ReptileJob extends Component{
                                         value={this.state.platform}
                                         onChange={(value) => this.changeValue(value, 'platform')}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                                        <Option value="0">准备启动</Option>
-                                        <Option value="2">正在运行</Option>
-                                        <Option value="3">已停止</Option>
+                                        <Option value="0">淘宝</Option>
+                                        <Option value="1">天猫</Option>
+                                        <Option value="2">京东</Option>
+                                        <Option value="3">亚马逊</Option>
+                                        <Option value="4">苏宁易购</Option>
+                                        <Option value="5">唯品会</Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
@@ -280,9 +269,12 @@ class AddModal extends Component{
                 notFoundContent="未匹配"
                 onChange={(value) => {this.changeValue(value, 'platform')}}
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                    <Option value='0'>淘宝</Option>
-                    <Option value='1'>天猫</Option>
-                    <Option value='2'>京东</Option>
+                    <Option value="0">淘宝</Option>
+                    <Option value="1">天猫</Option>
+                    <Option value="2">京东</Option>
+                    <Option value="3">亚马逊</Option>
+                    <Option value="4">苏宁易购</Option>
+                    <Option value="5">唯品会</Option>
             </Select>
         )
         const typeTreeSel = (
@@ -349,20 +341,6 @@ class AddModal extends Component{
                 okText="确认"
                 cancelText="取消"
                 destroyOnClose={true}>
-                {/* <Form>
-                    <CommonForm label = "作业名称" field = "name" type="input" 
-                        value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
-                    <CommonForm label = "平台" field = "platform" type="select" data={platFormData} 
-                        value = {this.state.platform} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
-                    {/*<TreeSelect.TreeNode value="电子产品" title="电子产品" key="1">
-                        <TreeSelect.TreeNode value="电脑" title="电脑" key="2" />
-                        <TreeSelect.TreeNode value="手机" title="手机" key="3" />
-                    </TreeSelect.TreeNode>*/}
-                    {/* <CommonForm label = "种类" field = "type" type="treeSelect" data={typeData} 
-                        value = {this.state.type} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
-                    <CommonForm label = "定时设置" field = "timing" type="select" data={timingData} 
-                        value = {this.state.timing} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
-                </Form> */}
                 <CommonForm items={items} customForm={(form) => this.form = form}/>
             </Modal>
         )

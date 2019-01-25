@@ -110,7 +110,7 @@ export const findJobs = (reptileVO) => {
     return (dispatch) => {
         axios({
             method: 'get',
-            url: '/api/rest/reptileService/v1/jobs?name='+reptileVO.name+'&status='+reptileVO.status+'&pageNo='+reptileVO.pageNo+'&pageSize='+reptileVO.pageSize,
+            url: '/api/rest/reptileService/v1/jobs?name='+reptileVO.name+'&status='+reptileVO.status+'&platform='+reptileVO.platform+'&pageNo='+reptileVO.pageNo+'&pageSize='+reptileVO.pageSize,
             // data: reptileReqVO
         }).then((response) => {
             return response.data.data

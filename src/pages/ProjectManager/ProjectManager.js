@@ -168,9 +168,10 @@ class Product extends Component{
                                         treeDefaultExpandAll
                                         treeNodeFilterProp='title'
                                         onChange={(value) => this.changeValue(value, 'type')}>
-                                            <TreeSelect.TreeNode value="2" title="电子产品" key="1">
-                                                <TreeSelect.TreeNode value="1" title="电脑" key="2" />
+                                            <TreeSelect.TreeNode value="-1" title="电子产品" key="1">
+                                                <TreeSelect.TreeNode value="2" title="电脑" key="2" />
                                                 <TreeSelect.TreeNode value="0" title="手机" key="3" />
+                                                <TreeSelect.TreeNode value="1" title="服装" key="4" />
                                             </TreeSelect.TreeNode>
                                     </TreeSelect>
                                 </Form.Item>

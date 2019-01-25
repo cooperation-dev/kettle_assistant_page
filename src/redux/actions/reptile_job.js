@@ -153,7 +153,7 @@ export const updateJobModalShow = (id) => {
     }
 }
 
-export const updateJobModalSure = (job,reptileId) => {
+export const updateJobModalSure = (reptileVO,reptileId) => {
     return (dispatch) => {
         axios({
             method: 'put',

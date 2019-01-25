@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { message } from 'antd';
 
 export const FIND_JOBS = "reptileJob/findJobs";
 //新增作业
@@ -203,6 +204,9 @@ export const startingJob = (reptileId) => {
             method: 'post',
             url: '/api/rest/reptileService/v1/job/'+reptileId+'/starting',
         }).then((response) => {
+            if(response.code == "0"){
+                message.success('启动成功');
+            }
             return response.data.data
         }).then((reptileRespVO) => {
             dispatch(starting_job(reptileRespVO))
@@ -216,6 +220,9 @@ export const pauseJob = (reptileId) => {
             method: 'post',
             url: '/api/rest/reptileService/v1/job/'+reptileId+'/pause',
         }).then((response) => {
+            if(response.code == "0"){
+                message.success('停止成功');
+            }
             return response.data.data
         }).then((reptileRespVO) => {
             dispatch(pause_job(reptileRespVO))

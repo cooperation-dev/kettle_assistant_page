@@ -92,7 +92,7 @@ class Product extends Component{
     changePagination = (page) => {
         let productVO = {
             name: this.state.name,
-            platform: this.state.platform,
+            platform: this.state.platform==undefined?'':this.state.platform,
             pageSize: this.props.product.pageSize,
             pageNo: page,
         }

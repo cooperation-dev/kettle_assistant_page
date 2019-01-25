@@ -187,6 +187,22 @@ class ReptileJob extends Component{
                                     </Select>
                                 </Form.Item>
                             </Col>
+                            <Col key={2} style={{float: "left", width: "20%"}}>
+                                <Form.Item label="平台">
+                                    <Select
+                                        showSearch
+                                        placeholder="请选择平台"
+                                        notFoundContent="未匹配"
+                                        // optionFilterProp="children"
+                                        value={this.state.platform}
+                                        onChange={(value) => this.changeValue(value, 'platform')}
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                                        <Option value="0">准备启动</Option>
+                                        <Option value="2">正在运行</Option>
+                                        <Option value="3">已停止</Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col>
                             <Col key={5} className="custom-sr-btn" style={{float: "left", width: "20%"}}>
                                 <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Button, Table, Select, Tooltip} from 'antd';
+import {Row, Col, Form, Input, Button, Table, Select, TreeSelect} from 'antd';
+
 
 import {findProducts} from '../../redux/actions/product';
 import {connect} from 'react-redux';
@@ -59,6 +60,7 @@ class Product extends Component{
         this.state = {
             name: '',
             platform: undefined,
+            type: ''
         }
     }
 
@@ -70,6 +72,7 @@ class Product extends Component{
         let productVO = {
             name: this.state.name,
             platform: this.state.platform==undefined?'':this.state.platform,
+            type: this.state.type,
             pageSize: this.props.product.pageSize,
             pageNo: 1,
         }
@@ -80,11 +83,13 @@ class Product extends Component{
         this.setState({
             name: '',
             platform: undefined,
+            type: '',
         })
 
         let productVO = {
             name: '',
             platform: '',
+            type: this.state.type,
             pageSize: this.props.product.pageSize,
             pageNo: 1,
         }
@@ -107,6 +112,7 @@ class Product extends Component{
         let productVO = {
             name: this.state.name,
             platform: this.state.platform==undefined?'':this.state.platform,
+            type: this.state.type,
             pageSize: this.props.product.pageSize,
             pageNo: page,
         }
@@ -141,20 +147,40 @@ class Product extends Component{
                                         // optionFilterProp="children"
                                         value={this.state.platform}
                                         onChange={(value) => this.changeValue(value, 'platform')}
-                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                    >
-                                        <Option value="京东">京东</Option>
-                                        <Option value="淘宝">淘宝</Option>
-                                        <Option value="天猫">天猫</Option>
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                                        <Option value="0">淘宝</Option>
+                                        <Option value="1">天猫</Option>
+                                        <Option value="2">京东</Option>
+                                        <Option value="3">亚马逊</Option>
+                                        <Option value="4">苏宁易购</Option>
+                                        <Option value="5">唯品会</Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
-                            <Col key={3} className="custom-sr-btn" style={{float: "left", width: "20%"}}>
+                            <Col key={3} style={{float: "left", width: "20%"}}>
+                                <Form.Item label="种类">
+                                    <TreeSelect
+                                        showSearch
+                                        style={{ width: '100%' }}
+                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                        placeholder='种类'
+                                        allowClear
+                                        treeDefaultExpandAll
+                                        treeNodeFilterProp='title'
+                                        onChange={(value) => this.changeValue(value, 'type')}>
+                                            <TreeSelect.TreeNode value="2" title="电子产品" key="1">
+                                                <TreeSelect.TreeNode value="1" title="电脑" key="2" />
+                                                <TreeSelect.TreeNode value="0" title="手机" key="3" />
+                                            </TreeSelect.TreeNode>
+                                    </TreeSelect>
+                                </Form.Item>
+                            </Col>
+                            <Col key={4} className="custom-sr-btn" style={{float: "left", width: "20%"}}>
                                 <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
                         </Row>
-                        <Table rowKey={(record) => {return record.productId}} dataSource={this.props.product.list} columns={columns} pagination={pagination}/>
+                        <Table rowKey={(record) => {return record.productId}} dataSource={this.props.product.list} columns={columns} pagination={pagination} scroll={{ x: '200%'}}/>
                     </Form>
                 </Row>
             </div>

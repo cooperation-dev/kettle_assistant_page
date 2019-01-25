@@ -37,15 +37,10 @@ class ReptileJob extends Component{
     }
 
     search = () => {
-        // let reptileVO = {
-        //     name: this.state.name,
-        //     status: this.state.status,
-        //     platform: this.state.platform,
-        //     updateTime: this.state.updateTime,
-        // }
         let reptileVO = {
             name: this.state.name,
             status: this.state.status==undefined?'':this.state.status,
+            platform: this.state.platform==undefined?'':this.state.platform,
             pageSize: this.props.reptileJob.pageSize,
             pageNo: 1,
         }
@@ -60,16 +55,10 @@ class ReptileJob extends Component{
             platform: undefined,
             updateTime: '',
         })
-
-        // let reptile = {
-        //     name: '',
-        //     status: '',
-        //     platform: '',
-        //     updateTime: '',
-        // }
         let reptileVO = {
             name: '',
             status: '',
+            platform: '',
             pageSize: this.props.reptileJob.pageSize,
             pageNo: 1,
             // data: reptile
@@ -90,18 +79,14 @@ class ReptileJob extends Component{
     }
 
     changePagination = (page) => {
-        let reptile = {
+        let reptileVO = {
             name: this.state.name,
-            status: this.state.status,
-            platform: this.state.platform,
-            updateTime: this.state.updateTime,
-        }
-        let reptileReqVO = {
+            status: this.state.status==undefined?'':this.state.status,
+            platform: this.state.platform==undefined?'':this.state.platform,
             pageSize: this.props.reptileJob.pageSize,
             pageNo: page,
-            data: reptile
         }
-        this.props.findJobs(reptileReqVO)
+        this.props.findJobs(reptileVO)
     }
     render(){
         const pagination = {
@@ -179,15 +164,16 @@ class ReptileJob extends Component{
                                         // optionFilterProp="children"
                                         value={this.state.status}
                                         onChange={(value) => this.changeValue(value, 'status')}
-                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                    >
-                                        <Option value="0">准备启动</Option>
-                                        <Option value="2">正在运行</Option>
-                                        <Option value="3">已停止</Option>
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                                        <Option value="0">未启动</Option>
+                                        <Option value="1">准备启动</Option>
+                                        <Option value="2">等待运行</Option>
+                                        <Option value="3">正在运行</Option>
+                                        <Option value="4">结束"</Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
-                            <Col key={2} style={{float: "left", width: "20%"}}>
+                            <Col key={3} style={{float: "left", width: "20%"}}>
                                 <Form.Item label="平台">
                                     <Select
                                         showSearch
@@ -197,13 +183,16 @@ class ReptileJob extends Component{
                                         value={this.state.platform}
                                         onChange={(value) => this.changeValue(value, 'platform')}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                                        <Option value="0">准备启动</Option>
-                                        <Option value="2">正在运行</Option>
-                                        <Option value="3">已停止</Option>
+                                        <Option value="0">淘宝</Option>
+                                        <Option value="1">天猫</Option>
+                                        <Option value="2">京东</Option>
+                                        <Option value="3">亚马逊</Option>
+                                        <Option value="4">苏宁易购</Option>
+                                        <Option value="5">唯品会</Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
-                            <Col key={5} className="custom-sr-btn" style={{float: "left", width: "20%"}}>
+                            <Col key={4} className="custom-sr-btn" style={{float: "left", width: "20%"}}>
                                 <Button type="primary" htmlType="submit" onClick={this.search}>查询</Button>
                                 <Button style={{ marginLeft: 8 }} onClick={this.reset}>重置</Button>
                             </Col>
@@ -268,6 +257,12 @@ class AddModal extends Component{
                 type: this.state.type,
                 timing: this.state.timing,
             }
+            this.setState({
+                name: '',
+                platform: undefined,
+                type: '',
+                timing: '5-12',
+            })
             this.props.onOk(reptileVO)
         })
     }
@@ -280,9 +275,12 @@ class AddModal extends Component{
                 notFoundContent="未匹配"
                 onChange={(value) => {this.changeValue(value, 'platform')}}
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                    <Option value='0'>淘宝</Option>
-                    <Option value='1'>天猫</Option>
-                    <Option value='2'>京东</Option>
+                    <Option value="0">淘宝</Option>
+                    <Option value="1">天猫</Option>
+                    <Option value="2">京东</Option>
+                    <Option value="3">亚马逊</Option>
+                    <Option value="4">苏宁易购</Option>
+                    <Option value="5">唯品会</Option>
             </Select>
         )
         const typeTreeSel = (
@@ -350,20 +348,6 @@ class AddModal extends Component{
                 okText="确认"
                 cancelText="取消"
                 destroyOnClose={true}>
-                {/* <Form>
-                    <CommonForm label = "作业名称" field = "name" type="input" 
-                        value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
-                    <CommonForm label = "平台" field = "platform" type="select" data={platFormData} 
-                        value = {this.state.platform} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
-                    {/*<TreeSelect.TreeNode value="电子产品" title="电子产品" key="1">
-                        <TreeSelect.TreeNode value="电脑" title="电脑" key="2" />
-                        <TreeSelect.TreeNode value="手机" title="手机" key="3" />
-                    </TreeSelect.TreeNode>*/}
-                    {/* <CommonForm label = "种类" field = "type" type="treeSelect" data={typeData} 
-                        value = {this.state.type} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
-                    <CommonForm label = "定时设置" field = "timing" type="select" data={timingData} 
-                        value = {this.state.timing} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
-                </Form> */}
                 <CommonForm items={items} customForm={(form) => this.form = form}/>
             </Modal>
         )
@@ -415,7 +399,7 @@ class UpdateModal extends Component{
                     name: reptileRespVO.name,
                     platform: reptileRespVO.platform,
                     type: reptileRespVO.type,
-                    timing: reptileRespVO.timing
+                    timing: reptileRespVO.interval
                 })
             })
     }
@@ -432,7 +416,77 @@ class UpdateModal extends Component{
     }
 
     render(){                 
-
+        const platFormSel = (
+            <Select
+                showSearch
+                style={{ width: '100%' }}
+                placeholder='平台'
+                notFoundContent="未匹配"
+                onChange={(value) => {this.changeValue(value, 'platform')}}
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                    <Option value="0">淘宝</Option>
+                    <Option value="1">天猫</Option>
+                    <Option value="2">京东</Option>
+                    <Option value="3">亚马逊</Option>
+                    <Option value="4">苏宁易购</Option>
+                    <Option value="5">唯品会</Option>
+            </Select>
+        )
+        const typeTreeSel = (
+            <TreeSelect
+                showSearch
+                style={{ width: '100%' }}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                placeholder='种类'
+                allowClear
+                treeDefaultExpandAll
+                treeNodeFilterProp='title'
+                onChange={(value) => this.changeValue(value, 'type')}>
+                    <TreeSelect.TreeNode value="2" title="电子产品" key="1">
+                        <TreeSelect.TreeNode value="1" title="电脑" key="2" />
+                        <TreeSelect.TreeNode value="0" title="手机" key="3" />
+                    </TreeSelect.TreeNode>
+            </TreeSelect>
+        )
+        const timingSel = (
+            <Select
+                showSearch
+                style={{ width: '100%' }}
+                placeholder='定时设置'
+                notFoundContent="未匹配"
+                onChange={(value) => {this.changeValue(value, 'timing')}}
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                    <Option value='1-3'>1-3秒</Option>
+                    <Option value='3-5'>3-5秒</Option>
+                    <Option value='5-12'>5-12秒</Option>
+            </Select>
+        )
+        const items = [
+            {
+                label: '作业名称',
+                key: 'name',
+                value: this.state.name,
+                component: <Input placeholder="作业名称" onChange={(value) => {this.change(value, 'name')}}/>,
+            },
+            {
+                label: '平台',
+                key: 'platform',
+                value: this.state.platform,
+                component: platFormSel,
+            },
+            {
+                label: '种类',
+                key: 'type',
+                value: this.state.type,
+                component: typeTreeSel,
+            },
+            {
+                label: '定时设置',
+                key: 'timing',
+                value: this.state.timing,
+                component: timingSel,
+            },
+        ]
         return (
             <Modal
                 title="修改作业"
@@ -442,18 +496,7 @@ class UpdateModal extends Component{
                 okText="确认"
                 cancelText="取消"
                 destroyOnClose={true}>
-                <CommonForm label = "作业名称" field = "name" type="input" 
-                    value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
-                <CommonForm label = "平台" field = "platform" type="select" data={platFormData} 
-                    value = {this.state.platform} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
-                {/*<TreeSelect.TreeNode value="电子产品" title="电子产品" key="1">
-                    <TreeSelect.TreeNode value="电脑" title="电脑" key="2" />
-                    <TreeSelect.TreeNode value="手机" title="手机" key="3" />
-                </TreeSelect.TreeNode>*/}
-                <CommonForm label = "种类" field = "type" type="treeSelect" data={typeData} 
-                    value = {this.state.type} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
-                <CommonForm label = "定时设置" field = "timing" type="select" data={timingData} 
-                    value = {this.state.timing} change = {(value, attribute) => {this.changeValue(value, attribute)}}/>
+                <CommonForm items={items} customForm={(form) => this.form = form}/>
             </Modal>
         )
     }

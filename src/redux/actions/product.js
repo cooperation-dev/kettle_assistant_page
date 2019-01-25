@@ -16,7 +16,7 @@ export const findProducts = (productVO) => {
     return (dispatch) => {
         axios({
             method: 'get',
-            url: '/api/rest/productService/v1/products?name='+productVO.name+'&platform='+productVO.platform+'&pageNo='+productVO.pageNo+'&pageSize='+productVO.pageSize,
+            url: '/api/rest/productService/v1/products?name='+productVO.name+'&platform='+productVO.platform+'&type='+productVO.type+'&pageNo='+productVO.pageNo+'&pageSize='+productVO.pageSize,
             // data: productReqVO
         }).then((response) => {
             return response.data.data

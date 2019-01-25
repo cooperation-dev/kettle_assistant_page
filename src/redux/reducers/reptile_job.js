@@ -2,7 +2,8 @@ import {FIND_JOBS,
     ADD_JOB_MODAL_SHOW, ADD_JOB_MODAL_SURE, ADD_JOB_MODAL_CANCEL,
     UPDATE_JOB_MODAL_SHOW, UPDATE_JOB_MODAL_SURE, UPDATE_JOB_MODAL_CANCEL,
     DISPLAY_LOG_SHOW, DISPLAY_LOG_CLOSE,DELETE_JOB_BY_IDS,
-    STARTING_JOB, PAUSE_JOB} from '../actions/reptile_job';
+    STARTING_JOB, PAUSE_JOB,
+    FIND_STATUS, FIND_PLATFORMS, FIND_TYPES} from '../actions/reptile_job';
 
 const initState = {
     list: [],
@@ -14,7 +15,10 @@ const initState = {
     //分页
     total: 0, //数据总数
     pageSize: 10, //默认一页10条
-    pageNo: 1 //当前显示数
+    pageNo: 1, //当前显示数
+    statusList: [],
+    platformList: [],
+    typeList: []
 }
 
 export default function reducers(state=initState, action){
@@ -121,6 +125,24 @@ export default function reducers(state=initState, action){
             return {
                 ...state,
                 list: newlist
+            }
+        }
+        case FIND_STATUS: {
+            return {
+                ...state,
+                statusList: action.statusList
+            }
+        }
+        case FIND_PLATFORMS: {
+            return {
+                ...state,
+                platformList: action.platformList
+            }
+        }
+        case FIND_TYPES: {
+            return {
+                ...state,
+                typeList: action.typeList
             }
         }
         default:

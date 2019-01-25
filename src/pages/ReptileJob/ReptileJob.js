@@ -6,7 +6,8 @@ import {findJobs,
     updateJobModalShow, updateJobModalSure, updateJobModalCancel,
     deleteJob,
     displayLogShow, displayLogClose,
-    startingJob, pauseJob} from '../../redux/actions/reptile_job';
+    startingJob, pauseJob,
+    findStatus, findPlatforms, findTypes} from '../../redux/actions/reptile_job';
 import {connect} from 'react-redux';
 import axios from 'axios';
 
@@ -33,7 +34,9 @@ class ReptileJob extends Component{
     }
 
     componentDidMount = () => {
-        this.search();
+        this.search()
+        this.props.findStatus()
+        this.props.findPlatforms()
     }
 
     search = () => {
@@ -165,11 +168,16 @@ class ReptileJob extends Component{
                                         value={this.state.status}
                                         onChange={(value) => this.changeValue(value, 'status')}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                                        <Option value="0">未启动</Option>
+                                        {/* <Option value="0">未启动</Option>
                                         <Option value="1">准备启动</Option>
                                         <Option value="2">等待运行</Option>
                                         <Option value="3">正在运行</Option>
-                                        <Option value="4">结束"</Option>
+                                        <Option value="4">结束</Option> */}
+                                        {
+                                            this.props.reptileJob.statusList.map(status => {
+                                                return <Option value={status.code} key={status.code}>{status.name}</Option>
+                                            })
+                                        }
                                     </Select>
                                 </Form.Item>
                             </Col>
@@ -183,12 +191,17 @@ class ReptileJob extends Component{
                                         value={this.state.platform}
                                         onChange={(value) => this.changeValue(value, 'platform')}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                                        <Option value="0">淘宝</Option>
+                                        {/* <Option value="0">淘宝</Option>
                                         <Option value="1">天猫</Option>
                                         <Option value="2">京东</Option>
                                         <Option value="3">亚马逊</Option>
                                         <Option value="4">苏宁易购</Option>
-                                        <Option value="5">唯品会</Option>
+                                        <Option value="5">唯品会</Option> */}
+                                        {
+                                            this.props.reptileJob.platformList.map(platform => {
+                                                return <Option value={platform.code} key={platform.code}>{platform.name}</Option>
+                                            })
+                                        }
                                     </Select>
                                 </Form.Item>
                             </Col>
@@ -200,7 +213,7 @@ class ReptileJob extends Component{
                         <Table rowKey={(record) => {return record.reptileId}} dataSource={this.props.reptileJob.list} columns={columns} pagination={pagination}/>
                     </Form>
                 </Row>
-                <AddModal visible={this.props.reptileJob.addVisible} onOk={(reptileReqVO) => this.props.addJobModalSure(reptileReqVO)} onCancel={() => this.props.addJobModalCancel()} ></AddModal>
+                <AddModal visible={this.props.reptileJob.addVisible} onOk={(reptileReqVO) => this.props.addJobModalSure(reptileReqVO)} onCancel={() => this.props.addJobModalCancel()} platforms={this.props.reptileJob.platformList}></AddModal>
                 <UpdateModal visible={this.props.reptileJob.updateVisible} onOk={(reptileReqVO, reptileId) => this.props.updateJobModalSure(reptileReqVO, reptileId)} onCancel={() => this.props.updateJobModalCancel()} id={this.props.reptileJob.updateJobId} ></UpdateModal>
                 <LogModal visible={this.props.reptileJob.logVisible} onOk={() => this.props.displayLogClose()} onCancel={() => this.props.displayLogClose()} id={this.props.reptileJob.logJobId}></LogModal>
             </div>
@@ -275,12 +288,15 @@ class AddModal extends Component{
                 notFoundContent="未匹配"
                 onChange={(value) => {this.changeValue(value, 'platform')}}
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                    <Option value="0">淘宝</Option>
+                    {/* <Option value="0">淘宝</Option>
                     <Option value="1">天猫</Option>
                     <Option value="2">京东</Option>
                     <Option value="3">亚马逊</Option>
                     <Option value="4">苏宁易购</Option>
-                    <Option value="5">唯品会</Option>
+                    <Option value="5">唯品会</Option> */}
+                    {
+                        this.props.platforms.map(platform => <Option value={platform.code} key={platform.code}>{platform.name}</Option>)
+                    }
             </Select>
         )
         const typeTreeSel = (
@@ -603,4 +619,5 @@ export default connect((state) => ({
     updateJobModalShow, updateJobModalSure, updateJobModalCancel,
     deleteJob,
     displayLogShow, displayLogClose,
-    startingJob, pauseJob})(ReptileJob)
+    startingJob, pauseJob,
+    findStatus, findPlatforms, findTypes})(ReptileJob)

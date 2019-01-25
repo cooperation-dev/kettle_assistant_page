@@ -23,6 +23,15 @@ export const DISPLAY_LOG_CLOSE = "reptileJob/displayLogClose";
 export const STARTING_JOB = "reptileJob/startingJob";
 export const PAUSE_JOB = "reptileJob/pauseJob";
 
+//查询运行状态列表
+export const FIND_STATUS = "reptileJob/findStatus"
+
+//查询平台列表
+export const FIND_PLATFORMS = "reptileJob/findPlatforms"
+
+//查询产品类别列表
+export const FIND_TYPES = "reptileJob/findTypes"
+
 export const find_jobs = (reptileRespVO) => {
     return {
         type: FIND_JOBS,
@@ -103,6 +112,27 @@ export const pause_job = (reptileRespVO) => {
     return {
         type: PAUSE_JOB,
         reptileRespVO: reptileRespVO
+    }
+}
+
+export const find_status = (list) => {
+    return {
+        type: FIND_STATUS,
+        statusList: list
+    }
+}
+
+export const find_platforms = (list) => {
+    return {
+        type: FIND_PLATFORMS,
+        platformList: list
+    }
+}
+
+export const find_types = (list) => {
+    return {
+        type: FIND_TYPES,
+        typeList: list
     }
 }
 
@@ -227,5 +257,44 @@ export const pauseJob = (reptileId) => {
         }).then((reptileVO) => {
             dispatch(pause_job(reptileVO))
         })
+    }
+}
+
+export const findStatus = () => {
+    return (dispatch) => {
+        axios({
+            method: 'get',
+            url: '/api/rest/reptileService/v1/job/status',
+        }).then((response) => {
+            return response.data.data
+        }).then((list) => {
+            dispatch(find_status(list))
+        }) 
+    }
+}
+
+export const findPlatforms = () => {
+    return (dispatch) => {
+        axios({
+            method: 'get',
+            url: '/api/rest/reptileService/v1/job/platforms',
+        }).then((response) => {
+            return response.data.data
+        }).then((list) => {
+            dispatch(find_platforms(list))
+        }) 
+    }
+}
+
+export const findTypes = () => {
+    return (dispatch) => {
+        axios({
+            method: 'get',
+            url: '/api/rest/reptileService/v1/job/types',
+        }).then((response) => {
+            return response.data.data
+        }).then((list) => {
+            dispatch(find_types(list))
+        }) 
     }
 }

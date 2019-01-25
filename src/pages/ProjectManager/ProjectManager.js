@@ -13,6 +13,15 @@ const columns = [{
     title: '产品',
     dataIndex: 'name',
     key: 'name',
+    render: text => {
+        let max_length = 20
+        if(text.length > max_length) {
+            return <Tooltip title={text}>
+                        <span>{text.substring(0, max_length)}...</span>
+                    </Tooltip>
+        }
+        return <span>{text}</span>
+    }
 }, {
     title: '平台',
     dataIndex: 'platform',
@@ -32,10 +41,9 @@ const columns = [{
     render: text => {
         let max_length = 60
         if(text.length > max_length) {
-            return <span>{text.substring(0, max_length)}...</span>
-
-                // <Tooltip title={text} placement="a">
-                // </Tooltip>
+            return <Tooltip title={text}>
+                        <span>{text.substring(0, max_length)}...</span>
+                    </Tooltip>
         }
         return <span>{text}</span>
     }

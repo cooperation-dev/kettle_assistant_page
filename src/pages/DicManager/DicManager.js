@@ -173,11 +173,6 @@ class DicManager extends Component{
                             key = 'type'
                         />
                         <Column 
-                            title = '更新人'
-                            dataIndex = 'updater'
-                            key = 'updater'
-                        />
-                        <Column 
                             title = '最后更新时间'
                             dataIndex = 'updateTime'
                             key = 'updateTime'
@@ -303,8 +298,7 @@ class AddModal extends Component{
                 key: 'code',
                 value: this.state.code,
                 component: <Input placeholder="字典代码" onChange={(value) => {this.change(value, 'code')}}/>,
-            },
-        ]
+        }]
         return (
             <Modal
                 title="新增字典"
@@ -315,6 +309,21 @@ class AddModal extends Component{
                 cancelText="取消"
                 destroyOnClose={true}>
                 <CommonForm items={items} customForm={(form) => this.form = form}/>
+                <Form.Item label="所属对象">
+                    <Col span={4}>
+                        <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
+                    </Col>
+                    <Col span={12} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
+                        <TreeSelect
+                            style={{ width: 300 }}
+                            value={this.state.belongs}
+                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                            treeData={this.state.dicTypes}
+                            placeholder="Please select"
+                            treeDefaultExpandAll
+                            onChange={this.changeBelongs}/>
+                    </Col>
+                </Form.Item>
             </Modal>
         )
     }
@@ -410,7 +419,19 @@ class UpdateModal extends Component{
     }
 
     render(){                 
-
+        const items = [
+            {
+                label: '字典名称',
+                key: 'name',
+                value: this.state.name,
+                component: <Input placeholder="字典名称" onChange={(value) => {this.change(value, 'name')}}/>,
+            },
+            {
+                label: '字典代码',
+                key: 'code',
+                value: this.state.code,
+                component: <Input placeholder="字典代码" onChange={(value) => {this.change(value, 'code')}}/>,
+        }]
         return (
             <Modal
                 title="修改字典"
@@ -420,27 +441,22 @@ class UpdateModal extends Component{
                 okText="确认"
                 cancelText="取消"
                 destroyOnClose={true}>
-                <CommonForm label = "字典名称" field = "name" type="input" value = {this.state.name} change = {(event, attribute) => {this.change(event, attribute)}}/>
-                <CommonForm label = "字典代码" field = "code" type="input" value = {this.state.code} change = {(event, attribute) => {this.change(event, attribute)}}/>
-                <Row >
-                    <Form.Item label="所属对象">
-                        <Col span={4}>
-                            <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
-                        </Col>
-                        <Col span={12} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
-                                <TreeSelect
-                                    style={{ width: 300 }}
-                                    value={this.state.belongs}
-                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                    treeData={this.state.dicTypes}
-                                    placeholder="Please select"
-                                    treeDefaultExpandAll
-                                    onChange={this.changeBelongs}
-                                />
-                        </Col>
-
-                    </Form.Item>
-                </Row>
+                <CommonForm items={items} customForm={(form) => this.form = form}/>
+                <Form.Item label="所属对象">
+                    <Col span={4}>
+                        <Switch checked={this.state.belongsSwitch} onChange={this.changeBelongsSwitch}></Switch>    
+                    </Col>
+                    <Col span={12} style={{display: `${this.state.belongsSwitch?'block':'none'}`}}>
+                        <TreeSelect
+                            style={{ width: 300 }}
+                            value={this.state.belongs}
+                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                            treeData={this.state.dicTypes}
+                            placeholder="Please select"
+                            treeDefaultExpandAll
+                            onChange={this.changeBelongs}/>
+                    </Col>
+                </Form.Item>
             </Modal>
         )
     }

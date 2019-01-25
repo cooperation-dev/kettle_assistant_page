@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Button, Table, Select} from 'antd';
+import {Row, Col, Form, Input, Button, Table, Select, Tooltip} from 'antd';
 
 import {findProducts} from '../../redux/actions/product';
 import {connect} from 'react-redux';
@@ -9,10 +9,6 @@ import './ProjectManager.css';
 const {Option} = Select
 
 const columns = [{
-    title: 'ID',
-    dataIndex: 'productId',
-    key: 'productId',
-},{
     title: '产品',
     dataIndex: 'name',
     key: 'name',
@@ -32,6 +28,16 @@ const columns = [{
     title: '网页链接',
     dataIndex: 'url',
     key: 'url',
+    render: text => {
+        let max_length = 60
+        if(text.length > max_length) {
+            return <span>{text.substring(0, max_length)}...</span>
+
+                // <Tooltip title={text} placement="a">
+                // </Tooltip>
+        }
+        return <span>{text}</span>
+    }
 },{
     title: '最新时间',
     dataIndex: 'updateTime',

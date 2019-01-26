@@ -11,6 +11,7 @@ import userManager from './reducers/user_manager'
 import roleManager from './reducers/role_manager'
 import projectManager from './reducers/project_manager'
 import captcha from './reducers/captcha';
+import reptileMonitor from './reducers/reptile_monitor'
 
 export default function combineReducers(state={}, action){
     const obj_app = app(state.app, action);
@@ -26,6 +27,7 @@ export default function combineReducers(state={}, action){
     const obj_roleManager = roleManager(state.roleManager, action);
     const obj_projectManager = projectManager(state.projectManager, action);
     const obj_captcha = captcha(state.captcha, action);
+    const obj_reptileMonitor = reptileMonitor(state.reptileMonitor, action);
     return {
         app: obj_app,
         reptileJob: obj_reptileJob,
@@ -40,6 +42,7 @@ export default function combineReducers(state={}, action){
         roleManager: obj_roleManager,
         projectManager: obj_projectManager,
         captcha: obj_captcha,
-        login: captcha(state.captcha, action)
+        login: captcha(state.captcha, action),
+        reptileMonitor: obj_reptileMonitor
     }
 }

@@ -175,7 +175,7 @@ class ReptileJob extends Component{
                                         <Option value="4">结束</Option> */}
                                         {
                                             this.props.reptileJob.statusList.map(status => {
-                                                return <Option value={status.code} key={status.code}>{status.name}</Option>
+                                                return <Option value={status.value} key={status.value}>{status.key}</Option>
                                             })
                                         }
                                     </Select>
@@ -199,7 +199,7 @@ class ReptileJob extends Component{
                                         <Option value="5">唯品会</Option> */}
                                         {
                                             this.props.reptileJob.platformList.map(platform => {
-                                                return <Option value={platform.code} key={platform.code}>{platform.name}</Option>
+                                                return <Option value={platform.value} key={platform.value}>{platform.key}</Option>
                                             })
                                         }
                                     </Select>
@@ -295,7 +295,7 @@ class AddModal extends Component{
                     <Option value="4">苏宁易购</Option>
                     <Option value="5">唯品会</Option> */}
                     {
-                        this.props.platforms.map(platform => <Option value={platform.code} key={platform.code}>{platform.name}</Option>)
+                        this.props.platforms.map(platform => <Option value={platform.value} key={platform.value}>{platform.key}</Option>)
                     }
             </Select>
         )

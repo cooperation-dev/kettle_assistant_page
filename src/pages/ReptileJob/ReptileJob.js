@@ -295,7 +295,7 @@ class AddModal extends Component{
                     <Option value="4">苏宁易购</Option>
                     <Option value="5">唯品会</Option> */}
                     {
-                        this.props.platforms.map(platform => <Option value={platform.value} key={platform.value}>{platform.key}</Option>)
+                        this.props.platforms.map(platform => <Option value={platform.value.toString()} key={platform.value}>{platform.key}</Option>)
                     }
             </Select>
         )

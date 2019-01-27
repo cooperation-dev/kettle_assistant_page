@@ -1,80 +1,82 @@
 import axios from 'axios';
 
-export const LOAD_DATA = "reptileMonitor/loadData";
-export const LOAD_ECHARTS = "reptileMonitor/loadEcharts";
-export const SHOW_RANGE = "reptileMonitor/showRange";
+//渲染正在运行的作业数
+export const LOAD_RUNNINGS = "reptileMonitor/loadRunnings";
+//渲染等待运行的作业数
+export const LOAD_WAITINGS = "reptileMonitor/loadWaitings";
+//按平台分组
+export const LOAD_PRODUCT_GROUPBY_PLATFORM = "reptileMonitor/grouping/platform"
+//按产品类型分组
+export const LOAD_PRODUCT_GROUPBY_TYPE = "reptileMonitor/grouping/type"
 
-export const load_data = (list) => {
+export const load_runnings = (data) => {
     return {
-        type: LOAD_DATA,
-        cards: list
+        type: LOAD_RUNNINGS,
+        runningCard: data
     }
 }
 
-export const load_echarts = (list) => {
+export const load_waitings = (data) => {
     return {
-        type: LOAD_ECHARTS,
-        options: list
+        type: LOAD_WAITINGS,
+        waitingCard: data
     }
 }
 
-export const show_range = (rangeData) => {
+export const load_product_grouping_platform = (data) => {
     return {
-        type: SHOW_RANGE,
-        rangeData: rangeData
+        type: LOAD_PRODUCT_GROUPBY_PLATFORM,
+        groupingPlatform: data
     }
 }
 
-export const loadData = () => {
+export const load_product_grouping_type = (data) => {
+    return {
+        type: LOAD_PRODUCT_GROUPBY_TYPE,
+        groupingType: data
+    }
+}
+
+export const loadRunnings = () => {
     return (dispatch) => {
-        axios.post('/api/reptileMonitorController/loadData')
+        axios.get('/api/rest/reptileService/v1/monitor/running')
                 .then((response) => {
-                    let cards = response.data
-                    return cards.map(card => {
-                        return {
-                            ...card,
-                            wYoy: parseFloat(card.wYoy*100).toFixed(2) + '%',
-                            dYoy: parseFloat(card.dYoy*100).toFixed(2) + '%',
-                            quantity: card.key=="4"?parseFloat(card.quantity*100).toFixed(2)+'%':card.quantity,
-                            dQuantity: card.key=="4"?parseFloat(card.dQuantity*100).toFixed(2)+'%':card.dQuantity,
-                        }
-                    })
+                    return response.data.data
                 }).then((data) => {
-                    dispatch(load_data(data))
+                    dispatch(load_runnings(data))
                 })
     }
 }
 
-export const loadEcharts = (type, datet) => {
+export const loadWaitings = () => {
     return (dispatch) => {
-        axios({
-            method: 'post',
-            url: '/api/reptileMonitorController/loadEcharts',
-            data: {
-                type: type,
-                datet: datet
-            }
-        }).then((response) => {
-            return response.data
-        }).then((data) => {
-            dispatch(load_echarts(data))
-        })
+        axios.get('/api/rest/reptileService/v1/monitor/waiting')
+                .then((response) => {
+                    return response.data.data
+                }).then((data) => {
+                    dispatch(load_waitings(data))
+                })
     }
 }
 
-export const showRange = (type, datet) => {
+export const loadProductGroupingPlatform = () => {
     return (dispatch) => {
-        axios({
-            method: 'post',
-            url: '/api/reptileMonitorController/showRange',
-            data: {
-                type: type,
-                datet: datet
-            }
-        }).then((response) => {
-            return response.data
-        }).then((data) => {
-            dispatch(show_range(data))
-        })
+        axios.get('/api/rest/reptileService/v1/products/grouping/0')
+                .then((response) => {
+                    return response.data.data
+                }).then((data) => {
+                    dispatch(load_product_grouping_platform(data))
+                })
+    }
+}
+
+export const loadProductGroupingType = () => {
+    return (dispatch) => {
+        axios.get('/api/rest/reptileService/v1/products/grouping/1')
+                .then((response) => {
+                    return response.data.data
+                }).then((data) => {
+                    dispatch(load_product_grouping_type(data))
+                })
     }
 }

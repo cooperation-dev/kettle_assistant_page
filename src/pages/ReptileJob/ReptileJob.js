@@ -214,7 +214,7 @@ class ReptileJob extends Component{
                     </Form>
                 </Row>
                 <AddModal visible={this.props.reptileJob.addVisible} onOk={(reptileReqVO) => this.props.addJobModalSure(reptileReqVO)} onCancel={() => this.props.addJobModalCancel()} platforms={this.props.reptileJob.platformList}></AddModal>
-                <UpdateModal visible={this.props.reptileJob.updateVisible} onOk={(reptileReqVO, reptileId) => this.props.updateJobModalSure(reptileReqVO, reptileId)} onCancel={() => this.props.updateJobModalCancel()} id={this.props.reptileJob.updateJobId} ></UpdateModal>
+                <UpdateModal visible={this.props.reptileJob.updateVisible} onOk={(reptileReqVO, reptileId) => this.props.updateJobModalSure(reptileReqVO, reptileId)} onCancel={() => this.props.updateJobModalCancel()} id={this.props.reptileJob.updateJobId} platforms={this.props.reptileJob.platformList}></UpdateModal>
                 <LogModal visible={this.props.reptileJob.logVisible} onOk={() => this.props.displayLogClose()} onCancel={() => this.props.displayLogClose()} id={this.props.reptileJob.logJobId}></LogModal>
             </div>
         )
@@ -440,12 +440,15 @@ class UpdateModal extends Component{
                 notFoundContent="未匹配"
                 onChange={(value) => {this.changeValue(value, 'platform')}}
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                    <Option value="0">淘宝</Option>
+                    {/* <Option value="0">淘宝</Option>
                     <Option value="1">天猫</Option>
                     <Option value="2">京东</Option>
                     <Option value="3">亚马逊</Option>
                     <Option value="4">苏宁易购</Option>
-                    <Option value="5">唯品会</Option>
+                    <Option value="5">唯品会</Option> */}
+                    {
+                        this.props.platforms.map(platform => <Option value={platform.value} key={platform.value}>{platform.key}</Option>)
+                    }
             </Select>
         )
         const typeTreeSel = (

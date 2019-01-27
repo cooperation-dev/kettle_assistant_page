@@ -2,8 +2,8 @@ import {TOGGLE_MENU, CHANGE_MENU, LOAD_MENU} from '../actions/app';
 
 const initState = {
     collapsed: false,
-    selectKeys: ['job_manager'],
-    openKeys: ['job_manager'],
+    selectKeys: ['reptile_job'],
+    openKeys: ['reptile_job'],
     list: [],
     sub_list: []
 }

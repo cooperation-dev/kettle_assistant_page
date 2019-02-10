@@ -1,5 +1,5 @@
 // import axios from 'axios';
-import axios from '../../router/Adapter';
+// import axios from '../../router/Adapter';
 import {message} from 'antd';
 
 //请求数据

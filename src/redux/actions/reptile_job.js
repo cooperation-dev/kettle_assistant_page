@@ -161,7 +161,7 @@ export const addJobModalSure = (reptileVO) => {
     return (dispatch) => {
         axios({
             method: 'post',
-            url: '/api/rest/reptileService/v1/job?name='+reptileVO.name+'&platform='+reptileVO.platform+'&type='+reptileVO.type+'&timing='+reptileVO.timing,
+            url: '/api/rest/reptileService/v1/job?name='+reptileVO.name+'&platform='+reptileVO.platform+'&type='+reptileVO.type+'&timing='+reptileVO.timing+"&cookies="+reptileVO.cookies,
             // data: reptileVO,
         }).then((res) => {
             return res.data.data

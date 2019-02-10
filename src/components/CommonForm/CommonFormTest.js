@@ -7,19 +7,24 @@ const formItemLayout = {
 }
 
 const renderFormItem = (item, getFieldDecorator) => {
-    const { label, key, component, value } = item;
+    const { label, key, component, value, necessary } = item;
     return (
-        <Form.Item label={label} {...formItemLayout}>
-            {getFieldDecorator(key, {
-                rules: [{
-                    required: true, message: '请输入'+label,
-                },{
-                    max: 30, message: '长度过大',
-                }],
-                initialValue: value
-            })
-            (component)}
-        </Form.Item>
+        necessary==undefined||necessary?
+            <Form.Item label={label} {...formItemLayout}>
+                {getFieldDecorator(key, {
+                    rules: [{
+                        required: true, message: '请输入'+label,
+                    },{
+                        max: 30, message: '长度过大',
+                    }],
+                    initialValue: value
+                })
+                (component)}
+            </Form.Item>
+        :
+            <Form.Item label={label} {...formItemLayout}>
+                {(component)}
+            </Form.Item>
     )
 }
 

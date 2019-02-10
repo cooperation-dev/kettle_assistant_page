@@ -245,6 +245,7 @@ class AddModal extends Component{
             platform: undefined,
             type: '',
             timing: '5-12',
+            cookies: ''
         }
     }
 
@@ -269,12 +270,14 @@ class AddModal extends Component{
                 platform: this.state.platform,
                 type: this.state.type,
                 timing: this.state.timing,
+                cookies: this.state.cookies
             }
             this.setState({
                 name: '',
                 platform: undefined,
                 type: '',
                 timing: '5-12',
+                cookies: ''
             })
             this.props.onOk(reptileVO)
         })
@@ -313,6 +316,7 @@ class AddModal extends Component{
                         <TreeSelect.TreeNode value="2" title="电脑" key="2" />
                         <TreeSelect.TreeNode value="0" title="手机" key="3" />
                         <TreeSelect.TreeNode value="1" title="服装" key="4" />
+                        <TreeSelect.TreeNode value="3" title="GXG" key="5" />
                     </TreeSelect.TreeNode>
             </TreeSelect>
         )
@@ -354,6 +358,13 @@ class AddModal extends Component{
                 value: this.state.timing,
                 component: timingSel,
             },
+            {
+                label: 'Cookies',
+                key: 'cookies',
+                value: this.state.cookies,
+                component: <TextArea onChange= {(value) => {this.change(value, 'cookies')}}/>,
+                necessary: false
+            }
         ]
         return (
             <Modal
